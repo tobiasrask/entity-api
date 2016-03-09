@@ -1,0 +1,260 @@
+import DomainMap from 'domain-map'
+import EntityHandler from "./entity-handler"
+import StorageBackend from "./../storage/storage-backend"
+
+/**
+* Entity storage handler
+*/
+class EntityStorageHandler extends EntityHandler {
+  
+  /**
+  * Construct storage
+  *
+  * @param variables
+  */
+  constructor(variables) {
+    super(variables);
+
+    // Storage backend defaults to config storage
+    let Backend = variables.hasOwnProperty('StorageBackend') ?
+      variables.StorageBackend : StorageBackend;
+
+    let backend = new Backend({storageHandler: this});
+    this._registry.set('properties', 'storage-backend', backend);
+  }
+
+  /**
+  * Load entity.
+  *
+  * @param id
+  * @param callback
+  */
+  load(id, callback) {
+
+    // Check if id is valid
+    if (!this.isValidEntityId(id))
+      return callback(new Error("Requested entity id is not valid.")); 
+
+    this.loadMultiple([id], (err, items) => {
+      if (err) callback(err);
+      else callback(null, items.get(id, false));
+    });
+  }
+
+  /**
+  * Load multiple entities.
+  * - Unknown entities are returned as false
+  * - Note that result map is keyed with entity key objects.
+  *
+  * @param ids
+  * @param callback
+  *   Passes collection of entities keyed with entity id
+  */
+  loadMultiple(ids, callback) {
+    let self = this;
+    let errors = [];
+
+    if (ids.length < 1)
+      return callback(new Error("You have to provide at least one entity id")); 
+
+    let build = DomainMap.createCollection({strictKeyMode: false});
+    let storageBackend = this._registry.get('properties', 'storage-backend');
+
+    // Container holds keys also for empty items
+    storageBackend.loadEntityContainers(ids, (err, containers) => {
+      if (err) return callback(err);
+      let counter = containers.size;
+
+      if (counter == 0)
+        return callback(null, build);
+
+      // Load entities
+      containers.forEach((container, entityId) => {
+        self.processLoadedEntity(entityId, container, (err, result) => {
+          if (err) {
+            errors.push(err);
+            this.log('storage-handler', err, 'error');            
+          } else
+            build.set(result.entityId, result.entity);
+
+          counter--;
+          if (counter == 0) {
+            if (errors.length > 0)
+              callback(new Error("There was error when loading entities"));
+            else
+              callback(null, build);
+          }
+        });
+      });
+    });
+  }
+
+  /**
+  * Build entity from loaded content container.
+  *
+  * @param entityId
+  * @param container
+  *   Content container
+  * @param callback
+  */
+  processLoadedEntity(entityId, container, callback) {
+    let build = { entityId: entityId, entity: false };
+
+    // Make sure we have valid container
+    if (!container)
+      return callback(null, build);
+
+    let EntityBaseClass = this.getEntityBaseClass();
+
+    build.entity = new EntityBaseClass({
+      entityTypeId: this.getEntityTypeId()
+    });
+
+    // Hook entity.load()
+    let params = { entityId: entityId, container: container };
+    build.entity.load(params, err => {
+      if (err) return callback(err);
+
+      // Hook entity.postLoad()
+      build.entity.postLoad(err => {
+        if (err) callback(err);
+        else callback(null, build);
+      });
+    });    
+  }
+
+  /**
+  * Save entity
+  *
+  * @param entity
+  * @param callback
+  */
+  save(entity, callback) {
+    let self = this;
+    let storageBackend = this._registry.get('properties', 'storage-backend');
+
+    // Export field data
+    let entityId = entity.id();
+    let fieldData = entity.exportFieldValues();
+
+    storageBackend.saveEntityContainer(entityId, fieldData, (err) => {
+      if (err) return callback(err);
+
+      // Hook entity.postSave()
+      entity.postSave((err) => {
+        callback(null, entity);        
+      });
+    });
+  }
+
+  /**
+  * Delete entity.
+  *
+  * @param entity
+  * @param callback
+  */
+  delete(entity, callback) {
+    let self = this;
+    let storageBackend = this._registry.get('properties', 'storage-backend');
+
+    // Hook entity.preDelete()
+    entity.preDelete(err => {
+      if (err) return callback(err);
+
+      let entityId = entity.id();
+      storageBackend.deleteEntityContainer(entityId, (err) => {
+        if (err) return callback(err);
+
+        // Hook entity.postDelete()
+        entity.postDelete((err) => {
+          callback(null);
+        });
+      });    
+    });
+  }
+
+  /**
+  * Delete multiple entities at once.
+  *
+  * @param entities
+  * @param callback
+  */
+  deleteMultiple(entities, callback) {
+    var self = this;
+    let errors = [];
+    let counter = entities.length;
+
+    if (counter == 0)
+      return callback(null);
+
+    entities.map(entity => {
+      self.delete(entity, err => {
+        if (err)
+          errors.push(err);
+
+        counter--;
+        if (counter == 0) {
+          if (errors.length > 0)
+            callback(new Error("There was an error when deleting items"))
+          else
+            callback(null);
+        }
+      })
+    })
+  }
+
+  /**
+  * Create entity.
+  *
+  * @param data
+  * @param callback
+  */
+  create(data, callback) {
+    let EntityBaseClass = this.getEntityBaseClass();
+    let entity = new EntityBaseClass({
+      entityTypeId: this.getEntityTypeId()
+    });
+
+    // Hook entity.preCreation()
+    entity.preCreation(data, err => {
+      if (err) return callback(err);
+      
+      // Hook entity.create()
+      entity.create(data, err => {
+        if (err) return callback(err);
+
+        // Hook entity.finalize()
+        entity.finalize(err => {
+          if (err) callback(err);
+          else callback(null, entity);
+        });
+      });    
+    });
+  }
+
+  /**
+  * Returns table name for entity data
+  *
+  * @return table name
+  */
+  getStorageTableName() {
+    // TODO: fix prefixes
+    let prefix = ''; // entity_';
+    return prefix + this.getEntityTypeId();
+  }
+
+  /**
+  * Check if requested entity id is valid.
+  *
+  * @param entityId
+  *   Entity id to be tested
+  * @return boolean is valid
+  */
+  isValidEntityId(entityId) {
+    if (!entityId)
+      return false;
+    return true;
+  }
+}
+
+export default EntityStorageHandler;
