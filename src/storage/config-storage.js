@@ -7,6 +7,22 @@ import StorageBackend from "./storage-backend"
 class ConfigStorageBackend extends StorageBackend {
 
   /**
+  * Construct
+  *
+  * @param variables with following keys:
+  *   storageHandler
+  *     Storage handler who is using storage backend.
+  *   lockUpdates
+  *     Lock entity updates.
+  */
+  constructor(variables) {
+    super(variables);
+
+    if (variables.hasOwnProperty('lockUpdates'))
+      this.setStorageLock(variables.lockUpdates);
+  }
+
+  /**
   * Load entity content container for entity data.
   *
   * @param ids
@@ -37,6 +53,9 @@ class ConfigStorageBackend extends StorageBackend {
   * @param caallback
   */
   saveEntityContainer(entityId, container, callback) {
+    if (this.isStorageLocked())
+      return callback(new Error("Storage updates are locked"));
+
     let domain = this.getStorageDomain();
     this._registry.set(domain, entityId, container);
     callback(null);
@@ -49,6 +68,25 @@ class ConfigStorageBackend extends StorageBackend {
   */
   getStorageDomain() {
     return "_entities:" + this.getStorageHandler().getStorageTableName();
+  }
+
+  /**
+  * Method checks if storage is locked.
+  *
+  * @return boolean is locked
+  */
+  isStorageLocked() {
+    return this._registry.get("properties", 'lockUpdates', false);
+  }
+
+  /**
+  * Set storage lock status.
+  *
+  * @param status
+  *   New lock status.
+  */
+  setStorageLock(status) {
+    this._registry.set("properties", 'lockUpdates', status);
   }
 }
 

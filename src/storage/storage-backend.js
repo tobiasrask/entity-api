@@ -78,7 +78,7 @@ class StorageBackend {
   */
   installSchemas(schemas, callback) {
     callback(null);
-  }
+  }  
 }
 
 export default StorageBackend

@@ -22,6 +22,87 @@ class EntityStorageHandler extends EntityHandler {
     let backend = new Backend({storageHandler: this});
     this._registry.set('properties', 'storage-backend', backend);
   }
+ 
+  /**
+  * Cleaned, ES6 Promises based storage handler.
+  * This is only sugar on top of basic callback based api.
+  */
+
+  /**
+  * Promise based  alias for @loadEntity
+  */
+  create(data) {
+    return new Promise((resolve, reject) => {
+      this.createEntity(data, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  }
+
+  /**
+  * Promise based  alias for @loadEntity
+  */
+  load(id) {
+    return new Promise((resolve, reject) => {
+      this.loadEntity(id, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  }
+
+  /**
+  * Promise based  alias for @loadMultipleEntities
+  */
+  loadMultiple(ids) {
+    return new Promise((resolve, reject) => {
+      this.loadMultipleEntities(ids, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  }
+
+  /**
+  * Promise based  alias for @saveEntity
+  */
+  save(entity) {
+    return new Promise((resolve, reject) => {
+      this.saveEntity(entity, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  }
+
+  /**
+  * Promise based  alias for @delete
+  */
+  delete(entity) {
+    return new Promise((resolve, reject) => {
+      this.deleteEntity(entity, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  }
+
+  /**
+  * Promise based  alias for @delete
+  */
+  deleteMultiple(entities) {
+    return new Promise((resolve, reject) => {
+      this.deleteMultipleEntities(entities, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  }
+
+  /**
+  * Traditional callback based api.
+  */
 
   /**
   * Load entity.
@@ -29,13 +110,13 @@ class EntityStorageHandler extends EntityHandler {
   * @param id
   * @param callback
   */
-  load(id, callback) {
+  loadEntity(id, callback) {
 
     // Check if id is valid
     if (!this.isValidEntityId(id))
       return callback(new Error("Requested entity id is not valid.")); 
 
-    this.loadMultiple([id], (err, items) => {
+    this.loadMultipleEntities([id], (err, items) => {
       if (err) callback(err);
       else callback(null, items.get(id, false));
     });
@@ -50,7 +131,7 @@ class EntityStorageHandler extends EntityHandler {
   * @param callback
   *   Passes collection of entities keyed with entity id
   */
-  loadMultiple(ids, callback) {
+  loadMultipleEntities(ids, callback) {
     let self = this;
     let errors = [];
 
@@ -129,7 +210,7 @@ class EntityStorageHandler extends EntityHandler {
   * @param entity
   * @param callback
   */
-  save(entity, callback) {
+  saveEntity(entity, callback) {
     let self = this;
     let storageBackend = this._registry.get('properties', 'storage-backend');
 
@@ -153,7 +234,7 @@ class EntityStorageHandler extends EntityHandler {
   * @param entity
   * @param callback
   */
-  delete(entity, callback) {
+  deleteEntity(entity, callback) {
     let self = this;
     let storageBackend = this._registry.get('properties', 'storage-backend');
 
@@ -179,7 +260,7 @@ class EntityStorageHandler extends EntityHandler {
   * @param entities
   * @param callback
   */
-  deleteMultiple(entities, callback) {
+  deleteMultipleEntities(entities, callback) {
     var self = this;
     let errors = [];
     let counter = entities.length;
@@ -209,7 +290,7 @@ class EntityStorageHandler extends EntityHandler {
   * @param data
   * @param callback
   */
-  create(data, callback) {
+  createEntity(data, callback) {
     let EntityBaseClass = this.getEntityBaseClass();
     let entity = new EntityBaseClass({
       entityTypeId: this.getEntityTypeId()
