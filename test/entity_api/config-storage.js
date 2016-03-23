@@ -1,6 +1,7 @@
 import assert from "assert"
 import {EntityAPI, EntityType, EntityHandler,
-        Entity, EntityStorageHandler, FieldAPI} from "./../../src/index"
+        Entity, EntityStorageHandler,
+        ConfigStorageBackend, FieldAPI} from "./../../src/index"
 import Utils from "./../../src/misc/utils"
 
 let fieldAPI = new FieldAPI();
@@ -17,7 +18,7 @@ class TestUtils extends Utils {
       // Random probe values
       values: {
         entityTypeProbe: 'entityTypeprob:' + TestUtils.getUUID(),
-        entityHandlerProbe: 'entityHandlerProb:' + TestUtils.getUUID(),
+        entityHandlerProbe: 'storage',
         entityProbe: 'entityProb:' + TestUtils.getUUID(),
       },
       // Probe classes
@@ -47,10 +48,31 @@ class TestUtils extends Utils {
       */
       getFieldDefinitions() {
         const fields = new Map();
+
         fields.set('entity_id', fieldAPI.createBasefield('text')
           .setName('Entity id')
           .setDescription('Entity identifier')
           .setProtected(true));
+
+        fields.set('field_string_a', fieldAPI.createBasefield('text')
+          .setName('Entity field')
+          .setDescription('Entity field'));
+
+        // String field with default value
+        fields.set('field_string_b', fieldAPI.createBasefield('text')
+          .setName('Entity field')
+          .setDescription('Entity field'));
+
+        fields.set('field_int_a', fieldAPI.createBasefield('integer')
+          .setName('Entity field')
+          .setDescription('Entity field'));
+
+        // Int field with default value
+        fields.set('field_int_b', fieldAPI.createBasefield('integer')
+          .setName('Entity field')
+          .setDescription('Entity field')
+          .setDefaultValue(123456789));
+
         return fields;
       }
 
@@ -72,7 +94,10 @@ class TestUtils extends Utils {
         // Define our entity type
         variables.entityTypeId = probe.values.entityTypeProbe;
         variables.entityClass = ProbeEntity;
+
         super(variables);
+
+        variables.storageBackend = ConfigStorageBackend;
 
         // Register handlers
         this.registerHandler(probe.values.entityHandlerProbe,
@@ -159,11 +184,11 @@ describe('Config storage handler', () => {
         entityAPI.getEntityType(probe.values.entityTypeProbe)
           .getHandler(probe.values.entityHandlerProbe)
           .create(inputParams)
-          .then(entityInstance => {
-            if (entityInstance.getEntityTypeId() != probe.values.entityTypeProbe)
+          .then(entity => {
+            if (entity.getEntityTypeId() != probe.values.entityTypeProbe)
               errors.push(new Error("Entity's type check failed"));
 
-            if (entityInstance.getIntanceProb() != probe.values.entityProbe)
+            if (entity.getIntanceProb() != probe.values.entityProbe)
               errors.push(new Error("Entity's instance probe check failed"));
 
             counter--;
@@ -199,11 +224,9 @@ describe('Config storage handler', () => {
         entityAPI.getEntityType(probe.values.entityTypeProbe)
           .getHandler(probe.values.entityHandlerProbe)
           .load(entityId)
-          .then(entityInstance => {
-
-            if (entityInstance)
+          .then(entity => {
+            if (entity)
               errors.push(new Error("Storage api didn't return false"));
-
             counter--;
             if (!counter && errors) done(errors[0]); else if (!counter) done();
           })
@@ -237,8 +260,8 @@ describe('Config storage handler', () => {
         entityAPI.getEntityType(probe.values.entityTypeProbe)
           .getHandler(probe.values.entityHandlerProbe)
           .loadMultiple(entityIds)
-          .then(entityInstances => {
-            if (entityInstances.size > 0)
+          .then(entitys => {
+            if (entitys.size > 0)
               errors.push(new Error("Storage api didn't return empty set"));
 
             counter--;
@@ -268,17 +291,48 @@ describe('Config storage handler', () => {
       }
 
       let entityAPI = EntityAPI.getInstance({entityTypes: entityTypes}, true);
-      let inputParams = {};
+      let inputParams = {
+        'field_string_a': 'A123',
+        'field_string_b': 'B231',
+        'field_int_a': 1234,
+        'field_int_b': 5678
+      };
 
       probes.map(probe => {
+        let storage = entityAPI.getStorage(probe.values.entityTypeProbe);
+        let entityId = {};
 
-        // Create entity
+        storage.create(inputParams)
+          .then(entityA => {
+            entityId = entityA.id();
+            // Save entity
+            return entityA.save();
+          })
+          .then(result => {
+            // Load entity
+            return storage.load(entityId);
+          })
+          .then(entityB => {
 
-        // Save entity
+            if (!entityB) {
+              errors.push("Unable to load saved entity");
 
-        // Load entity
+            } else {
+              // Validate params
+              Object.keys(inputParams).forEach((fieldName, index) => {
+                if (entityB.get(fieldName) != inputParams[fieldName])
+                  errors.push("Entity didn't return expected field value");
+              });
+            }
+            counter--;
+            if (!counter && errors) done(errors[0]); else if (!counter) done();
+          })
+          .catch(err => {
+            errors.push(err);
+            counter--;
+            if (!counter && errors) done(errors[0]); else if (!counter) done();
+          });
       });
-      done();
     })
   });
 });

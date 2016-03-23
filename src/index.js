@@ -36,3 +36,13 @@ export { _fieldHandler as FieldHandler };
 
 import _field from './field/field';
 export { _field as Field };
+
+/**
+* Storage API
+*/
+
+import _storageBackend from './storage/storage-backend';
+export {_storageBackend as StorageBackend };
+
+import _configStorageBackend from './storage/config-storage';
+export {_configStorageBackend as ConfigStorageBackend };

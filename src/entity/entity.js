@@ -1,5 +1,6 @@
-import DomainMap from 'domain-map'
+import DomainMap from "domain-map"
 import Utils from "./../misc/utils"
+import EntityAPI from "./entity-api"
 
 /**
 * Entity
@@ -171,13 +172,14 @@ class Entity {
   }
 
   /**
-  * Save entity
+  * Save this entity.
   *
-  * @param callback
+  * @return promise
+  *   Delivers promise from entity strorage.
   */
-  save(callback) {
-    let entityType = this.getEntityType();
-    entityAPI.getStorage(entityType).save(this, callback);
+  save() {
+    let entityType = this.getEntityTypeId();
+    return EntityAPI.getInstance().getStorage(entityType).save(this);
   }
 
   /**
@@ -195,7 +197,7 @@ class Entity {
   * @param callback
   */
   delete(callback) {
-    let entityType = this.getEntityType();
+    let entityType = this.getEntityTypeId();
     entityAPI.getStorage(entityType).delete(this, callback);
   }
 

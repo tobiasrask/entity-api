@@ -16,8 +16,8 @@ class EntityStorageHandler extends EntityHandler {
     super(variables);
 
     // Storage backend defaults to config storage
-    let Backend = variables.hasOwnProperty('StorageBackend') ?
-      variables.StorageBackend : StorageBackend;
+    let Backend = variables.hasOwnProperty('storageBackend') ?
+      variables.storageBackend : StorageBackend;
 
     let backend = new Backend({storageHandler: this});
     this._registry.set('properties', 'storage-backend', backend);
@@ -124,8 +124,8 @@ class EntityStorageHandler extends EntityHandler {
 
   /**
   * Load multiple entities.
-  * - Unknown entities are returned as false
   * - Note that result map is keyed with entity key objects.
+  * - Unknown entities are returned as false, but keyed with entity id
   *
   * @param ids
   * @param callback
@@ -144,8 +144,7 @@ class EntityStorageHandler extends EntityHandler {
     // Container holds keys also for empty items
     storageBackend.loadEntityContainers(ids, (err, containers) => {
       if (err) return callback(err);
-      let counter = containers.size;
-
+      let counter = containers.getSize();
       if (counter == 0)
         return callback(null, build);
 

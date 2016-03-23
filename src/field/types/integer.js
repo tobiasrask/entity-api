@@ -15,6 +15,14 @@ class IntegerFieldType extends FieldType {
     super(variables);
   }
 
+  /**
+  * Validate field value before assigning it.
+  *
+  * @return boolean is valid
+  */
+  validateFieldValue(value) {
+    return !isNaN(value) && (x => { return (x | 0) === x; })(parseFloat(value))
+  }
 }
 
 export default IntegerFieldType;

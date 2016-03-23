@@ -17,7 +17,6 @@ class ConfigStorageBackend extends StorageBackend {
   */
   constructor(variables) {
     super(variables);
-
     if (variables.hasOwnProperty('lockUpdates'))
       this.setStorageLock(variables.lockUpdates);
   }
@@ -33,12 +32,10 @@ class ConfigStorageBackend extends StorageBackend {
   */
   loadEntityContainers(ids, callback) {
     var self = this;
-    let result = new DomainMap.createCollection({strictKeyMode: false});
+    let result = DomainMap.createCollection({strictKeyMode: false});
     let domain = this.getStorageDomain();
     ids.map(entityId => {
-      let entity = self._registry.get(domain, entityId, false);
-      if (entity)
-        result.set(entityId, entity);
+      result.set(entityId, self._registry.get(domain, entityId, false));
     });
     callback(null, result);
   }
@@ -55,7 +52,6 @@ class ConfigStorageBackend extends StorageBackend {
   saveEntityContainer(entityId, container, callback) {
     if (this.isStorageLocked())
       return callback(new Error("Storage updates are locked"));
-
     let domain = this.getStorageDomain();
     this._registry.set(domain, entityId, container);
     callback(null);

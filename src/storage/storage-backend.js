@@ -14,7 +14,10 @@ class StorageBackend {
   */
   constructor(variables) {
     if (variables === undefined) variables = {};
-    this._registry = new DomainMap();
+
+    // Weak map
+    this._registry = new DomainMap({strictKeyMode: false});
+    
     // Ref. to entity storage handler
     if (variables.hasOwnProperty('storageHandler'))
       this._registry.set("properties", 'handler', variables.storageHandler);

@@ -30,16 +30,16 @@ class FieldType extends APIObject {
   * Set value.
   *
   * @param value
-  * @return succeed
+  * @return boolean succeed
   */
   setValue(value) {
     if (this.validateFieldValue(value)) {
       this._registry.set('properties', 'value', value);
       return true;
     } else {
-      console.log("Field validation failed: " + value);
+      this._registry.set('log', 'error', `Field validation failed: ${value}`);
+      return false;
     }
-    return false;
   }
 
   /**
