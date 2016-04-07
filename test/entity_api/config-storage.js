@@ -387,13 +387,9 @@ describe('Config storage handler', () => {
           entityIds.push(storage.extractEntityId(indexes, container));
         });
 
-        console.log("Loading...", entityIds);
-
         storage.loadMultiple(entityIds)
           .then(entitys => {
-            console.log("Saatiin", entitys.size, entitys);
-
-
+ 
             if (entitys.size > 0)
               errors.push(new Error("Storage api didn't return empty set"));
 

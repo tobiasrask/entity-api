@@ -45,7 +45,6 @@ class ConfigStorageBackend extends StorageBackend {
       // TODO: Retrieve entity id based on item values
       let entityId = handler.extractEntityId(indexes, container);
       self._registry.set(domain, entityId, container);
-      console.log("Initializing entity:", entityId, container);
     });
   }
 
