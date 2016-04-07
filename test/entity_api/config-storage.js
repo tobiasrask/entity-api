@@ -11,9 +11,11 @@ class TestUtils extends Utils {
   /**
   * Creates probe
   *
+  * @param variables
   * @return probe
   */
-  static createProbe() {
+  static createProbe(variables) {
+
     let probe = {
       // Random probe values
       values: {
@@ -46,10 +48,10 @@ class TestUtils extends Utils {
       *
       * @return data
       */
-      getFieldDefinitions() {
+      static getFieldDefinitions() {
         const fields = new Map();
 
-        fields.set('entity_id', fieldAPI.createBasefield('text')
+        fields.set('eid', fieldAPI.createBasefield('text')
           .setName('Entity id')
           .setDescription('Entity identifier')
           .setProtected(true));
@@ -81,9 +83,9 @@ class TestUtils extends Utils {
       *
       * @return data
       */
-      getEntityIndexDefinitions() {
+      static getEntityIndexDefinitions() {
         return [
-          {'fieldName': 'entity_id', 'indexType': 'HASH', 'auto': true}
+          {'fieldName': 'eid', 'indexType': 'HASH', 'auto': true}
         ]
       }
     }
@@ -218,7 +220,7 @@ describe('Config storage handler', () => {
       }
 
       let entityAPI = new EntityAPI({entityTypes: entityTypes});
-      let entityId = {entity_id: 'probe:random'};
+      let entityId = {eid: 'probe:random'};
 
       probes.map(probe => {
         entityAPI.getEntityType(probe.values.entityTypeProbe)
@@ -254,7 +256,7 @@ describe('Config storage handler', () => {
       }
 
       let entityAPI = new EntityAPI({entityTypes: entityTypes});
-      let entityIds = [{entity_id: 'probe:random'}];
+      let entityIds = [{eid: 'probe:random'}];
 
       probes.map(probe => {
         entityAPI.getEntityType(probe.values.entityTypeProbe)
@@ -332,6 +334,78 @@ describe('Config storage handler', () => {
             counter--;
             if (!counter && errors) done(errors[0]); else if (!counter) done();
           });
+      });
+    })
+  });
+
+  describe('Config storage interface', () => {
+    it('Test initialization with entities', (done) => {
+      let numProbes = 2;
+      let counter = numProbes;
+      let errors = [];
+      let probes = [];
+      let entityTypes = [];
+
+      for (var i = 0; i < numProbes; i++) {
+        let probe = TestUtils.createProbe();
+        probes.push(probe);
+        entityTypes.push(probe.classes.ProbeEntityType);
+      }
+
+      let entityAPI = EntityAPI.getInstance({entityTypes: entityTypes}, true);
+
+      // Storage data
+      // TODO: Initialize storage with given entity type data
+      let storageData = [
+        {
+          'eid': '123',
+          'field_string_a': 'A123',
+          'field_string_b': 'B231',
+          'field_int_a': 1234,
+          'field_int_b': 5678
+        },
+        {
+          'eid': '234',
+          'field_string_a': 'A123',
+          'field_string_b': 'B231',
+          'field_int_a': 1234,
+          'field_int_b': 5678
+        }
+      ];
+
+      probes.map(probe => {
+        let storage = entityAPI.getStorage(probe.values.entityTypeProbe);
+
+        // Init storage
+        let indexes = probe.classes.ProbeEntity.getEntityIndexDefinitions();
+        storage.getStorageBackend().applyStorageData(indexes, storageData);
+
+        // Try to load preloaded data
+        let entityIds = [];
+
+        storageData.map(container => {
+          entityIds.push(storage.extractEntityId(indexes, container));
+        });
+
+        console.log("Loading...", entityIds);
+
+        storage.loadMultiple(entityIds)
+          .then(entitys => {
+            console.log("Saatiin", entitys.size, entitys);
+
+
+            if (entitys.size > 0)
+              errors.push(new Error("Storage api didn't return empty set"));
+
+            counter--;
+            if (!counter && errors) done(errors[0]); else if (!counter) done();
+          })
+          .catch(err => {
+            errors.push(err);
+            counter--;
+            if (!counter && errors) done(errors[0]); else if (!counter) done();
+          });
+
       });
     })
   });

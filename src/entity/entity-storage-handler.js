@@ -318,10 +318,57 @@ class EntityStorageHandler extends EntityHandler {
   * @return table name
   */
   getStorageTableName() {
-    // TODO: fix prefixes
+    // TODO: fix prefixes, provide configuration basic data
     let prefix = ''; // entity_';
     return prefix + this.getEntityTypeId();
   }
+
+  /**
+  * Get storage backend.
+  *
+  * @return storage backend
+  */
+  getStorageBackend() {
+    return this._registry.get('properties', 'storage-backend');
+  }
+
+  /**
+  * Returns entity field definitions.
+  *
+  * @return field definitions
+  */
+  getEntityFieldDefinitions() {
+    return this.getEntityBaseClass().getFieldDefinitions();
+  }
+
+  /**
+  * Returns entity field definitions.
+  *
+  * @return field definitions
+  */
+  getEntityFieldIndexDefinitions() {
+    return this.getEntityBaseClass().getFieldIndexDefinitions();
+  }
+
+  /**
+  * Helper method to extract entity id data.
+  *
+  * @param indexes
+  *   Entity index definition
+  * @param data
+  *   Container
+  * @return entity id
+  */
+  extractEntityId(indexes, data) {
+    if (!indexes)
+      return false;
+
+    let entityId = {};
+    for (var i = 0; i < indexes.length; i++) {
+      entityId[indexes[i].fieldName] = data[indexes[i].fieldName];
+    }
+    return entityId;
+  } 
 
   /**
   * Check if requested entity id is valid.
@@ -335,6 +382,7 @@ class EntityStorageHandler extends EntityHandler {
       return false;
     return true;
   }
+
 }
 
 export default EntityStorageHandler;

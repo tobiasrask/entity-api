@@ -17,8 +17,36 @@ class ConfigStorageBackend extends StorageBackend {
   */
   constructor(variables) {
     super(variables);
+
+    if (variables.hasOwnProperty('storageData'))
+      this.applyStorageData(variables.storageData);
+
     if (variables.hasOwnProperty('lockUpdates'))
       this.setStorageLock(variables.lockUpdates);
+
+  }
+
+  /**
+  * Fill storage with configuration based data.
+  *
+  * @param indexes
+  *   Entity storage indexes
+  * @param storage data
+  *   Array of containers to be applied, every item should contain keys
+  *   entityId and container.
+  * @return boolean succeed
+  */
+  applyStorageData(indexes, data) {
+    let self = this;
+    let domain = this.getStorageDomain();
+    let handler = self.getStorageHandler();
+
+    data.map(container => {
+      // TODO: Retrieve entity id based on item values
+      let entityId = handler.extractEntityId(indexes, container);
+      self._registry.set(domain, entityId, container);
+      console.log("Initializing entity:", entityId, container);
+    });
   }
 
   /**
@@ -52,6 +80,7 @@ class ConfigStorageBackend extends StorageBackend {
   saveEntityContainer(entityId, container, callback) {
     if (this.isStorageLocked())
       return callback(new Error("Storage updates are locked"));
+
     let domain = this.getStorageDomain();
     this._registry.set(domain, entityId, container);
     callback(null);

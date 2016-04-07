@@ -23,7 +23,8 @@ class Entity {
   * Prepare fields by fetching field definitions.
   */
   prepareFields() {
-    this._registry.set('properties', 'fields', this.getFieldDefinitions());
+    let fields = this.constructor.getFieldDefinitions();
+    this._registry.set('properties', 'fields', fields);
   }
 
   /**
@@ -68,9 +69,10 @@ class Entity {
   *   Object with index keys
   */
   id() {
-    let indexes = this.getEntityIndexDefinitions();
+    let indexes = this.constructor.getFieldIndexDefinitions();
     if (!indexes)
       return false;
+
     let entityId = {};
     for (var i = 0; i < indexes.length; i++) {
       entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName);
@@ -124,7 +126,10 @@ class Entity {
   *   Object with index keys
   */
   prepareEntityId() {
-    let indexes = this.getEntityIndexDefinitions();
+    //let entityType = this.getEntityTypeId();
+    //return EntityAPI.getInstance().getStorage(entityType).getEntityFieldDefinitions();
+
+    let indexes = this.constructor.getFieldIndexDefinitions();
     if (!indexes)
       return false;
     for (var i = 0; i < indexes.length; i++) {
@@ -289,7 +294,7 @@ class Entity {
   * @return data
   *   List of indexes
   */
-  static getEntityIndexDefinitions() {
+  static getFieldIndexDefinitions() {
     return [];
   }
 }
