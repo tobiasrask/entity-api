@@ -24,7 +24,7 @@ class APIObject {
   log(source, message, type) {
     if (type == undefined) type = 'info';
     
-    // console.log(`${source}  ${message}  ${type}`);
+    console.log(`${source}  ${message}  ${type}`);
   }
 
   /**

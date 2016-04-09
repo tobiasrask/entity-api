@@ -25,12 +25,6 @@ export { _entity as Entity };
 import _fieldAPI from './field/field-api';
 export { _fieldAPI as FieldAPI };
 
-import _baseField from './field/base-field';
-export { _baseField as BaseField };
-
-import _complexField from './field/complex-field';
-export { _complexField as ComplexField };
-
 import _fieldHandler from './field/field-handler';
 export { _fieldHandler as FieldHandler };
 

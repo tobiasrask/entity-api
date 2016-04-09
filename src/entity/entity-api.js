@@ -89,6 +89,16 @@ class EntityAPI extends APIObject {
   }
 
   /**
+  * Get view handler for requested entity type.
+  *
+  * @param entity type name
+  * @return view handler or null
+  */
+  getViewHandler(name) {
+    return this.getEntityTypeHandler(name, 'view');
+  }
+
+  /**
   * Returns singleton object
   *
   * @param options

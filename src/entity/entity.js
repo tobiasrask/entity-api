@@ -36,8 +36,8 @@ class Entity {
   */
   prepareFieldValues(container, callback) {
     var self = this;
-    var fields = this._registry.get('properties', 'fields');
-    if (!fields) return callback(null);
+    var fields = this.getFields();
+
     fields.forEach((value, fieldName) => {
       if (container.hasOwnProperty(fieldName))
         self.set(fieldName, container[fieldName]);
@@ -53,10 +53,9 @@ class Entity {
   exportFieldValues() {
     var self = this;
     var build = {};
-    var fields = this._registry.get('properties', 'fields');
-    if (!fields) return callback(null);
-    fields.forEach((value, fieldName) => {
-      build[fieldName] = self.get(fieldName);
+    var fields = this.getFields();
+    fields.forEach((field, fieldName) => {
+      build[fieldName] = field.get();
     });
     return build;
   }
@@ -125,13 +124,12 @@ class Entity {
   * @return entity id
   *   Object with index keys
   */
-  prepareEntityId() {
-    //let entityType = this.getEntityTypeId();
-    //return EntityAPI.getInstance().getStorage(entityType).getEntityFieldDefinitions();
-
+  prepareEntityId() {    
     let indexes = this.constructor.getFieldIndexDefinitions();
+
     if (!indexes)
       return false;
+
     for (var i = 0; i < indexes.length; i++) {
       if (indexes[i].hasOwnProperty('auto') && indexes[i]['auto']) 
         this.setDangerously(indexes[i].fieldName, Utils.getUUID());
@@ -225,6 +223,15 @@ class Entity {
   }
 
   /**
+  * Return fields
+  *
+  * @return collection fields
+  */
+  getFields() {
+    return this._registry.get('properties', 'fields');
+  }
+
+  /**
   * Fetch field value.
   *
   * @param fieldName
@@ -232,14 +239,8 @@ class Entity {
   get(fieldName) {
     let fields = this._registry.get('properties', 'fields');
     if (!fields)
-      return false;
-
-    if (fields.has(fieldName)) {
-      return fields.get(fieldName).get();
-    } else {
-      console.log("Unable to get field value, unknown field name:", fieldName);
-    }
-    return false;
+      return null;
+    return fields.has(fieldName) ? fields.get(fieldName).get() : null;
   }
 
   /**
@@ -250,6 +251,7 @@ class Entity {
   */
   set(fieldName, value) {
     let fields = this._registry.get('properties', 'fields');
+
     if (!fields)
       return false;
 

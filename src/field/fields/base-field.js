@@ -1,5 +1,4 @@
-import DomainMap from 'domain-map'
-import Field from "./field";
+import Field from "./../field";
 
 /**
 * Base fields are stored withing entity table.

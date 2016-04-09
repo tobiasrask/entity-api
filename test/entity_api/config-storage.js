@@ -1,7 +1,7 @@
 import assert from "assert"
-import {EntityAPI, EntityType, EntityHandler,
+import { EntityAPI, EntityType, EntityHandler,
         Entity, EntityStorageHandler,
-        ConfigStorageBackend, FieldAPI} from "./../../src/index"
+        ConfigStorageBackend, FieldAPI } from "./../../src/index"
 import Utils from "./../../src/misc/utils"
 
 let fieldAPI = new FieldAPI();
@@ -262,8 +262,8 @@ describe('Config storage handler', () => {
         entityAPI.getEntityType(probe.values.entityTypeProbe)
           .getHandler(probe.values.entityHandlerProbe)
           .loadMultiple(entityIds)
-          .then(entitys => {
-            if (entitys.size > 0)
+          .then(entities => {
+            if (entities.size() <= 0)
               errors.push(new Error("Storage api didn't return empty set"));
 
             counter--;
@@ -388,9 +388,9 @@ describe('Config storage handler', () => {
         });
 
         storage.loadMultiple(entityIds)
-          .then(entitys => {
+          .then(entities => {
  
-            if (entitys.size > 0)
+            if (entities.size > 0)
               errors.push(new Error("Storage api didn't return empty set"));
 
             counter--;

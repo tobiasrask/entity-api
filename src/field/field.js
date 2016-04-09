@@ -2,7 +2,7 @@ import DomainMap from 'domain-map'
 
 
 /**
-* Field.
+* Field @API.
 */
 class Field {
   
@@ -81,6 +81,18 @@ class Field {
   */
   get() {
     // Override this method
+  }
+
+  /**
+  * View field.
+  *
+  * @param options with following keys
+  *   viewMode
+  * @param callback
+  *   Will return object with data - key, or false if no data available.
+  */
+  view(options, callback) {
+    callback(null, false);
   }
 }
 

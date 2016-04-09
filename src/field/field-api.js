@@ -1,18 +1,10 @@
 import DomainMap from 'domain-map'
 import APIObject from "./../misc/api-object"
-import BaseField from "./base-field";
 
 /**
-* Field api.
+* Field API.
 *
-* File api contains:
-*
-*   keyfield
-*     Field are handled 
-*   basefield
-*     Field values are stored withing entity table
-*   complex-fields
-*     Field data is stored in separate table
+* File api contains
 *   
 */
 class FieldAPI extends APIObject {
@@ -24,15 +16,27 @@ class FieldAPI extends APIObject {
   */
   constructor(variables = {}) {
     super(variables);
-
     this._registry = new DomainMap();
 
-    if (!variables.hasOwnProperty('fieldTypes')) {
-      // Apply default field typs
-      variables.fieldTypes = {
-        text: require('./types/text').default,
-        integer: require('./types/integer').default
-      }
+    // Apply default fields provided by field API
+    if (!variables.hasOwnProperty('fields')) variables.fields = {};
+    if (!variables.hasOwnProperty('skipDefaultFields')) {
+      variables.fields['base_field'] = require('./fields/base-field').default;
+      variables.fields['complex_field'] = require('./fields/complex-field').default;
+    }
+
+    Object.keys(variables.fields).forEach((fieldId, index) => {
+      this.registerField(fieldId, variables.fields[fieldId]);
+    });
+
+    // Apply default field types provided by field API
+    if (!variables.hasOwnProperty('fieldTypes')) variables.fieldTypes = {};    
+    if (!variables.hasOwnProperty('skipDefaultFieldTypes')) {
+      variables.fieldTypes['text'] = require('./field_types/text').default;
+      variables.fieldTypes['integer'] = require('./field_types/integer').default;
+      variables.fieldTypes['boolean'] = require('./field_types/boolean').default;
+      variables.fieldTypes['list'] = require('./field_types/list').default;
+      variables.fieldTypes['map'] = require('./field_types/map').default;
     }
 
     Object.keys(variables.fieldTypes).forEach((fieldTypeId, index) => {
@@ -41,19 +45,44 @@ class FieldAPI extends APIObject {
   }
 
   /**
-  * Register field type
+  * Register field. Field could be something like "base_field", "image" or
+  * "link" and contains formatted value.
+  *
+  * @param fieldId
+  *   Field identifier
+  * @param field
+  *   Field class
+  */
+  registerField(fieldId, field) {
+    this.log("FieldAPI", `Registering field: ${fieldId}`);
+    this._registry.set('fields', fieldId, field);
+  }
+
+  /**
+  * Get field.
+  *
+  * @param fieldId
+  * @return field of null
+  */
+  getField(fieldId) {
+    return this._registry.get('fields', fieldId, null);
+  }
+
+  /**
+  * Register field type. Field type could be something like "text", "integer" or
+  * "boolean" and contains formatted value.
   *
   * @param fieldTypeId
   * @param fieldType
   *   Field type class
   */
   registerFieldType(fieldTypeId, fieldType) {
-    this.log("FieldAPI", "Registering field type: text");
+    this.log("FieldAPI", `Registering field type: ${fieldTypeId}`);
     this._registry.set('fieldTypes', fieldTypeId, fieldType);
   }
 
   /**
-  * Get field.
+  * Get field type.
   *
   * @param name
   * @return field handler of null
@@ -67,17 +96,30 @@ class FieldAPI extends APIObject {
   * Base field contain only one field at the time.
   *
   * @param field type name
-  * @return field
+  * @return field instance
   */
   createBasefield(fieldTypeName) {
+    return this.createField('base_field', fieldTypeName);
+  }
+
+  /**
+  * Factor method to create fields.
+  *
+  * @param fieldId
+  * @param field type name
+  * @return field
+  */
+  createField(fieldId, fieldTypeName) {
+    let field = this.getField(fieldId);
+
+    if (!field)
+      throw new Error(`Unable to create field, unknown field id: ${fieldId}`);
+
     let fieldType = this.getFieldType(fieldTypeName);
+    if (!fieldType)
+      throw new Error(`Unable to create field, unknown field type ${fieldTypeName}`);
 
-    if (!fieldType) {
-      throw new Error(`Unable to create base field, unknown type ${fieldTypeName}`);
-    }
-
-    // Initialize new field with corresponding field type
-    return new BaseField({
+    return new field({
       'fieldItem': new fieldType()
       });
   }

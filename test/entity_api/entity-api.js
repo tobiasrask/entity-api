@@ -1,5 +1,6 @@
 import assert from "assert"
-import {EntityAPI, EntityType, EntityHandler, Entity} from "./../../src/index"
+import { EntityAPI, EntityType,
+         EntityHandler, Entity } from "./../../src/index"
 import Utils from "./../../src/misc/utils"
 
 class TestUtils extends Utils {
