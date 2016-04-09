@@ -1,4 +1,3 @@
-import DomainMap from 'domain-map'
 import APIObject from "./../misc/api-object"
 
 /**
@@ -16,7 +15,6 @@ class FieldAPI extends APIObject {
   */
   constructor(variables = {}) {
     super(variables);
-    this._registry = new DomainMap();
 
     // Apply default fields provided by field API
     if (!variables.hasOwnProperty('fields')) variables.fields = {};

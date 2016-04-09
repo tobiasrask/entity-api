@@ -193,6 +193,9 @@ describe('Config storage handler', () => {
             if (entity.getIntanceProb() != probe.values.entityProbe)
               errors.push(new Error("Entity's instance probe check failed"));
 
+            if (!entity.isNew)
+              errors.push(new Error("Entity isNew() check failed"));
+
             counter--;
             if (!counter && errors) done(errors[0]); else if (!counter) done();
           })
@@ -206,7 +209,7 @@ describe('Config storage handler', () => {
   });
 
   describe('Config storage interface', () => {
-    it('Test StorageHandler.load() method', (done) => {
+    it('Test StorageHandler.load() method for unknown entity', (done) => {
       let numProbes = 2;
       let counter = numProbes;
       let errors = [];
@@ -242,7 +245,7 @@ describe('Config storage handler', () => {
   });
 
   describe('Config storage interface', () => {
-    it('Test StorageHandler.loadMultiple() method', (done) => {
+    it('Test StorageHandler.loadMultiple() method for unknown ids', (done) => {
       let numProbes = 2;
       let counter = numProbes;
       let errors = [];
@@ -263,8 +266,15 @@ describe('Config storage handler', () => {
           .getHandler(probe.values.entityHandlerProbe)
           .loadMultiple(entityIds)
           .then(entities => {
+
             if (entities.size() <= 0)
-              errors.push(new Error("Storage api didn't return empty set"));
+              errors.push(new Error("Storage api didn't return keyed Map"));
+
+            // Make sure every entity is marked as false
+            entities.forEach((value, entityId) => {
+              if (entities.get(entityId))
+                errors.push(new Error("Storage returned object for unknown entity"));
+            });
 
             counter--;
             if (!counter && errors) done(errors[0]); else if (!counter) done();
@@ -307,7 +317,8 @@ describe('Config storage handler', () => {
         storage.create(inputParams)
           .then(entityA => {
             entityId = entityA.id();
-            // Save entity
+            if (!entityA.isNew())
+              errors.push("Just created entity is not marked as new");
             return entityA.save();
           })
           .then(result => {
@@ -315,6 +326,8 @@ describe('Config storage handler', () => {
             return storage.load(entityId);
           })
           .then(entityB => {
+            if (entityB.isNew())
+              errors.push("Just loaded entity is marked as new");
 
             if (!entityB) {
               errors.push("Unable to load saved entity");

@@ -1,6 +1,7 @@
 import DomainMap from "domain-map"
 import Utils from "./../misc/utils"
 import EntityAPI from "./entity-api"
+import APIObject from "./../misc/api-object"
 
 /**
 * Entity
@@ -71,11 +72,9 @@ class Entity {
     let indexes = this.constructor.getFieldIndexDefinitions();
     if (!indexes)
       return false;
-
     let entityId = {};
-    for (var i = 0; i < indexes.length; i++) {
+    for (var i = 0; i < indexes.length; i++)
       entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName);
-    }
     return entityId;
   }
 
@@ -104,15 +103,13 @@ class Entity {
   * @param callback
   */
   preCreation(variables, callback) {
-    this._isNew = true;
+    this._registry.set('properties', 'isNew', true);
 
     // Apply entity tag
     if (variables.hasOwnProperty(':tag'))
       this._registry.set('properties', 'entityTag', variables[':tag']);
-
     // Prepare entity identifier
     this.prepareEntityId();
-
     // Apply field values
     this.prepareFieldValues(variables, callback);
   }
@@ -126,14 +123,11 @@ class Entity {
   */
   prepareEntityId() {    
     let indexes = this.constructor.getFieldIndexDefinitions();
-
     if (!indexes)
       return false;
-
-    for (var i = 0; i < indexes.length; i++) {
+    for (var i = 0; i < indexes.length; i++)
       if (indexes[i].hasOwnProperty('auto') && indexes[i]['auto']) 
         this.setDangerously(indexes[i].fieldName, Utils.getUUID());
-    }
   }
 
   /**
@@ -153,6 +147,15 @@ class Entity {
   */
   finalize(callback) {
     callback(null);
+  }
+
+  /**
+  * Method returns boolean value to indicate if entity is new.
+  *
+  * @return boolean is new
+  */
+  isNew() {
+    return this._registry.get('properties', 'isNew', false);
   }
 
   /**
@@ -248,18 +251,17 @@ class Entity {
   *
   * @param fieldName
   * @param value
+  * @return boolean succeed
   */
   set(fieldName, value) {
     let fields = this._registry.get('properties', 'fields');
-
+    
     if (!fields)
       return false;
 
-    if (fields.has(fieldName)) {
-      fields.get(fieldName).set(value);
-    } else {
-      console.log("Unable to set field value, unkown field name:", fieldName);
-    }
+    if (!fields.has(fieldName))
+      throw new Error(`Unable to set value for unkown field : ${fieldName}`);
+    return fields.get(fieldName).set(value);
   }
 
   /**
@@ -270,14 +272,14 @@ class Entity {
   */
   setDangerously(fieldName, value) {
     let fields = this._registry.get('properties', 'fields');
+
     if (!fields)
       return false;
 
-    if (fields.has(fieldName)) {
-      fields.get(fieldName).set(value, {force: true});
-    } else {
-      console.log("Unable to set field value, unkown field name:", fieldName);
-    }
+    if (!fields.has(fieldName))
+      throw new Error(`Unable to set value for unkown field : ${fieldName}`);
+
+    return fields.get(fieldName).set(value, {force: true});
   }
 
   /**

@@ -1,4 +1,3 @@
-import DomainMap from 'domain-map'
 import APIObject from "./../misc/api-object"
 
 var entityAPIInstance = false;
@@ -15,13 +14,13 @@ class EntityAPI extends APIObject {
   */
   constructor(options = {}) {
     super(options);
-    this._registry = new DomainMap();
+
     if (options.hasOwnProperty('entityTypes'))
       this.registerEntityTypes(options.entityTypes);
   }
 
   /**
-  * Initialize entity types
+  * Register entity types
   *
   * @param entityTypes
   *   List of entity types to be registered

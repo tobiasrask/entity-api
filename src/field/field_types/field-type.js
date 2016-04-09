@@ -4,7 +4,7 @@ import APIObject from "./../../misc/api-object"
 /**
 * Field type.
 */
-class FieldType extends APIObject {
+class FieldType {
   
   /**
   * Construct field type
@@ -12,7 +12,6 @@ class FieldType extends APIObject {
   * @param params
   */
   constructor(variables) {
-    super(variables);
     this._registry = new DomainMap();
     this._registry.set('properties', 'fieldTypeId', variables.fieldTypeId);
   }
