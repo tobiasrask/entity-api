@@ -30,7 +30,7 @@ class TestUtils extends Utils {
     class ProbeEntityViewHandler extends EntityViewHandler {
       getProb() {
         return probe.values.entityHandlerProbe;
-      }      
+      }
     }
 
     class ProbeEntity extends Entity {
@@ -154,7 +154,7 @@ describe('Entity view handler', () => {
           return errors.push(new Error("It didn't return entity class"));
 
         if (entity.getProb() != probe.values.entityProbe)
-          return errors.push(new Error("Entitys's probe check failed"));                
+          return errors.push(new Error("Entitys's probe check failed"));
       });
 
       if (errors.length > 0)
@@ -180,8 +180,6 @@ describe('Entity view handler', () => {
 
       let entityAPI = EntityAPI.getInstance({entityTypes: entityTypes}, true);
 
-      // Storage data
-      // TODO: Initialize storage with given entity type data
       let storageData = [
         {
           'eid': '123',
@@ -207,8 +205,14 @@ describe('Entity view handler', () => {
         storage.getStorageBackend().applyStorageData(indexes, storageData);
 
         let entityIds = [];
+        let entityIdsData = [];
+
         storageData.map(container => {
-          entityIds.push(storage.extractEntityId(indexes, container));
+          // Extract entity id
+          let entityId = storage.extractEntityId(indexes, container);
+          entityIds.push(entityId);
+          // Keep track of entity id and expected field values
+          entityIdsData.push({ entityId: entityId, data: container });
         });
 
         storage.loadMultiple(entityIds)
@@ -217,8 +221,19 @@ describe('Entity view handler', () => {
           })
           .then(build => {
             // TODO: Validate values
+            entityIdsData.map(entityData => {
+              let fieldValues = build.get(entityData.entityId);
+ 
+              Object.keys(entityData.data).forEach((fieldName, index) => {
+                if (!fieldValues.hasOwnProperty(fieldName))
+                  return errors.push(new Error(`Viewing field failed: ${fieldName}`));
+                else if (entityData.data[fieldName] != fieldValues[fieldName])
+                  return errors.push(new Error(`Rendering field value failed: ${fieldName}, ${entityData.data[fieldName]} vs ${fieldValues[fieldName]}`));
+              });
+            });
+
             counter--;
-            if (!counter && errors) done(errors[0]); else if (!counter) done();            
+            if (!counter && errors) done(errors[0]); else if (!counter) done();
           })
           .catch(err => {
             errors.push(err);
