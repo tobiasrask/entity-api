@@ -213,12 +213,10 @@ describe('Entity view handler', () => {
 
         storage.loadMultiple(entityIds)
           .then(entities => {
-            console.log("About to view: ", entityIds, entities);
             return view.viewMultiple(entities, { viewMode: 'full' });
           })
-          .then(viewedEntities => {
-            console.log("VIEWED!");
-            console.log(viewedEntities);
+          .then(build => {
+            // TODO: Validate values
             counter--;
             if (!counter && errors) done(errors[0]); else if (!counter) done();            
           })

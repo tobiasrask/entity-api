@@ -1,5 +1,5 @@
 import DomainMap from 'domain-map'
-import Entity from './entity';
+import Entity from './entity'
 
 /**
 * Entity handler

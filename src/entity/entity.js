@@ -70,11 +70,15 @@ class Entity {
   */
   id() {
     let indexes = this.constructor.getFieldIndexDefinitions();
+
     if (!indexes)
       return false;
+    
     let entityId = {};
+    
     for (var i = 0; i < indexes.length; i++)
       entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName);
+    
     return entityId;
   }
 

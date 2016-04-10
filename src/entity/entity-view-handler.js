@@ -1,4 +1,5 @@
-import EntityHandler from "./entity-handler";
+import DomainMap from 'domain-map'
+import EntityHandler from "./entity-handler"
 
 /**
 * Entity view handler
@@ -66,7 +67,6 @@ class EntityViewHandler extends EntityHandler {
     if (!options.hasOwnProperty('viewMode')) options.viewMode = 'default';
 
     self.viewMultipleProcessFields(entities, options, function(err, result) {
-      console.log("DONE!", err, result, entities);
       if (err) callback(err);
       else callback(null, result);
     });
@@ -86,17 +86,20 @@ class EntityViewHandler extends EntityHandler {
     let entityType = this.getEntityTypeId();
     let errors = [];
     let counter = entities.size();
-    console.log("Processing entities...")
-    entities.forEach((entity, entityId) => {
-      console.log("Processing entity: " + counter);
-      // TODO: Check scope? We reuse entities & entityID & entity
-      self.processEntityFields(entityId, entity, options, err => {
-        if (err) errors = errors.concat(err);        
-        counter--;
-        console.log("callbacked: " + counter);
+    let build = DomainMap.createCollection({strictKeyMode: false});
 
+    entities.forEach((entity, entityId) => {
+
+      // TODO: Check scope? We reuse entities & entityID & entity
+      self.processEntityFields(entityId, entity, options, (err, container) => {
+        if (err)
+          errors = errors.concat(err);
+        else
+          build.set(container.entityId, container.content);
+
+        counter--;
         if (counter == 0) {
-          if (!errors.length) callback(null);
+          if (!errors.length) callback(null, build);
           else callback(errors);
         }
       });
@@ -110,6 +113,7 @@ class EntityViewHandler extends EntityHandler {
   * @param entity
   * @param options
   * @param callback
+  *   Container keyed with entityId and content
   */
   processEntityFields(entityId, entity, options, callback) {
     if (!entity)
@@ -117,20 +121,23 @@ class EntityViewHandler extends EntityHandler {
     let errors = [];
     let fields = entity.getFields();
     let counter = fields.size;
-    entity.content = {}    
-    console.log("Processing entity fields...")
+
+    let container = {
+      entityId: entityId,
+      content: {}
+    };
 
     fields.forEach((field, fieldName) => {
       field.view(options, (err, result) => {
         if (err)
           errors.push(err);
-        else if (result.hasOwnProperty('data'))
-          entity.content[fieldName] = result.data;
+        else if (result != undefined)
+          container.content[fieldName] = result;
         // TODO: Provide hook for overriding value?
         // Maybe observer-pattern?
         counter--;
         if (counter == 0) {
-          if (!errors.length) callback(null);
+          if (!errors.length) callback(null, container);
           else callback(errors);
         }
       });

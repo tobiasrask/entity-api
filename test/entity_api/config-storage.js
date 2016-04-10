@@ -259,7 +259,7 @@ describe('Config storage handler', () => {
       }
 
       let entityAPI = new EntityAPI({entityTypes: entityTypes});
-      let entityIds = [{eid: 'probe:random'}];
+      let entityIds = [ { eid: 'probe:random' } ];
 
       probes.map(probe => {
         entityAPI.getEntityType(probe.values.entityTypeProbe)
@@ -402,9 +402,24 @@ describe('Config storage handler', () => {
 
         storage.loadMultiple(entityIds)
           .then(entities => {
- 
-            if (entities.size > 0)
-              errors.push(new Error("Storage api didn't return empty set"));
+
+            if (entities.size() <= 0)
+              errors.push(new Error("Storage api didn't return keyed Map"));
+
+            // Make sure every entity is marked as false
+
+
+            entityIds.map(entityId => {
+              if (!entities.get(entityId))
+                errors.push(new Error("Storage didn't return entity"));
+            });
+
+            entities.forEach((entity, entityId) => {
+              if (!entities.get(entityId))
+                errors.push(new Error("Storage didn't return entity"));
+              // TODO: Validate entity fields...
+
+            });
 
             counter--;
             if (!counter && errors) done(errors[0]); else if (!counter) done();
@@ -414,7 +429,6 @@ describe('Config storage handler', () => {
             counter--;
             if (!counter && errors) done(errors[0]); else if (!counter) done();
           });
-
       });
     })
   });

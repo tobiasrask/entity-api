@@ -123,6 +123,18 @@ class BaseField extends Field {
     this.getFieldItem().setDefaultValue(value);    
     return this;
   }
+
+  /**
+  * View field.
+  *
+  * @param options with following keys
+  *   viewMode
+  * @param callback
+  *   Will return object content value - key, or false if no data available.
+  */
+  view(options, callback) {
+    callback(null, this.getFieldItem().getValue());
+  }
 }
 
 export default BaseField;
