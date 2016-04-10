@@ -54,26 +54,65 @@ class TestUtils extends Utils {
         fields.set('eid', fieldAPI.createBasefield('text')
           .setName('Entity id')
           .setDescription('Entity identifier')
-          .setProtected(true));
+          .setProtected(true)
+          .setProperty('view_properties', {
+            full: { view_field: true },
+            list: { view_field: true }
+          }));
 
         fields.set('field_string_a', fieldAPI.createBasefield('text')
           .setName('Entity field')
-          .setDescription('Entity field'));
+          .setDescription('Entity field')
+          .setProperty('view_properties', {
+            full: { view_field: true },
+            list: { view_field: true }
+          }));
 
         // String field with default value
         fields.set('field_string_b', fieldAPI.createBasefield('text')
           .setName('Entity field')
-          .setDescription('Entity field'));
+          .setDescription('Entity field')
+          .setProperty('view_properties', {
+            full: { view_field: true },
+            list: { view_field: true }
+          }));
 
         fields.set('field_int_a', fieldAPI.createBasefield('integer')
           .setName('Entity field')
-          .setDescription('Entity field'));
+          .setDescription('Entity field')
+          .setProperty('view_properties', {
+            full: { view_field: true },
+            list: { view_field: true }
+          }));
 
         // Int field with default value
         fields.set('field_int_b', fieldAPI.createBasefield('integer')
           .setName('Entity field')
           .setDescription('Entity field')
-          .setDefaultValue(123456789));
+          .setDefaultValue(123456789)
+          .setProperty('view_properties', {
+            full: { view_field: true },
+            list: { view_field: true }
+          }));
+
+        // View mode stealth fields 
+        fields.set('field_string_hidden', fieldAPI.createBasefield('text')
+          .setName('Entity field')
+          .setDescription('Entity field')
+          .setProperty('view_properties', {
+            full: { view_field: false },
+            list: { view_field: false }
+          }));
+
+        // Int field with hidden value
+        fields.set('field_int_hidden', fieldAPI.createBasefield('integer')
+          .setName('Entity field')
+          .setDescription('Entity field')
+          .setDefaultValue(123456789)
+          .setProperty('view_properties', {
+            full: { view_field: false },
+            list: { view_field: false }
+          }));
 
         return fields;
       }
@@ -108,10 +147,8 @@ class TestUtils extends Utils {
           new ProbeEntityViewHandler(variables));
       }
     }
-
     probe.classes.ProbeEntity = ProbeEntity;
     probe.classes.ProbeEntityType = ProbeEntityType;
-
     return probe;
   }
 }
@@ -220,13 +257,18 @@ describe('Entity view handler', () => {
             return view.viewMultiple(entities, { viewMode: 'full' });
           })
           .then(build => {
-            // TODO: Validate values
+ 
             entityIdsData.map(entityData => {
               let fieldValues = build.get(entityData.entityId);
  
               Object.keys(entityData.data).forEach((fieldName, index) => {
+
                 if (!fieldValues.hasOwnProperty(fieldName))
                   return errors.push(new Error(`Viewing field failed: ${fieldName}`));
+
+                else if (typeof entityData.data[fieldName] != typeof fieldValues[fieldName])
+                  return errors.push(new Error(`Typeof field value failed: ${fieldName}, ${typeof entityData.data[fieldName]} vs ${typeof fieldValues[fieldName]}`));
+
                 else if (entityData.data[fieldName] != fieldValues[fieldName])
                   return errors.push(new Error(`Rendering field value failed: ${fieldName}, ${entityData.data[fieldName]} vs ${fieldValues[fieldName]}`));
               });

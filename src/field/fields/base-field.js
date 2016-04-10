@@ -125,6 +125,27 @@ class BaseField extends Field {
   }
 
   /**
+  * Set field property value.
+  *
+  * @param property key
+  * @param value
+  */
+  setProperty(propertyKey, value) {
+    this._registry.set('field_property', propertyKey, value);
+    return this;
+  }
+
+  /**
+  * Get field property
+  *
+  * @param propertyKey
+  * @return value
+  */
+  getProperty(propertyKey) {
+    return this._registry.get('field_property', propertyKey);
+  }
+
+  /**
   * View field.
   *
   * @param options with following keys
