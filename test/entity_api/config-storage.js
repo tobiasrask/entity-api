@@ -132,7 +132,6 @@ describe('Config storage handler', () => {
 
       let entityAPI = EntityAPI.getInstance({entityTypes: entityTypes}, true);
 
-      // Test entity type getter
       probes.map(probe => {
         let entityType = entityAPI.getEntityType(probe.values.entityTypeProbe);
         let handler = entityType.getHandler(probe.values.entityHandlerProbe);
