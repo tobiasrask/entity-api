@@ -48,7 +48,7 @@ class TestUtils extends Utils {
 describe('Field', () => {
 
   describe('Field construction', () => {
-    it('Should construct with random field type probes', (done) => {
+    it('Should construct with random field probes', (done) => {
       let numProbes = 2;
       let errors = [];
 
@@ -75,11 +75,18 @@ describe('Field', () => {
 
         if (instance.getProperty(probe.values.fieldPropertyKeyProbe) != probe.values.fieldPropertyValueProbe)
           errors.push(new Error("Field property probe check failed"));
+
+        instance.view({viewMode: 'random'}, (err, result) => {
+          if (err)
+            errors.push(err);
+          else if (result)
+            errors.push(new Error("Field view default value check failed"));
+        });
       }
 
       if (errors.length > 0)
         return done(errors[0]);
-
+      
       done();
     })
   });

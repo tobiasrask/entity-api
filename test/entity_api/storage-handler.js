@@ -27,7 +27,7 @@ class TestUtils extends Utils {
     class ProbeEntityStorageHandler extends EntityStorageHandler {
       getProb() {
         return probe.values.entityHandlerProbe;
-      }      
+      }
     }
 
     class ProbeEntity extends Entity {
@@ -125,7 +125,7 @@ describe('Storage handler', () => {
           return errors.push(new Error("It didn't return entity class"));
 
         if (entity.getProb() != probe.values.entityProbe)
-          return errors.push(new Error("Entitys's probe check failed"));                
+          return errors.push(new Error("Entitys's probe check failed"));
       });
 
       if (errors.length > 0)

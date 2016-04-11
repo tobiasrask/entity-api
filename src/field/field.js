@@ -83,7 +83,7 @@ class Field {
   * @param options
   */
   set(value, options) {
-    // Override this method
+    return false;
   }
 
   /**
@@ -92,7 +92,7 @@ class Field {
   * @return field value  
   */
   get() {
-    // Override this method
+    return false;
   }
 
   /**
