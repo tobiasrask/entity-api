@@ -7,7 +7,7 @@ import EntityHandler from "./entity-handler"
 class EntityViewHandler extends EntityHandler {
 
   /**
-  * Promise based  alias for @viewEntity
+  * Promise based alias for @viewEntity
   */
   view(entity, options) {
     return new Promise((resolve, reject) => {
@@ -19,7 +19,7 @@ class EntityViewHandler extends EntityHandler {
   }
 
   /**
-  * Promise based  alias for @viewMultipleEntities
+  * Promise based alias for @viewMultipleEntities
   */
   viewMultiple(entities, options) {
     return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ class EntityViewHandler extends EntityHandler {
   }
 
  /**
-  * Traditional callback based api.
+  * Traditional, callback based API.
   */
 
   /**
@@ -61,9 +61,8 @@ class EntityViewHandler extends EntityHandler {
   *   viewMode - view mode for rendering
   * @param callback
   */
-  viewMultipleEntities(entities, options, callback) {
+  viewMultipleEntities(entities, options = {}, callback) {
     var self = this;
-    if (options == undefined) options = {};
     if (!options.hasOwnProperty('viewMode')) options.viewMode = 'default';
 
     self.viewMultipleProcessFields(entities, options, function(err, result) {

@@ -11,6 +11,7 @@ class BaseField extends Field {
   * @param params
   */
   constructor(variables) {
+    variables.fieldId = 'base_field';
     super(variables);
 
     // Apply protected value
@@ -125,27 +126,6 @@ class BaseField extends Field {
   }
 
   /**
-  * Set field property value.
-  *
-  * @param property key
-  * @param value
-  */
-  setProperty(propertyKey, value) {
-    this._registry.set('field_property', propertyKey, value);
-    return this;
-  }
-
-  /**
-  * Get field property
-  *
-  * @param propertyKey
-  * @return value
-  */
-  getProperty(propertyKey) {
-    return this._registry.get('field_property', propertyKey);
-  }
-
-  /**
   * View field.
   *
   * @param options with following keys
@@ -155,6 +135,22 @@ class BaseField extends Field {
   */
   view(options, callback) {
     callback(null, this.getFieldItem().getValue());
+  }
+
+  /**
+  * Method checks if given view mode is enabled for view.
+  *
+  * @param viewMode
+  * @return boolean is enabled
+  */
+  isViewModeEnabled(viewMode) {
+    let property = this.getProperty('view_properties');
+
+    if (!property || !property.hasOwnProperty(viewMode))
+      return false;
+
+    return property[viewMode].hasOwnProperty('view_field') &&
+           property[viewMode]['view_field'] ? true : false;
   }
 }
 

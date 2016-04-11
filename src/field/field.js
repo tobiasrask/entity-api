@@ -14,6 +14,18 @@ class Field {
   */
   constructor(variables) {
     this._registry = new DomainMap();
+
+    if (variables.hasOwnProperty('fieldId'))
+      this._registry.set('properties', 'fieldId', variables.fieldId);
+  }
+
+  /**
+  * Get field id.
+  *
+  * @return value
+  */
+  getFieldId() {
+    return this._registry.get('properties', 'fieldId', '');
   }
 
   /**
@@ -32,7 +44,7 @@ class Field {
   * @return value
   */
   getName() {
-    return this._registry.set('properties', 'fieldName', '');
+    return this._registry.get('properties', 'fieldName', '');
   }
 
   /**
@@ -94,6 +106,27 @@ class Field {
   view(options, callback) {
     callback(null, false);
   }
+
+  /**
+  * Set field property value.
+  *
+  * @param property key
+  * @param value
+  */
+  setProperty(propertyKey, value) {
+    this._registry.set('field_property', propertyKey, value);
+    return this;
+  }
+
+  /**
+  * Get field property
+  *
+  * @param propertyKey
+  * @return value
+  */
+  getProperty(propertyKey) {
+    return this._registry.get('field_property', propertyKey);
+  }  
 }
 
 export default Field

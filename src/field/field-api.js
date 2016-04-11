@@ -96,26 +96,28 @@ class FieldAPI extends APIObject {
   * @param field type name
   * @return field instance
   */
-  createBasefield(fieldTypeName) {
-    return this.createField('base_field', fieldTypeName);
+  createBasefield(fieldTypeId) {
+    return this.createField('base_field', fieldTypeId);
   }
 
   /**
   * Factor method to create fields.
   *
   * @param fieldId
-  * @param field type name
+  *   Field id
+  * @param fieldTypeId
+  *   Field type id
   * @return field
   */
-  createField(fieldId, fieldTypeName) {
+  createField(fieldId, fieldTypeId) {
     let field = this.getField(fieldId);
 
     if (!field)
       throw new Error(`Unable to create field, unknown field id: ${fieldId}`);
 
-    let fieldType = this.getFieldType(fieldTypeName);
+    let fieldType = this.getFieldType(fieldTypeId);
     if (!fieldType)
-      throw new Error(`Unable to create field, unknown field type ${fieldTypeName}`);
+      throw new Error(`Unable to create field, unknown field type ${fieldTypeId}`);
 
     return new field({
       'fieldItem': new fieldType()
