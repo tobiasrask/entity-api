@@ -40,7 +40,7 @@ class BaseField extends Field {
   * @param value
   */
   getLockState() {
-    return this._registry.set('properties', 'locked', false);
+    return this._registry.get('properties', 'locked', false);
   }
 
 
@@ -71,13 +71,13 @@ class BaseField extends Field {
   *   force - Force locked and protected values to be updated  
   */
   set(value, options = {}) {
-    const forceUpdate = options.hasOwnProperty('force') &&
+    let forceUpdate = options.hasOwnProperty('force') &&
       options.force ? true : false;
 
     // Protected fields are initialized only once
     // Second write requires force mode to be enabled
     if (this.getLockState() && !forceUpdate) {
-      this.log("basefield", "Can't update locked field", "warning");
+      // console.log("basefield", "Can't update locked field", "warning");
       return false;      
     }
 

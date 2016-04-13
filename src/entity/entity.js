@@ -269,7 +269,8 @@ class Entity {
   }
 
   /**
-  * Set field value dangerously. Not this method passes protected field lock.
+  * Set field value dangerously.
+  * Note that this method passes protected fields lock.
   *
   * @param fieldName
   * @param value

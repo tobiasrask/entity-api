@@ -1,5 +1,5 @@
 import assert from "assert"
-import { BaseField } from "./../../src/index"
+import { BaseField, FieldType } from "./../../src/index"
 import Utils from "./../../src/misc/utils"
 
 class TestUtils extends Utils {
@@ -17,10 +17,13 @@ class TestUtils extends Utils {
       values: {
         fieldProbe: 'fieldProb:' + TestUtils.getUUID(),
         fieldIdProbe: 'fieldIdProb:' + TestUtils.getUUID(),
+        fieldTypeIdProbe: 'fieldTypeIdProbe:' + TestUtils.getUUID(),
         fieldNameProbe: 'fieldNameProb:' + TestUtils.getUUID(),
         fieldDescProbe: 'fieldNameProb:' + TestUtils.getUUID(),
         fieldPropertyKeyProbe: 'fieldPropertyKeyProb:' + TestUtils.getUUID(),
         fieldPropertyValueProbe: 'fieldPropertyValueProbe:' + TestUtils.getUUID(),
+        fieldValueProbe: 'fieldValueProbe:' + TestUtils.getUUID(),
+        fieldValue2Probe: 'fieldValue2Probe:' + TestUtils.getUUID(),
       },
       // Probe classes
       classes: {}
@@ -38,7 +41,20 @@ class TestUtils extends Utils {
       }      
     }
 
+    class ProbeFieldType extends FieldType {
+
+      constructor(variables = {}) {
+        variables.fieldTypeId = probe.values.fieldTypeIdProbe;
+        super(variables);
+      }
+
+      getProb() {
+        return probe.values.fieldProbe;
+      }
+    }
+
     probe.classes.ProbeField = ProbeField;
+    probe.classes.ProbeFieldType = ProbeFieldType;    
     return probe;
   }
 }
@@ -53,7 +69,11 @@ describe('Base field', () => {
       for (var i = 0; i < numProbes; i++) {
         let probe = TestUtils.createProbe();
 
-        let instance = new probe.classes.ProbeField();
+        let params = {
+          fieldType: new probe.classes.ProbeFieldType()
+        }
+
+        let instance = new probe.classes.ProbeField(params);
 
         instance.setName(probe.values.fieldNameProbe)
                 .setDescription(probe.values.fieldDescProbe)
@@ -80,6 +100,57 @@ describe('Base field', () => {
           else if (result)
             errors.push(new Error("Field view default value check failed"));
         });
+      }
+
+      if (errors.length > 0)
+        return done(errors[0]);
+      
+      done();
+    })
+  });
+
+  describe('Field locking', () => {
+    it('Should lock field updates', (done) => {
+      let numProbes = 2;
+      let errors = [];
+
+      for (var i = 0; i < numProbes; i++) {
+        let probe = TestUtils.createProbe();
+
+        let params = {
+          fieldType: new probe.classes.ProbeFieldType()
+        }
+
+        let instance = new probe.classes.ProbeField(params);
+
+        if (instance.getProb() != probe.values.fieldProbe)
+          errors.push(new Error("Field probe check failed"));
+
+        instance.setProtected(true);
+
+        if (!instance.isProtected())
+          errors.push(new Error("Base field protected flag was not updated"));
+
+        if (!instance.set(probe.values.fieldValueProbe))
+          errors.push(new Error("Field value update didn't return success"));
+
+        if (instance.get() != probe.values.fieldValueProbe)
+          errors.push(new Error("Field value was not updated: " + instance.get() + ", expecting: " + probe.values.fieldValueProbe));
+
+        // Field is now locked, so next update should not pass
+        if (instance.set(probe.values.fieldValue2Probe))
+          errors.push(new Error("Field updating is not locked, returns success"));
+
+        if (instance.get() != probe.values.fieldValueProbe)
+          errors.push(new Error("Protected value was updated: " + instance.get() + ", expecting: " + probe.values.fieldValueProbe));
+
+        // Test brute force
+        if (!instance.set(probe.values.fieldValue2Probe, { force: true }))
+          errors.push(new Error("Unable to break protected field, didn't return success"));
+
+        if (instance.get() != probe.values.fieldValue2Probe)
+          errors.push(new Error("Unable to force update protected value: " + instance.get() + ", expecting: " + probe.values.fieldValue2Probe));
+
       }
 
       if (errors.length > 0)
