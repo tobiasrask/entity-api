@@ -94,8 +94,16 @@ describe('Field API', () => {
         if (api.getProb() != probe.values.fieldAPIProbe)
           return errors.push(new Error("Field API probe check failed"));
 
-
         let testField = null
+
+        // Try to create unknown field, should throw error...        
+        try {
+          testField = api.createField('random:field:id', 'random:field:type');
+          return errors.push(new Error("Field API didn't throw error for random field"));
+        } catch (err) {
+          // We expected field api to throw error, so this is ok
+          
+        }
 
         try {
           testField = api.createField(probe.values.fieldIdProbe, probe.values.fieldTypeIdProbe);
@@ -122,7 +130,6 @@ describe('Field API', () => {
 
         if (testFieldType.getFieldTypeId() != probe.values.fieldTypeIdProbe)
           return errors.push(new Error("Field type instance constructed with illegal id: " + testFieldType.getFieldTypeId() + ", expecting: " + probe.values.fieldTypeIdProbe));
-
       });
 
       if (errors.length > 0)
