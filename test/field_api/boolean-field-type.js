@@ -20,31 +20,63 @@ class TestUtils extends Utils {
         testCases: [
           {
             'value': null,
-            'shouldAllow': true
+            'shouldAllow': true,
+            'expectedValue': false
           },
           {
             'value': undefined,
-            'shouldAllow': true
+            'shouldAllow': true,
+            'expectedValue': false
           },
           { 
             'value': true,
-            'shouldAllow': true
+            'shouldAllow': true,
+            'expectedValue': true
           },
           { 
-            'value': true,
-            'shouldAllow': true
+            'value': false,
+            'shouldAllow': true,
+            'expectedValue': false
+          },
+          {
+            'value': 0,
+            'shouldAllow': true,
+            'expectedValue': false
+          },
+          {
+            'value': 1,
+            'shouldAllow': true,
+            'expectedValue': true
+          },
+          {
+            'value': 2,
+            'shouldAllow': true,
+            'expectedValue': true
+          },
+          {
+            'value': -1,
+            'shouldAllow': true,
+            'expectedValue': true
           },
           {
             'value': 'abc',
-            'shouldAllow': true
+            'shouldAllow': true,
+            'expectedValue': true
+          },
+          {
+            'value': '',
+            'shouldAllow': true,
+            'expectedValue': false
           },
           {
             'value': [ 'test' ],
-            'shouldAllow': true
+            'shouldAllow': true,
+            'expectedValue': true
           },
           {
             'value': { 'test': 'test' },
-            'shouldAllow': true
+            'shouldAllow': true,
+            'expectedValue': true
           }
         ]
       },
@@ -94,13 +126,16 @@ describe('Boolean - Field type', () => {
 
           let result = instance.setValue(testCase['value']);
 
-          console.log("Running test case: " + index, testCase['value'], 'expected:', testCase['shouldAllow'], result, '***');
-
           if (testCase.shouldAllow && !result) {
             errors.push(new Error("Test case #" + index + " failed. Didn't allow value to be type of: " + typeof testCase['value']));
 
           } else if (!testCase.shouldAllow && result) {
             errors.push(new Error("Test case #" + index + " failed. Unexpected value was allowed: " + typeof testCase['value']));
+
+          } else {
+            // Test expected value
+            if (instance.getValue() != testCase.expectedValue)
+              errors.push(new Error("Test case #" + index + " validation failed. Returns: " + instance.getValue()) + ", expected: " + testCase.expectedValue + ", original value: " + testCase['value']);
           }
         });
       }

@@ -32,7 +32,6 @@ class BooleanFieldType extends FieldType {
   * @param value
   */
   validateFieldValue(value) {
-    console.log("Checking boolean value: " + typeof (value) === "boolean");
     return typeof (value) === "boolean";
   }
 }
