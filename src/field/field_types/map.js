@@ -16,6 +16,16 @@ class MapFieldType extends FieldType {
     super(variables);
   }
 
+  /**
+  * Validate value.
+  *
+  * @param value
+  */
+  validateFieldValue(value) {
+    return value !== null &&
+           typeof value === "object" &&
+           !Array.isArray(value);
+  }
 }
 
 export default MapFieldType;
