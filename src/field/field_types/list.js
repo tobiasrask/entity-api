@@ -16,6 +16,14 @@ class ListFieldType extends FieldType {
     super(variables);
   }
 
+  /**
+  * Validate value.
+  *
+  * @param value
+  */
+  validateFieldValue(value) {
+    return Array.isArray(value);
+  }
 }
 
 export default ListFieldType;
