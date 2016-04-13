@@ -11,10 +11,30 @@ class BooleanFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    variables['fieldTypeId'] = 'boolean';
+    if (!variables.hasOwnProperty('fieldTypeId'))
+      variables['fieldTypeId'] = 'boolean';
     super(variables);
   }
 
+  /**
+  * Prepare field value to be boolean.
+  *
+  * @param value
+  * @return value
+  */
+  prepareFieldValue(value) {
+    return value ? true : false;
+  }
+
+  /**
+  * Validate value.
+  *
+  * @param value
+  */
+  validateFieldValue(value) {
+    console.log("Checking boolean value: " + typeof (value) === "boolean");
+    return typeof (value) === "boolean";
+  }
 }
 
 export default BooleanFieldType;

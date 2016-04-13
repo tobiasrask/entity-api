@@ -11,7 +11,8 @@ class TextFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    variables['fieldTypeId'] = 'text';
+    if (!variables.hasOwnProperty('fieldTypeId'))
+      variables['fieldTypeId'] = 'text';
     super(variables);
   }
 

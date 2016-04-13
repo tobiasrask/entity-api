@@ -37,6 +37,22 @@ export { _baseField as BaseField };
 import _fieldType from './field/field_types/field-type';
 export { _fieldType as FieldType };
 
+// Field types
+import _booleanFieldType from './field/field_types/boolean';
+export { _booleanFieldType as BooleanFieldType };
+
+import _integerFieldType from './field/field_types/integer';
+export { _integerFieldType as IntegerFieldType };
+
+import _listFieldType from './field/field_types/list';
+export { _listFieldType as ListFieldType };
+
+import _mapFieldType from './field/field_types/map';
+export { _mapFieldType as MapFieldType };
+
+import _textFieldType from './field/field_types/text';
+export { _textFieldType as TextFieldType };
+
 /**
 * Storage API
 */

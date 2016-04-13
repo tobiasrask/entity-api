@@ -26,17 +26,20 @@ class FieldType {
   }
 
   /**
-  * Set value.
+  * Set value. Value must be valid for instance type.
   *
   * @param value
   * @return boolean succeed
   */
   setValue(value) {
+    // Prepare field value
+    value = this.prepareFieldValue(value);
+
     if (this.validateFieldValue(value)) {
       this._registry.set('properties', 'value', value);
       return true;
     } else {
-      this._registry.set('log', 'error', `Field validation failed: ${value}`);
+      this._registry.set('log', 'error', `Unable to set value, validation failed: ${value}`);
       return false;
     }
   }
@@ -66,6 +69,16 @@ class FieldType {
   */
   getDefaultValue() {
     return this._registry.get('properties', 'defaultValue', null);
+  }
+
+  /**
+  * Prepare field value. Allows fields to format values.
+  *
+  * @param value
+  * @return value
+  */
+  prepareFieldValue(value) {
+    return value;
   }
 
   /**

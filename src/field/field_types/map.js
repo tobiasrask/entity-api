@@ -11,7 +11,8 @@ class MapFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    variables['fieldTypeId'] = 'map';
+    if (!variables.hasOwnProperty('fieldTypeId'))
+      variables['fieldTypeId'] = 'map';
     super(variables);
   }
 

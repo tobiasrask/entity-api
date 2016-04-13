@@ -11,7 +11,8 @@ class IntegerFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    variables['fieldTypeId'] = 'integer';
+    if (!variables.hasOwnProperty('fieldTypeId'))
+      variables['fieldTypeId'] = 'integer';
     super(variables);
   }
 

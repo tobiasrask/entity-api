@@ -11,7 +11,8 @@ class ListFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    variables['fieldTypeId'] = 'list';
+    if (!variables.hasOwnProperty('fieldTypeId'))
+      variables['fieldTypeId'] = 'list';
     super(variables);
   }
 
