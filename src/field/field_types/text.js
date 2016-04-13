@@ -16,6 +16,14 @@ class TextFieldType extends FieldType {
     super(variables);
   }
 
+  /**
+  * Validate field value before assigning it.
+  *
+  * @return boolean is valid
+  */
+  validateFieldValue(value) {
+    return typeof value === 'string';
+  }
 }
 
 export default TextFieldType;
