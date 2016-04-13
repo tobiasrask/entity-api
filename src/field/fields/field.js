@@ -17,6 +17,12 @@ class Field {
 
     if (variables.hasOwnProperty('fieldId'))
       this._registry.set('properties', 'fieldId', variables.fieldId);
+
+    // Apply field item
+    if (variables.hasOwnProperty('fieldType'))
+      this.setFieldTypeInstance(variables.fieldType);
+    //  else
+    //    throw new Error("Field generation requires fielItem attribute");
   }
 
   /**
@@ -64,6 +70,24 @@ class Field {
   */
   getDescription() {
     return this._registry.get('properties', 'description', '');
+  }
+
+  /**
+  * Set field type item.
+  *
+  * @param fieldType
+  */
+  setFieldTypeInstance(fieldType) {
+    this._registry.set('values', 'fieldType', fieldType);
+  }
+
+  /**
+  * Get field item.
+  *
+  * @return fieldType or null
+  */
+  getFieldTypeInstance() {
+    return this._registry.get('values', 'fieldType', null);
   }
 
   /**

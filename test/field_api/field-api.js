@@ -29,7 +29,7 @@ class TestUtils extends Utils {
       classes: {}
     }
 
-    class ProbeFieldAPI extends FieldAPI {
+    class ProbeFieldAPI extends FieldAPI {
       getProb() {
         return probe.values.fieldAPIProbe;
       }      

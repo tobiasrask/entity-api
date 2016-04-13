@@ -1,4 +1,4 @@
-import Field from "./../field";
+import Field from "./field";
 
 /**
 * Base fields are stored withing entity table.
@@ -10,8 +10,11 @@ class BaseField extends Field {
   *
   * @param params
   */
-  constructor(variables) {
-    variables.fieldId = 'base_field';
+  constructor(variables = {}) {
+    
+    if (!variables.hasOwnProperty('fieldId'))
+      variables.fieldId = 'base_field';
+
     super(variables);
 
     // Apply protected value
@@ -20,30 +23,6 @@ class BaseField extends Field {
 
     // By default field value is not locked
     this.setLockState(false);
-
-    // Apply field item
-    if (variables.hasOwnProperty('fieldItem'))
-      this.setFieldItem(variables.fieldItem);
-    else
-      throw new Error("Basefield generation requires fielItem attribute");
-  }
-
-  /**
-  * Set field item.
-  *
-  * @param fieldItem
-  */
-  setFieldItem(fieldItem) {
-    this._registry.set('values', 'fieldItem', fieldItem);
-  }
-
-  /**
-  * Get field item.
-  *
-  * @return fieldItem or null
-  */
-  getFieldItem() {
-    return this._registry.get('values', 'fieldItem', null);
   }
 
   /**
@@ -103,7 +82,7 @@ class BaseField extends Field {
     }
 
     if (this.isProtected()) this.setLockState(true);
-    return this.getFieldItem().setValue(value);
+    return this.getFieldTypeInstance().setValue(value);
   }
 
   /**
@@ -112,7 +91,7 @@ class BaseField extends Field {
   * @return field value
   */
   get() {
-    return this.getFieldItem().getValue();    
+    return this.getFieldTypeInstance().getValue();    
   }
 
   /**
@@ -121,7 +100,7 @@ class BaseField extends Field {
   * @param value
   */
   setDefaultValue(value) {
-    this.getFieldItem().setDefaultValue(value);    
+    this.getFieldTypeInstance().setDefaultValue(value);    
     return this;
   }
 
@@ -134,7 +113,8 @@ class BaseField extends Field {
   *   Will return object content value - key, or false if no data available.
   */
   view(options, callback) {
-    callback(null, this.getFieldItem().getValue());
+    let instance = this.getFieldTypeInstance();
+    return instance ? callback(null, instance.getValue()) : callback(null, null);
   }
 
   /**

@@ -1,5 +1,5 @@
 import assert from "assert"
-import { Field } from "./../../src/index"
+import { BaseField } from "./../../src/index"
 import Utils from "./../../src/misc/utils"
 
 class TestUtils extends Utils {
@@ -26,7 +26,7 @@ class TestUtils extends Utils {
       classes: {}
     }
 
-    class ProbeField extends Field {
+    class ProbeField extends BaseField {
 
       constructor(variables = {}) {
         variables.fieldId = probe.values.fieldIdProbe;
@@ -43,9 +43,9 @@ class TestUtils extends Utils {
   }
 }
 
-describe('Field', () => {
+describe('Base field', () => {
 
-  describe('Field construction', () => {
+  describe('Base field construction', () => {
     it('Should construct with random field probes', (done) => {
       let numProbes = 2;
       let errors = [];

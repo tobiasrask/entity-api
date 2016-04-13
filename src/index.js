@@ -28,8 +28,14 @@ export { _fieldAPI as FieldAPI };
 import _fieldHandler from './field/field-handler';
 export { _fieldHandler as FieldHandler };
 
-import _field from './field/field';
+import _field from './field/fields/field';
 export { _field as Field };
+
+import _baseField from './field/fields/base-field';
+export { _baseField as BaseField };
+
+import _fieldType from './field/field_types/field-type';
+export { _field as FieldType };
 
 /**
 * Storage API

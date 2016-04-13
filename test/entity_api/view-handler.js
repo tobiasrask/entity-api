@@ -14,7 +14,7 @@ class TestUtils extends Utils {
   * @param variables
   * @return probe
   */
-  static createProbe(variables) {
+  static createProbe(variables = {}) {
 
     let probe = {
       // Random probe values
@@ -130,8 +130,7 @@ class TestUtils extends Utils {
     }
 
     class ProbeEntityType extends EntityType {
-      constructor(variables) {
-        if (variables === undefined) variables = {};
+      constructor(variables = {}) {
         // Define our entity type
         variables.entityTypeId = probe.values.entityTypeProbe;
         variables.entityClass = ProbeEntity;

@@ -120,7 +120,8 @@ class FieldAPI extends APIObject {
       throw new Error(`Unable to create field, unknown field type ${fieldTypeId}`);
 
     return new field({
-      'fieldItem': new fieldType()
+      'fieldId': fieldId,
+      'fieldType': new fieldType()
       });
   }
 }

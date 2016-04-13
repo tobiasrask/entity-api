@@ -91,8 +91,7 @@ class TestUtils extends Utils {
     }
 
     class ProbeEntityType extends EntityType {
-      constructor(variables) {
-        if (variables === undefined) variables = {};
+      constructor(variables = {}) {
         // Define our entity type
         variables.entityTypeId = probe.values.entityTypeProbe;
         variables.entityClass = ProbeEntity;
