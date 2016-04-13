@@ -35,7 +35,7 @@ import _baseField from './field/fields/base-field';
 export { _baseField as BaseField };
 
 import _fieldType from './field/field_types/field-type';
-export { _field as FieldType };
+export { _fieldType as FieldType };
 
 /**
 * Storage API
