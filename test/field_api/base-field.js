@@ -128,11 +128,17 @@ describe('Base field', () => {
 
         instance.setProtected(true);
 
+        if (instance.getLockState())
+          errors.push(new Error("Instance was locked before initial value"));
+
         if (!instance.isProtected())
           errors.push(new Error("Base field protected flag was not updated"));
 
         if (!instance.set(probe.values.fieldValueProbe))
           errors.push(new Error("Field value update didn't return success"));
+
+        if (!instance.getLockState())
+          errors.push(new Error("Instance was not locked after initial value"));
 
         if (instance.get() != probe.values.fieldValueProbe)
           errors.push(new Error("Field value was not updated: " + instance.get() + ", expecting: " + probe.values.fieldValueProbe));
@@ -148,8 +154,21 @@ describe('Base field', () => {
         if (!instance.set(probe.values.fieldValue2Probe, { force: true }))
           errors.push(new Error("Unable to break protected field, didn't return success"));
 
+        if (!instance.getLockState())
+          errors.push(new Error("Instance was not locked after forced update"));
+
         if (instance.get() != probe.values.fieldValue2Probe)
           errors.push(new Error("Unable to force update protected value: " + instance.get() + ", expecting: " + probe.values.fieldValue2Probe));
+
+        // Disable protected value
+        instance.setProtected(false);
+
+        if (!instance.set(probe.values.fieldValueProbe))
+          errors.push(new Error("Unable to update unprotect field, didn't return success"));
+
+        if (instance.get() != probe.values.fieldValueProbe)
+          errors.push(new Error("Unable to update unprotected value: " + instance.get() + ", expecting: " + probe.values.fieldValueProbe));
+
 
       }
 
