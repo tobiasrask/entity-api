@@ -38,7 +38,6 @@ class Entity {
   prepareFieldValues(container, callback) {
     var self = this;
     var fields = this.getFields();
-
     fields.forEach((value, fieldName) => {
       if (container.hasOwnProperty(fieldName))
         self.set(fieldName, container[fieldName]);
@@ -70,12 +69,9 @@ class Entity {
   */
   id() {
     let indexes = this.constructor.getFieldIndexDefinitions();
-
     if (!indexes)
       return false;
-
     let entityId = {};
-
     for (var i = 0; i < indexes.length; i++)
       entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName);
 
@@ -188,8 +184,7 @@ class Entity {
   *   Delivers promise from entity strorage.
   */
   save() {
-    let entityType = this.getEntityTypeId();
-    return EntityAPI.getInstance().getStorage(entityType).save(this);
+    return EntityAPI.getInstance().getStorage(this.getEntityTypeId()).save(this);
   }
 
   /**
@@ -207,8 +202,7 @@ class Entity {
   * @param callback
   */
   delete(callback) {
-    let entityType = this.getEntityTypeId();
-    entityAPI.getStorage(entityType).delete(this, callback);
+    entityAPI.getStorage(this.getEntityTypeId()).delete(this, callback);
   }
 
   /**
@@ -227,6 +221,16 @@ class Entity {
   */
   postDelete(callback) {
     callback(null);
+  }
+
+  /**
+  * View entity.
+  *
+  * @param callback
+  * @param viewMode
+  */
+  view(callback, viewMode) {
+    return EntityAPI.getInstance().getViewHandler(this.getEntityTypeId()).save(this);
   }
 
   /**

@@ -62,6 +62,7 @@ class APIObject {
   getProperty(key, defaultValue = null) {
     return this._registry.get('properties', key, defaultValue);
   }
+
   /**
   * Register listener for observer.
   *

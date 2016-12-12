@@ -45,7 +45,7 @@ class TestUtils extends Utils {
       *
       * @return data
       */
-      getFieldDefinitions() {
+      static getFieldDefinitions() {
         const fields = new Map();
         fields.set('entity_id', fieldAPI.createBasefield('text')
           .setName('Entity id')
@@ -59,7 +59,7 @@ class TestUtils extends Utils {
       *
       * @return data
       */
-      getEntityIndexDefinitions() {
+      static getEntityIndexDefinitions() {
         return [
           {'fieldName': 'entity_id', 'indexType': 'HASH', 'auto': true}
         ]

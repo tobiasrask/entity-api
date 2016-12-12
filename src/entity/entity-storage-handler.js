@@ -19,7 +19,7 @@ class EntityStorageHandler extends EntityHandler {
     let Backend = variables.hasOwnProperty('storageBackend') ?
       variables.storageBackend : StorageBackend;
 
-    let backend = new Backend({storageHandler: this});
+    let backend = new Backend({ storageHandler: this });
     this._registry.set('properties', 'storage-backend', backend);
   }
 
@@ -111,7 +111,6 @@ class EntityStorageHandler extends EntityHandler {
   * @param callback
   */
   loadEntity(id, callback) {
-
     // Check if id is valid
     if (!this.isValidEntityId(id))
       return callback(new Error("Requested entity id is not valid."));
@@ -221,7 +220,7 @@ class EntityStorageHandler extends EntityHandler {
       if (err) return callback(err);
 
       // Hook entity.postSave()
-      entity.postSave((err) => {
+      entity.postSave(err => {
         callback(null, entity);
       });
     });
