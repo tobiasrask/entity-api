@@ -216,7 +216,7 @@ class EntityStorageHandler extends EntityHandler {
     let entityId = entity.id();
     let fieldData = entity.exportFieldValues();
 
-    storageBackend.saveEntityContainer(entityId, fieldData, (err) => {
+    storageBackend.saveEntityContainer(entityId, fieldData, err => {
       if (err) return callback(err);
 
       // Hook entity.postSave()
@@ -241,11 +241,11 @@ class EntityStorageHandler extends EntityHandler {
       if (err) return callback(err);
 
       let entityId = entity.id();
-      storageBackend.deleteEntityContainer(entityId, (err) => {
+      storageBackend.deleteEntityContainer(entityId, err => {
         if (err) return callback(err);
 
         // Hook entity.postDelete()
-        entity.postDelete((err) => {
+        entity.postDelete(err => {
           callback(null);
         });
       });

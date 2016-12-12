@@ -74,7 +74,6 @@ class Entity {
     let entityId = {};
     for (var i = 0; i < indexes.length; i++)
       entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName);
-
     return entityId;
   }
 
@@ -226,10 +225,10 @@ class Entity {
   /**
   * View entity.
   *
-  * @param callback
   * @param options
+  * @return promise
   */
-  view(callback, options = {}) {
+  view(options) {
     return EntityAPI.getInstance().getViewHandler(this.getEntityTypeId()).view(this, options);
   }
 
