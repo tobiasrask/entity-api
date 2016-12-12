@@ -11,7 +11,7 @@ class EntityViewHandler extends EntityHandler {
   */
   view(entity, options) {
     return new Promise((resolve, reject) => {
-      this.viewEntity(id, options, (err, result) => {
+      this.viewEntity(entity, options, (err, result) => {
         if (err) reject(err);
         else resolve(result);
       });
