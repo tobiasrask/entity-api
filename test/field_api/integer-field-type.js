@@ -1,6 +1,6 @@
 import assert from "assert"
 import { IntegerFieldType } from "./../../src/index"
-import Utils from "./../../src/misc/utils"
+import Utils from "./../../src/includes/utils"
 
 class TestUtils extends Utils {
 

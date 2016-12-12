@@ -1,7 +1,7 @@
 import assert from "assert"
 import { EntityAPI, EntityType, EntityHandler,
         Entity, EntityStorageHandler, FieldAPI } from "./../../src/index"
-import Utils from "./../../src/misc/utils"
+import Utils from "./../../src/includes/utils"
 
 let fieldAPI = new FieldAPI();
 

@@ -1,4 +1,4 @@
-import APIObject from "./../misc/api-object"
+import APIObject from "./../includes/api-object"
 
 var entityAPIInstance = false;
 

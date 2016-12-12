@@ -1,7 +1,7 @@
 import DomainMap from "domain-map"
-import Utils from "./../misc/utils"
+import APIObject from "./../includes/api-object"
+import Utils from "./../includes/utils"
 import EntityAPI from "./entity-api"
-import APIObject from "./../misc/api-object"
 
 /**
 * Entity

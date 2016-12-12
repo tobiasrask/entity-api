@@ -1,5 +1,4 @@
 import DomainMap from 'domain-map'
-import APIObject from "./../../misc/api-object"
 
 /**
 * Field type.

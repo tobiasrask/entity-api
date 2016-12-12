@@ -1,6 +1,5 @@
 import DomainMap from 'domain-map'
 
-
 /**
 * Field @API.
 */

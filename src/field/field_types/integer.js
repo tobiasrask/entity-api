@@ -4,7 +4,7 @@ import FieldType from "./field-type";
 * Interger field type
 */
 class IntegerFieldType extends FieldType {
-  
+
   /**
   * Construct field
   *
