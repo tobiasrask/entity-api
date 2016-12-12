@@ -227,10 +227,10 @@ class Entity {
   * View entity.
   *
   * @param callback
-  * @param viewMode
+  * @param options
   */
-  view(callback, viewMode) {
-    return EntityAPI.getInstance().getViewHandler(this.getEntityTypeId()).save(this);
+  view(callback, options = {}) {
+    return EntityAPI.getInstance().getViewHandler(this.getEntityTypeId()).view(this, options);
   }
 
   /**
