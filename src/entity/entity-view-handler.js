@@ -44,7 +44,7 @@ class EntityViewHandler extends EntityHandler {
   viewEntity(entity, options, callback) {
     let entities = DomainMap.createCollection({strictKeyMode: false});
     entities.set(entity.id(), entity);
-    this.viewMultiple(entities, variables, function(err, result) {
+    this.viewMultiple(entities, options, function(err, result) {
       if (err) callback(err);
       else callback(null, result[0]);
     });

@@ -14,7 +14,6 @@ class EntityAPI extends APIObject {
   */
   constructor(options = {}) {
     super(options);
-
     if (options.hasOwnProperty('entityTypes'))
       this.registerEntityTypes(options.entityTypes);
   }
