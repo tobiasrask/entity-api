@@ -4,7 +4,7 @@ import FieldType from "./field-type";
 * Boolean field type
 */
 class BooleanFieldType extends FieldType {
-  
+
   /**
   * Construct field
   *

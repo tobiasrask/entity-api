@@ -5,7 +5,7 @@ import DomainMap from 'domain-map'
 * Field @API.
 */
 class Field {
-  
+
   /**
   * Construct field
   *
@@ -113,7 +113,7 @@ class Field {
   /**
   * Get field value
   *
-  * @return field value  
+  * @return field value
   */
   get() {
     return false;
@@ -150,7 +150,7 @@ class Field {
   */
   getProperty(propertyKey) {
     return this._registry.get('field_property', propertyKey);
-  }  
+  }
 }
 
 export default Field

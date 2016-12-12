@@ -35,7 +35,7 @@ class TestUtils extends Utils {
 
       getProb() {
         return probe.values.fieldProbe;
-      }      
+      }
     }
 
     probe.classes.ProbeField = ProbeField;
@@ -61,7 +61,7 @@ describe('Field', () => {
 
         if (instance.getProb() != probe.values.fieldProbe)
           errors.push(new Error("Field probe check failed"));
-        
+
         if (instance.getFieldId() != probe.values.fieldIdProbe)
           errors.push(new Error("Field id probe check failed"));
 
@@ -84,7 +84,7 @@ describe('Field', () => {
 
       if (errors.length > 0)
         return done(errors[0]);
-      
+
       done();
     })
   });

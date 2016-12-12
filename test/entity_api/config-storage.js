@@ -30,7 +30,7 @@ class TestUtils extends Utils {
     class ProbeEntityStorageHandler extends EntityStorageHandler {
       getProb() {
         return probe.values.entityHandlerProbe;
-      }      
+      }
     }
 
     class ProbeEntity extends Entity {
@@ -150,7 +150,7 @@ describe('Config storage handler', () => {
           return errors.push(new Error("It didn't return entity class"));
 
         if (entity.getProb() != probe.values.entityProbe)
-          return errors.push(new Error("Entitys's probe check failed"));                
+          return errors.push(new Error("Entitys's probe check failed"));
       });
 
       if (errors.length > 0)
@@ -237,7 +237,7 @@ describe('Config storage handler', () => {
             errors.push(err);
             counter--;
             if (!counter && errors) done(errors[0]); else if (!counter) done();
-          });          
+          });
       });
     })
   });

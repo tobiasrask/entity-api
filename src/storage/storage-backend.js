@@ -4,7 +4,7 @@ import DomainMap from 'domain-map'
 * Storage backend
 */
 class StorageBackend {
-  
+
   /**
   * Construct
   *
@@ -17,7 +17,7 @@ class StorageBackend {
 
     // Weak map
     this._registry = new DomainMap({strictKeyMode: false});
-    
+
     // Ref. to entity storage handler
     if (variables.hasOwnProperty('storageHandler'))
       this._registry.set("properties", 'handler', variables.storageHandler);
@@ -36,7 +36,7 @@ class StorageBackend {
   * Load entity content containers.
   *
   * @param ids
-  *   Array of entity ids.  
+  *   Array of entity ids.
   * @param callback
   *   Passes map of objects keyed with entity id
   */
@@ -50,7 +50,7 @@ class StorageBackend {
 
   /**
   * Save entity content container.
-  * 
+  *
   * @param entityId
   *   Entity id
   * @param container
@@ -63,7 +63,7 @@ class StorageBackend {
 
   /**
   * Delete entity content container.
-  * 
+  *
   * @param entityId
   *   Entity id
   * @param callback
@@ -81,8 +81,8 @@ class StorageBackend {
   */
   installSchemas(schemas, callback) {
     callback(null);
-  }  
- 
+  }
+
 }
 
 export default StorageBackend

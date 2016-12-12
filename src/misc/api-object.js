@@ -4,7 +4,7 @@ import DomainMap from 'domain-map'
 * Defides API object interface.
 */
 class APIObject {
-  
+
   /**
   * Construct.
   *

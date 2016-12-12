@@ -4,7 +4,7 @@ import FieldType from "./field-type";
 * Map field type
 */
 class MapFieldType extends FieldType {
-  
+
   /**
   * Construct field
   *

@@ -29,7 +29,7 @@ class TestUtils extends Utils {
     class ProbeFieldAPI extends FieldAPI {
       getProb() {
         return probe.values.fieldAPIProbe;
-      }      
+      }
     }
 
     class ProbeField extends Field {
@@ -41,7 +41,7 @@ class TestUtils extends Utils {
 
       getProb() {
         return probe.values.fieldProbe;
-      }      
+      }
     }
 
     class ProbeFieldType extends FieldType {
@@ -54,7 +54,7 @@ class TestUtils extends Utils {
       getProb() {
         return probe.values.fieldProbe;
       }
-    }    
+    }
 
     probe.classes.ProbeFieldAPI = ProbeFieldAPI;
     probe.classes.ProbeFieldType = ProbeFieldType;
@@ -96,13 +96,13 @@ describe('Field API', () => {
 
         let testField = null
 
-        // Try to create unknown field, should throw error...        
+        // Try to create unknown field, should throw error...
         try {
           testField = api.createField('random:field:id', 'random:field:type');
           return errors.push(new Error("Field API didn't throw error for random field"));
         } catch (err) {
           // We expected field api to throw error, so this is ok
-          
+
         }
 
         try {
@@ -134,7 +134,7 @@ describe('Field API', () => {
 
       if (errors.length > 0)
         return done(errors[0]);
-      
+
       done();
     })
   });

@@ -42,10 +42,8 @@ class EntityViewHandler extends EntityHandler {
   * @param callback
   */
   viewEntity(entity, options, callback) {
-
     let entities = DomainMap.createCollection({strictKeyMode: false});
     entities.set(entity.id(), entity);
-
     this.viewMultiple(entities, variables, function(err, result) {
       if (err) callback(err);
       else callback(null, result[0]);
@@ -88,7 +86,6 @@ class EntityViewHandler extends EntityHandler {
     let build = DomainMap.createCollection({strictKeyMode: false});
 
     entities.forEach((entity, entityId) => {
-
       // TODO: Check scope? We reuse entities & entityID & entity
       self.processEntityFields(entityId, entity, options, (err, container) => {
         if (err)
@@ -116,7 +113,7 @@ class EntityViewHandler extends EntityHandler {
   */
   processEntityFields(entityId, entity, options, callback) {
     if (!entity)
-      return callback(new Error("Trying to view empty entity: ${entityId}"))    
+      return callback(new Error("Trying to view empty entity: ${entityId}"))
     let errors = [];
     let fields = entity.getFields();
     let counter = fields.size;

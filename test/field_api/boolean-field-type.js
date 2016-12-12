@@ -28,12 +28,12 @@ class TestUtils extends Utils {
             'shouldAllow': true,
             'expectedValue': false
           },
-          { 
+          {
             'value': true,
             'shouldAllow': true,
             'expectedValue': true
           },
-          { 
+          {
             'value': false,
             'shouldAllow': true,
             'expectedValue': false
@@ -94,7 +94,7 @@ class TestUtils extends Utils {
 
       getProb() {
         return probe.values.fieldTypeProbe;
-      }      
+      }
     }
 
     probe.classes.ProbeFieldType = ProbeFieldType;
@@ -116,7 +116,7 @@ describe('Boolean - Field type', () => {
 
         if (instance.getProb() != probe.values.fieldTypeProbe)
           errors.push(new Error("Field probe check failed"));
-        
+
         if (instance.getFieldTypeId() != probe.values.fieldTypeIdProbe)
           errors.push(new Error("Field id probe check failed"));
 
@@ -142,7 +142,7 @@ describe('Boolean - Field type', () => {
 
       if (errors.length > 0)
         return done(errors[0]);
-      
+
       done();
     })
   });

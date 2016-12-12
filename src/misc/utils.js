@@ -1,18 +1,15 @@
 import crypto from "crypto"
+import uuidV4 from "uuid/v4";
 
 class Utils {
 
   /**
-  * Build (semi) uuid. Warning regarding to security, result is not real 
-  * uuid since we use basic random generator.
+  * Generate uuid, read more from: https://www.npmjs.com/package/uuid.
   *
   * @return uuid
   */
   static getUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = crypto.randomBytes(1)[0]%16|0, v = c == 'x' ? r : (r&0x3|0x8);
-    return v.toString(16);
-    });
+    return uuidV4();
   }
 }
 

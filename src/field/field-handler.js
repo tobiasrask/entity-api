@@ -20,7 +20,7 @@ class FieldHandler {
   getFieldType() {
     return this._fieldTypeId;
   }
-  
+
 }
 
 export default FieldHandler;

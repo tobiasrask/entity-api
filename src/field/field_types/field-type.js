@@ -5,7 +5,7 @@ import APIObject from "./../../misc/api-object"
 * Field type.
 */
 class FieldType {
-  
+
   /**
   * Construct field type
   *

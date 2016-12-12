@@ -38,7 +38,7 @@ class TestUtils extends Utils {
 
       getProb() {
         return probe.values.fieldProbe;
-      }      
+      }
     }
 
     class ProbeFieldType extends FieldType {
@@ -54,7 +54,7 @@ class TestUtils extends Utils {
     }
 
     probe.classes.ProbeField = ProbeField;
-    probe.classes.ProbeFieldType = ProbeFieldType;    
+    probe.classes.ProbeFieldType = ProbeFieldType;
     return probe;
   }
 }
@@ -81,7 +81,7 @@ describe('Base field', () => {
 
         if (instance.getProb() != probe.values.fieldProbe)
           errors.push(new Error("Field probe check failed"));
-        
+
         if (instance.getFieldId() != probe.values.fieldIdProbe)
           errors.push(new Error("Field id probe check failed"));
 
@@ -104,7 +104,7 @@ describe('Base field', () => {
 
       if (errors.length > 0)
         return done(errors[0]);
-      
+
       done();
     })
   });
@@ -174,7 +174,7 @@ describe('Base field', () => {
 
       if (errors.length > 0)
         return done(errors[0]);
-      
+
       done();
     })
   });

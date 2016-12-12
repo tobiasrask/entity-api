@@ -16,7 +16,7 @@ class TestUtils extends Utils {
       values: {
         entityTypeProbe: 'entityTypeprob:' + TestUtils.getUUID(),
         entityHandlerProbe: 'entityHandlerProb:' + TestUtils.getUUID(),
-        entityProbe: 'entityProb:' + TestUtils.getUUID()      
+        entityProbe: 'entityProb:' + TestUtils.getUUID()
       },
       // Probe classes
       classes: {}

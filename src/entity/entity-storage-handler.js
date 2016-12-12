@@ -6,7 +6,7 @@ import StorageBackend from "./../storage/storage-backend"
 * Entity storage handler
 */
 class EntityStorageHandler extends EntityHandler {
-  
+
   /**
   * Construct storage
   *
@@ -22,7 +22,7 @@ class EntityStorageHandler extends EntityHandler {
     let backend = new Backend({storageHandler: this});
     this._registry.set('properties', 'storage-backend', backend);
   }
- 
+
   /**
   * Cleaned, ES6 Promises based storage handler.
   * This is only sugar on top of basic callback based api.
@@ -114,7 +114,7 @@ class EntityStorageHandler extends EntityHandler {
 
     // Check if id is valid
     if (!this.isValidEntityId(id))
-      return callback(new Error("Requested entity id is not valid.")); 
+      return callback(new Error("Requested entity id is not valid."));
 
     this.loadMultipleEntities([id], (err, items) => {
       if (err) callback(err);
@@ -136,7 +136,7 @@ class EntityStorageHandler extends EntityHandler {
     let errors = [];
 
     if (ids.length < 1)
-      return callback(new Error("You have to provide at least one entity id")); 
+      return callback(new Error("You have to provide at least one entity id"));
 
     let build = DomainMap.createCollection({strictKeyMode: false});
     let storageBackend = this._registry.get('properties', 'storage-backend');
@@ -153,7 +153,7 @@ class EntityStorageHandler extends EntityHandler {
         self.processLoadedEntity(entityId, container, (err, result) => {
           if (err) {
             errors.push(err);
-            this.log('storage-handler', err, 'error');            
+            this.log('storage-handler', err, 'error');
           } else
             build.set(result.entityId, result.entity);
 
@@ -200,7 +200,7 @@ class EntityStorageHandler extends EntityHandler {
         if (err) callback(err);
         else callback(null, build);
       });
-    });    
+    });
   }
 
   /**
@@ -222,7 +222,7 @@ class EntityStorageHandler extends EntityHandler {
 
       // Hook entity.postSave()
       entity.postSave((err) => {
-        callback(null, entity);        
+        callback(null, entity);
       });
     });
   }
@@ -249,7 +249,7 @@ class EntityStorageHandler extends EntityHandler {
         entity.postDelete((err) => {
           callback(null);
         });
-      });    
+      });
     });
   }
 
@@ -298,7 +298,7 @@ class EntityStorageHandler extends EntityHandler {
     // Hook entity.preCreation()
     entity.preCreation(data, err => {
       if (err) return callback(err);
-      
+
       // Hook entity.create()
       entity.create(data, err => {
         if (err) return callback(err);
@@ -308,7 +308,7 @@ class EntityStorageHandler extends EntityHandler {
           if (err) callback(err);
           else callback(null, entity);
         });
-      });    
+      });
     });
   }
 
@@ -368,7 +368,7 @@ class EntityStorageHandler extends EntityHandler {
       entityId[indexes[i].fieldName] = data[indexes[i].fieldName];
     }
     return entityId;
-  } 
+  }
 
   /**
   * Check if requested entity id is valid.

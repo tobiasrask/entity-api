@@ -73,12 +73,12 @@ class Entity {
 
     if (!indexes)
       return false;
-    
+
     let entityId = {};
-    
+
     for (var i = 0; i < indexes.length; i++)
       entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName);
-    
+
     return entityId;
   }
 
@@ -125,12 +125,12 @@ class Entity {
   * @return entity id
   *   Object with index keys
   */
-  prepareEntityId() {    
+  prepareEntityId() {
     let indexes = this.constructor.getFieldIndexDefinitions();
     if (!indexes)
       return false;
     for (var i = 0; i < indexes.length; i++)
-      if (indexes[i].hasOwnProperty('auto') && indexes[i]['auto']) 
+      if (indexes[i].hasOwnProperty('auto') && indexes[i]['auto'])
         this.setDangerously(indexes[i].fieldName, Utils.getUUID());
   }
 
@@ -259,7 +259,7 @@ class Entity {
   */
   set(fieldName, value) {
     let fields = this._registry.get('properties', 'fields');
-    
+
     if (!fields)
       return false;
 

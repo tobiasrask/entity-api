@@ -69,7 +69,7 @@ class ConfigStorageBackend extends StorageBackend {
 
   /**
   * Save entity content container.
-  * 
+  *
   * @param entityId
   *   Entity id
   * @param container
@@ -88,7 +88,7 @@ class ConfigStorageBackend extends StorageBackend {
   /**
   * Return storege domain.
   *
-  * @return storage domain                  
+  * @return storage domain
   */
   getStorageDomain() {
     return "_entities:" + this.getStorageHandler().getStorageTableName();

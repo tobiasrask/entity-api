@@ -4,7 +4,7 @@ import FieldType from "./field-type";
 * Text field type
 */
 class TextFieldType extends FieldType {
-  
+
   /**
   * Construct field
   *

@@ -4,6 +4,9 @@
 import _entityAPI from './entity/entity-api';
 export { _entityAPI as EntityAPI };
 
+const entityAPIInstace = _entityAPI.getInstance();
+export { entityAPIInstace as entityAPI };
+
 import _entityHandler from './entity/entity-handler';
 export { _entityHandler as EntityHandler };
 
@@ -24,6 +27,9 @@ export { _entity as Entity };
 */
 import _fieldAPI from './field/field-api';
 export { _fieldAPI as FieldAPI };
+
+const fieldAPIInstace = _fieldAPI.getInstance();
+export { fieldAPIInstace as fieldAPI };
 
 import _fieldHandler from './field/field-handler';
 export { _fieldHandler as FieldHandler };
@@ -56,7 +62,6 @@ export { _textFieldType as TextFieldType };
 /**
 * Storage API
 */
-
 import _storageBackend from './storage/storage-backend';
 export {_storageBackend as StorageBackend };
 

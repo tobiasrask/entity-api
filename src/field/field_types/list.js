@@ -4,7 +4,7 @@ import FieldType from "./field-type";
 * List field type
 */
 class ListFieldType extends FieldType {
-  
+
   /**
   * Construct field
   *

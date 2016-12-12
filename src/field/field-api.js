@@ -1,10 +1,11 @@
 import APIObject from "./../misc/api-object"
+var fieldAPIInstance = false;
 
 /**
 * Field API.
 *
 * File api contains
-*   
+*
 */
 class FieldAPI extends APIObject {
 
@@ -28,7 +29,7 @@ class FieldAPI extends APIObject {
     });
 
     // Apply default field types provided by field API
-    if (!variables.hasOwnProperty('fieldTypes')) variables.fieldTypes = {};    
+    if (!variables.hasOwnProperty('fieldTypes')) variables.fieldTypes = {};
     if (!variables.hasOwnProperty('skipDefaultFieldTypes')) {
       variables.fieldTypes['text'] = require('./field_types/text').default;
       variables.fieldTypes['integer'] = require('./field_types/integer').default;
@@ -123,6 +124,23 @@ class FieldAPI extends APIObject {
       'fieldId': fieldId,
       'fieldType': new fieldType()
       });
+  }
+
+  /**
+  * Returns singleton object
+  *
+  * @param options
+  *  If instance if not constructed yet, it will be constructed with given
+  *  options
+  * @param reset
+  *   Boolean value to indicate if entity singleton should be re created
+  *   Defaults to false.
+  */
+  static getInstance(options = {}, reset = false) {
+    if (!fieldAPIInstance || reset) {
+      fieldAPIInstance = new FieldAPI(options);
+    }
+    return fieldAPIInstance;
   }
 }
 

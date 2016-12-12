@@ -4,7 +4,7 @@ import DomainMap from 'domain-map'
 * Entity type.
 */
 class EntityType {
-  
+
   /**
   * Construct entity type
   *
@@ -40,13 +40,13 @@ class EntityType {
   getHandler(key) {
     return this._registry.get('handlers', key, null);
   }
-  
+
   /**
   * Returns entity type id
   */
   getEntityTypeId() {
     return this._registry.get('properties', 'entityTypeId');
-  }  
+  }
 }
 
 export default EntityType;

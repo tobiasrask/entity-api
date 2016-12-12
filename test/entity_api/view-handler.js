@@ -95,7 +95,7 @@ class TestUtils extends Utils {
             list: { view_field: true }
           }));
 
-        // View mode stealth fields 
+        // View mode stealth fields
         fields.set('field_string_hidden', fieldAPI.createBasefield('text')
           .setName('Entity field')
           .setDescription('Entity field')
@@ -256,10 +256,10 @@ describe('Entity view handler', () => {
             return view.viewMultiple(entities, { viewMode: 'full' });
           })
           .then(build => {
- 
+
             entityIdsData.map(entityData => {
               let fieldValues = build.get(entityData.entityId);
- 
+
               Object.keys(entityData.data).forEach((fieldName, index) => {
 
                 if (!fieldValues.hasOwnProperty(fieldName))

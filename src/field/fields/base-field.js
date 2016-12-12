@@ -4,14 +4,14 @@ import Field from "./field";
 * Base fields are stored withing entity table.
 */
 class BaseField extends Field {
-  
+
   /**
   * Construct field
   *
   * @param params
   */
   constructor(variables = {}) {
-    
+
     if (!variables.hasOwnProperty('fieldId'))
       variables.fieldId = 'base_field';
 
@@ -67,7 +67,7 @@ class BaseField extends Field {
   *
   * @param value
   * @param options
-  *   force - Force locked and protected values to be updated  
+  *   force - Force locked and protected values to be updated
   */
   set(value, options = {}) {
     let forceUpdate = options.hasOwnProperty('force') &&
@@ -77,12 +77,12 @@ class BaseField extends Field {
     // Second write requires force mode to be enabled
     if (this.isProtected() && this.getLockState() && !forceUpdate) {
       // console.log("basefield", "Can't update locked field", "warning");
-      return false;      
+      return false;
     }
 
     if (this.isProtected())
       this.setLockState(true);
-    
+
     return this.getFieldTypeInstance().setValue(value);
   }
 
@@ -92,7 +92,7 @@ class BaseField extends Field {
   * @return field value
   */
   get() {
-    return this.getFieldTypeInstance().getValue();    
+    return this.getFieldTypeInstance().getValue();
   }
 
   /**
@@ -101,7 +101,7 @@ class BaseField extends Field {
   * @param value
   */
   setDefaultValue(value) {
-    this.getFieldTypeInstance().setDefaultValue(value);    
+    this.getFieldTypeInstance().setDefaultValue(value);
     return this;
   }
 
