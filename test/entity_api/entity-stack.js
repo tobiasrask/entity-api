@@ -28,9 +28,7 @@ describe('Entity stack', () => {
       }
 
       class ProbeEntity extends Entity {
-        /**
-        * Implementation of hook getFieldDefinitions().
-        */
+
         static getFieldDefinitions() {
 
           const fields = new Map();
@@ -63,9 +61,6 @@ describe('Entity stack', () => {
           return fields;
         }
 
-        /**
-        * Implementation of hook getEntityIndexDefinitions()
-        */
         static getFieldIndexDefinitions() {
           return [
             { 'fieldName': 'id', 'indexType': 'HASH', 'auto': true }
@@ -120,5 +115,4 @@ describe('Entity stack', () => {
       });
     })
   });
-
 });
