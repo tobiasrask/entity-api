@@ -256,7 +256,6 @@ describe('Entity view handler', () => {
             return view.viewMultiple(entities, { viewMode: 'full' });
           })
           .then(build => {
-
             entityIdsData.map(entityData => {
               let fieldValues = build.get(entityData.entityId);
 

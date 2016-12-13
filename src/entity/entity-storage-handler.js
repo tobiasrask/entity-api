@@ -29,7 +29,7 @@ class EntityStorageHandler extends EntityHandler {
   */
 
   /**
-  * Promise based  alias for @loadEntity
+  * Promise based  alias for @createEntity
   */
   create(data) {
     return new Promise((resolve, reject) => {
@@ -152,9 +152,10 @@ class EntityStorageHandler extends EntityHandler {
         self.processLoadedEntity(entityId, container, (err, result) => {
           if (err) {
             errors.push(err);
-            this.log('storage-handler', err, 'error');
-          } else
+            this.log('storage-handler', err.toString(), 'error');
+          } else {
             build.set(result.entityId, result.entity);
+          }
 
           counter--;
           if (counter == 0) {

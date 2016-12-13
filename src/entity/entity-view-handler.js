@@ -42,11 +42,11 @@ class EntityViewHandler extends EntityHandler {
   * @param callback
   */
   viewEntity(entity, options, callback) {
-    let entities = DomainMap.createCollection({strictKeyMode: false});
+    let entities = DomainMap.createCollection({ strictKeyMode: false });
     entities.set(entity.id(), entity);
-    this.viewMultiple(entities, options, function(err, result) {
+    this.viewMultipleEntities(entities, options, function(err, result) {
       if (err) callback(err);
-      else callback(null, result[0]);
+      else callback(null, result.get(entity.id()));
     });
   }
 
@@ -86,12 +86,9 @@ class EntityViewHandler extends EntityHandler {
     let build = DomainMap.createCollection({strictKeyMode: false});
 
     entities.forEach((entity, entityId) => {
-      // TODO: Check scope? We reuse entities & entityID & entity
       self.processEntityFields(entityId, entity, options, (err, container) => {
-        if (err)
-          errors = errors.concat(err);
-        else
-          build.set(container.entityId, container.content);
+        if (err) errors = errors.concat(err);
+        else build.set(container.entityId, container.content);
 
         counter--;
         if (counter == 0) {
@@ -117,12 +114,10 @@ class EntityViewHandler extends EntityHandler {
     let errors = [];
     let fields = entity.getFields();
     let counter = fields.size;
-
     let container = {
       entityId: entityId,
       content: {}
     };
-
     fields.forEach((field, fieldName) => {
       field.view(options, (err, result) => {
         if (err)
