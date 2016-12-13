@@ -372,14 +372,15 @@ class EntityStorageHandler extends EntityHandler {
   * @return entity id
   */
   extractEntityId(indexes, data) {
+    let build = {};
+
     if (!indexes)
       return false;
 
-    let entityId = {};
     for (var i = 0; i < indexes.length; i++) {
-      entityId[indexes[i].fieldName] = data[indexes[i].fieldName];
+      build[indexes[i].fieldName] = data[indexes[i].fieldName];
     }
-    return entityId;
+    return build;
   }
 
   /**
