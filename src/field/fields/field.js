@@ -11,7 +11,7 @@ class Field {
   * @param variables
   *   Every field construction requires field_name and field_type
   */
-  constructor(variables) {
+  constructor(variables = {}) {
     this._registry = new DomainMap();
 
     if (variables.hasOwnProperty('fieldId'))

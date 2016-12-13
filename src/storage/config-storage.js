@@ -15,7 +15,7 @@ class ConfigStorageBackend extends StorageBackend {
   *   lockUpdates
   *     Lock entity updates.
   */
-  constructor(variables) {
+  constructor(variables = {}) {
     super(variables);
 
     if (variables.hasOwnProperty('storageData'))

@@ -16,33 +16,33 @@ class FieldAPI extends APIObject {
   *
   * @param variables
   */
-  constructor(params = {}) {
-    params.type = 'entityAPI';
-    super(params);
+  constructor(variables = {}) {
+    variables.type = 'entityAPI';
+    super(variables);
 
     // Apply default fields provided by field API
-    if (!params.hasOwnProperty('fields')) params.fields = {};
-    if (!params.hasOwnProperty('skipDefaultFields')) {
-      params.fields['base_field'] = require('./fields/base-field').default;
-      params.fields['complex_field'] = require('./fields/complex-field').default;
+    if (!variables.hasOwnProperty('fields')) variables.fields = {};
+    if (!variables.hasOwnProperty('skipDefaultFields')) {
+      variables.fields['base_field'] = require('./fields/base-field').default;
+      variables.fields['complex_field'] = require('./fields/complex-field').default;
     }
 
-    Object.keys(params.fields).forEach((fieldId, index) => {
-      this.registerField(fieldId, params.fields[fieldId]);
+    Object.keys(variables.fields).forEach((fieldId, index) => {
+      this.registerField(fieldId, variables.fields[fieldId]);
     });
 
     // Apply default field types provided by field API
-    if (!params.hasOwnProperty('fieldTypes')) params.fieldTypes = {};
-    if (!params.hasOwnProperty('skipDefaultFieldTypes')) {
-      params.fieldTypes['text'] = require('./field_types/text').default;
-      params.fieldTypes['integer'] = require('./field_types/integer').default;
-      params.fieldTypes['boolean'] = require('./field_types/boolean').default;
-      params.fieldTypes['list'] = require('./field_types/list').default;
-      params.fieldTypes['map'] = require('./field_types/map').default;
+    if (!variables.hasOwnProperty('fieldTypes')) variables.fieldTypes = {};
+    if (!variables.hasOwnProperty('skipDefaultFieldTypes')) {
+      variables.fieldTypes['text'] = require('./field_types/text').default;
+      variables.fieldTypes['integer'] = require('./field_types/integer').default;
+      variables.fieldTypes['boolean'] = require('./field_types/boolean').default;
+      variables.fieldTypes['list'] = require('./field_types/list').default;
+      variables.fieldTypes['map'] = require('./field_types/map').default;
     }
 
-    Object.keys(params.fieldTypes).forEach((fieldTypeId, index) => {
-      this.registerFieldType(fieldTypeId, params.fieldTypes[fieldTypeId]);
+    Object.keys(variables.fieldTypes).forEach((fieldTypeId, index) => {
+      this.registerFieldType(fieldTypeId, variables.fieldTypes[fieldTypeId]);
     });
   }
 

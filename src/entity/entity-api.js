@@ -13,12 +13,12 @@ class EntityAPI extends APIObject {
   *
   * @param options
   */
-  constructor(params = {}) {
-    params.type = 'entityAPI';
-    super(params);
+  constructor(variables = {}) {
+    variables.type = 'entityAPI';
+    super(variables);
 
-    if (params.hasOwnProperty('entityTypes'))
-      this.registerEntityTypes(params.entityTypes);
+    if (variables.hasOwnProperty('entityTypes'))
+      this.registerEntityTypes(variables.entityTypes);
   }
 
   /**

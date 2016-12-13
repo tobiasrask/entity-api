@@ -14,7 +14,7 @@ class Entity {
   * @param variables with following values
   *  - entityTypeId
   */
-  constructor(variables) {
+  constructor(variables = {}) {
     this._registry = new DomainMap();
     this._registry.set('properties', 'entityTypeId', variables.entityTypeId);
     this.prepareFields();

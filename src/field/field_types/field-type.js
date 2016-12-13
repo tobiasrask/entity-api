@@ -11,7 +11,7 @@ class FieldType {
   *
   * @param params
   */
-  constructor(variables) {
+  constructor(variables = {}) {
     this._registry = new DomainMap();
     this._registry.set('properties', 'fieldTypeId', variables.fieldTypeId);
   }

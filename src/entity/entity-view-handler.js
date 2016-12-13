@@ -9,7 +9,7 @@ class EntityViewHandler extends EntityHandler {
   /**
   * Promise based alias for @viewEntity
   */
-  view(entity, options) {
+  view(entity, options = {}) {
     return new Promise((resolve, reject) => {
       this.viewEntity(entity, options, (err, result) => {
         if (err) reject(err);
@@ -21,7 +21,7 @@ class EntityViewHandler extends EntityHandler {
   /**
   * Promise based alias for @viewMultipleEntities
   */
-  viewMultiple(entities, options) {
+  viewMultiple(entities, options = {}) {
     return new Promise((resolve, reject) => {
       this.viewMultipleEntities(entities, options, (err, result) => {
         if (err) reject(err);

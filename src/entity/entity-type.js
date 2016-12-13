@@ -10,7 +10,7 @@ class EntityType {
   *
   * @param params
   */
-  constructor(variables) {
+  constructor(variables = {}) {
     this._registry = new DomainMap();
     this._registry.set('properties', 'entityTypeId', variables.entityTypeId);
     // Register handlers

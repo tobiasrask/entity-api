@@ -12,7 +12,7 @@ class StorageBackend {
   *   storageHandler
   *     Storage handler who is using storage backend.
   */
-  constructor(variables) {
+  constructor(variables = {}) {
     if (variables === undefined) variables = {};
 
     // Weak map
@@ -21,6 +21,15 @@ class StorageBackend {
     // Ref. to entity storage handler
     if (variables.hasOwnProperty('storageHandler'))
       this._registry.set("properties", 'handler', variables.storageHandler);
+  }
+
+  /**
+  * Set storage handler.
+  *
+  * @return handler
+  */
+  setStorageHandler(handler) {
+    return this._registry.set("properties", 'handler', handler);
   }
 
   /**

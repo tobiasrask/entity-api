@@ -15,7 +15,7 @@ class EntityHandler {
   *   entityClass
   *     Entity class
   */
-  constructor(variables) {
+  constructor(variables = {}) {
     this._registry = new DomainMap();
 
     if (!variables.hasOwnProperty('entityTypeId'))

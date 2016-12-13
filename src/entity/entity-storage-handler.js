@@ -12,16 +12,25 @@ class EntityStorageHandler extends EntityHandler {
   *
   * @param variables
   */
-  constructor(variables) {
+  constructor(variables = {}) {
     super(variables);
+    let backend = null;
 
-    // Storage backend defaults to config storage
-    let Backend = variables.hasOwnProperty('storageBackend') ?
-      variables.storageBackend : StorageBackend;
+    if (variables.hasOwnProperty('storageBackend')) {
+      backend = new variables['storageBackend']();
 
-    let backend = new Backend({ storageHandler: this });
+    } else if (variables.hasOwnProperty('storage')) {
+      backend = variables['storage'];
+
+    } else {
+      // Storage backend defaults to config storage
+      backend = new StorageBackend();
+    }
+
+    // Apply reference to backend
+    backend.setStorageHandler(this);
+
     this._registry.set('properties', 'storage-backend', backend);
-
 
     if (variables.hasOwnProperty('tablePrefix'))
       this._registry.set('properties', 'tablePrefix', variables.tablePrefix);

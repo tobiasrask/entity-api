@@ -10,15 +10,15 @@ class APIObject {
   *
   * @param options
   */
-  constructor(params = {}) {
+  constructor(variables = {}) {
     this._registry = new DomainMap();
 
-    if (!params.hasOwnProperty('type'))
+    if (!variables.hasOwnProperty('type'))
       throw new Error("API type not defined.");
 
-    this._registry.set('properties', 'type', params.type)
+    this._registry.set('properties', 'type', variables.type)
 
-    let debug = params.hasOwnProperty('debug') ? params.debug : false;
+    let debug = variables.hasOwnProperty('debug') ? variables.debug : false;
     this._registry.set('properties', 'debug', debug)
 
     this.init();
