@@ -1,4 +1,5 @@
 import Field from "./field";
+import system from "./../../system"
 
 /**
 * Base fields are stored withing entity table.
@@ -76,7 +77,7 @@ class BaseField extends Field {
     // Protected fields are initialized only once
     // Second write requires force mode to be enabled
     if (this.isProtected() && this.getLockState() && !forceUpdate) {
-      // console.log("basefield", "Can't update locked field", "warning");
+      system.log("basefield", "Can't update locked field", "warning");
       return false;
     }
 

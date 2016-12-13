@@ -10,9 +10,17 @@ class APIObject {
   *
   * @param options
   */
-  constructor(options) {
+  constructor(params = {}) {
     this._registry = new DomainMap();
-    this._debug = options.hasOwnProperty('debug') ? options.debug : false;
+
+    if (!params.hasOwnProperty('type'))
+      throw new Error("API type not defined.");
+
+    this._registry.set('properties', 'type', params.type)
+
+    let debug = params.hasOwnProperty('debug') ? params.debug : false;
+    this._registry.set('properties', 'debug', debug)
+
     this.init();
   }
 
@@ -83,24 +91,6 @@ class APIObject {
   */
   unregisterListener(listenerId) {
     return false;
-  }
-
-  /**
-  * Generic logging method. Application should extend LoggerAPI and register it
-  * to handle event flow.
-  *
-  * @param args
-  *   Arguments will be passed to logger.
-  * @return boolean succeed
-  *   Method returns boolean value to indicate if log exists.
-  */
-  log(args) {
-    let logger = this.getProperty('log');
-    if (logger == null)
-      return false;
-
-    logger.log.apply(logger, arguments);
-    return true;
   }
 }
 

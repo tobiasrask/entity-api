@@ -21,6 +21,10 @@ class EntityStorageHandler extends EntityHandler {
 
     let backend = new Backend({ storageHandler: this });
     this._registry.set('properties', 'storage-backend', backend);
+
+
+    if (variables.hasOwnProperty('tablePrefix'))
+      this._registry.set('properties', 'tablePrefix', variables.tablePrefix);
   }
 
   /**
@@ -152,7 +156,7 @@ class EntityStorageHandler extends EntityHandler {
         self.processLoadedEntity(entityId, container, (err, result) => {
           if (err) {
             errors.push(err);
-            this.log('storage-handler', err.toString(), 'error');
+            system.log('storage-handler', err.toString(), 'error');
           } else {
             build.set(result.entityId, result.entity);
           }
@@ -313,13 +317,12 @@ class EntityStorageHandler extends EntityHandler {
   }
 
   /**
-  * Returns table name for entity data
+  * Returns table name for entity data. Table name can prefixed by configuration.
   *
   * @return table name
   */
   getStorageTableName() {
-    // TODO: fix prefixes, provide configuration basic data
-    let prefix = ''; // entity_';
+    let prefix = this._registry.get('properties', 'tablePrefix', '');
     return prefix + this.getEntityTypeId();
   }
 

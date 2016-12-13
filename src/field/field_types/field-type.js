@@ -1,4 +1,5 @@
 import DomainMap from 'domain-map'
+import system from "./../../system"
 
 /**
 * Field type.
@@ -38,7 +39,7 @@ class FieldType {
       this._registry.set('properties', 'value', value);
       return true;
     } else {
-      this._registry.set('log', 'error', `Unable to set value, validation failed: ${value}`);
+      system.log('FieldType', `Unable to set value, validation failed: ${value}`, 'error');
       return false;
     }
   }

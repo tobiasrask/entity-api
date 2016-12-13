@@ -1,3 +1,4 @@
+import system from "./../system"
 import APIObject from "./../includes/api-object"
 
 var entityAPIInstance = false;
@@ -12,10 +13,12 @@ class EntityAPI extends APIObject {
   *
   * @param options
   */
-  constructor(options = {}) {
-    super(options);
-    if (options.hasOwnProperty('entityTypes'))
-      this.registerEntityTypes(options.entityTypes);
+  constructor(params = {}) {
+    params.type = 'entityAPI';
+    super(params);
+
+    if (params.hasOwnProperty('entityTypes'))
+      this.registerEntityTypes(params.entityTypes);
   }
 
   /**
@@ -38,7 +41,7 @@ class EntityAPI extends APIObject {
   */
   registerEntityType(entityType) {
     let type = entityType.getEntityTypeId();
-    this.log("registerEntityType", `Registering entity type: ${type}`);
+    system.log("registerEntityType", `Registering entity type: ${type}`);
     this._registry.set('entityTypes', type, entityType)
   }
 

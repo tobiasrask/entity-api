@@ -6,13 +6,31 @@ import APIObject from "./../includes/api-object"
 class LoggerAPI extends APIObject {
 
   /**
-  * Hook log allows other API's and modules to log events.
+  * Construct logger api
   *
-  * @param params
-  *   Application should define it own params
+  * @param variables
   */
-  log(args) {
+  constructor(params = {}) {
+    params.type = 'log';
+    super(params);
+  }
 
+  /**
+  * Watchdog logging.
+  *
+  * @param module
+  * @param msg
+  * @param type
+  *   Log message type, defaults to 'info'
+  * @param meta
+  *   Context for this log event formatted as array of key value pairs.
+  */
+  log(module, msg, type = 'info', meta = []) {
+    let time = Math.floor(Date.now() / 1000);
+    let metatext = meta.reduce((build, data) => {
+      return `${build} ${data.key}=${data.value}`
+    }, '');
+    console.log(`${time} ${module} ${msg} ${metatext} [${type}]`);
   }
 }
 

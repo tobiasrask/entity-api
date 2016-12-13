@@ -1,10 +1,12 @@
 import assert from "assert"
-import { EntityAPI, EntityType, EntityHandler,
+import EntitySystem, { EntityAPI, EntityType, EntityHandler,
         Entity, EntityStorageHandler,
-        ConfigStorageBackend, FieldAPI } from "./../../src/index"
+        ConfigStorageBackend, FieldAPI, LoggerAPI } from "./../../src/index"
 import Utils from "./../../src/includes/utils"
 
 let fieldAPI = new FieldAPI();
+
+EntitySystem.registerAPI(new LoggerAPI())
 
 class TestUtils extends Utils {
 

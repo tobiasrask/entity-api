@@ -1,4 +1,16 @@
 /**
+* API
+*/
+import _APIObject from './includes/api-object';
+export { _APIObject as APIObject };
+
+import _system from './system';
+export { _system as system };
+
+import _LoggerAPI from './utils/logger';
+export { _LoggerAPI as LoggerAPI };
+
+/**
 * Entity API
 */
 import _entityAPI from './entity/entity-api';
@@ -67,3 +79,5 @@ export {_storageBackend as StorageBackend };
 
 import _configStorageBackend from './storage/config-storage';
 export {_configStorageBackend as ConfigStorageBackend };
+
+export default _system;
