@@ -86,12 +86,36 @@ class StorageBackend {
   *
   * @param scema
   *   Install one or more schemas
-  * @param callback
+  * @param options
+  * @return promise
   */
-  installSchemas(schemas, callback) {
+  installSchemas(schemas, options, callback) {
     callback(null);
   }
 
+  /**
+  * Update schema
+  *
+  * @param scema
+  *   Install one or more schemas
+  * @param options
+  * @return promise
+  */
+  updateSchemas(schemas, options, callback) {
+    callback(null);
+  }
+
+  /**
+  * Uninstall schema
+  *
+  * @param scema
+  *   Install one or more schemas
+  * @param options
+  * @return promise
+  */
+  uninstallSchemas(schemas, options, callback) {
+    callback(null);
+  }
 }
 
 export default StorageBackend

@@ -1,9 +1,7 @@
 import assert from "assert"
 import { EntityAPI, EntityType, EntityHandler,
-        Entity, EntityStorageHandler, FieldAPI } from "./../../src/index"
+        Entity, EntityStorageHandler, StorageBackend  } from "./../../src/index"
 import Utils from "./../../src/includes/utils"
-
-let fieldAPI = new FieldAPI();
 
 class TestUtils extends Utils {
 
@@ -18,19 +16,29 @@ class TestUtils extends Utils {
       values: {
         entityTypeProbe: 'entityTypeprob:' + TestUtils.getUUID(),
         entityHandlerProbe: 'entityHandlerProb:' + TestUtils.getUUID(),
+        storageBackendProbe: 'storageBackendProb:' + TestUtils.getUUID(),
         entityProbe: 'entityProb:' + TestUtils.getUUID(),
       },
       // Probe classes
       classes: {}
     }
 
-    class ProbeEntityStorageBackend extends EntityStorageHandler {
+    class ProbeStorageBackend extends StorageBackend {
       getProb() {
-        return probe.values.entityHandlerProbe;
+        return probe.values.storageBackendProbe;
       }
     }
 
     class ProbeEntityStorageHandler extends EntityStorageHandler {
+
+      /**
+      * Construct
+      */
+      constructor(variables) {
+        variables.storageBackend = ProbeStorageBackend;
+        super(variables);
+      }
+
       getProb() {
         return probe.values.entityHandlerProbe;
       }
@@ -46,42 +54,18 @@ class TestUtils extends Utils {
         return probe.values.entityProbe;
       }
 
-      /**
-      * Returns field definitions.
-      *
-      * @return data
-      */
-      static getFieldDefinitions() {
-        const fields = new Map();
-        fields.set('entity_id', fieldAPI.createBasefield('text')
-          .setName('Entity id')
-          .setDescription('Entity identifier')
-          .setProtected(true));
-        return fields;
-      }
-
-      /**
-      * Returns entity index definitions.
-      *
-      * @return data
-      */
-      static getEntityIndexDefinitions() {
-        return [
-          {'fieldName': 'entity_id', 'indexType': 'HASH', 'auto': true}
-        ]
-      }
     }
 
     class ProbeEntityType extends EntityType {
       constructor(variables = {}) {
-        // Define our entity type
         variables.entityTypeId = probe.values.entityTypeProbe;
         variables.entityClass = ProbeEntity;
-        super(variables);
 
-        // Register handlers
-        this.registerHandler(probe.values.entityHandlerProbe,
-          new ProbeEntityStorageHandler(variables));
+        if (!variables.hasOwnProperty('handlers'))
+          variables.handlers = [];
+
+        variables.handlers['storage'] = new ProbeEntityStorageHandler(variables);
+        super(variables);
       }
     }
 
@@ -92,10 +76,10 @@ class TestUtils extends Utils {
   }
 }
 
-describe('Storage handler', () => {
+describe('Storage backend', () => {
 
-  describe('Construction with storage handler', () => {
-    it('Should construct with random entity type probes', (done) => {
+  describe('Construction with storage backend', () => {
+    it('Should construct with random entity storage probes', (done) => {
       let numProbes = 2;
       let errors = [];
 
@@ -110,10 +94,9 @@ describe('Storage handler', () => {
 
       let entityAPI = EntityAPI.getInstance({entityTypes: entityTypes}, true);
 
-      // Test entity type getter
       probes.map(probe => {
-        let entityType = entityAPI.getEntityType(probe.values.entityTypeProbe);
-        let handler = entityType.getHandler(probe.values.entityHandlerProbe);
+        // Test direct fetsing of storage handler
+        let handler = entityAPI.getStorage(probe.values.entityTypeProbe);
 
         if (!handler)
           return errors.push(new Error("It didn't return requested handler"));
@@ -131,12 +114,50 @@ describe('Storage handler', () => {
 
         if (entity.getProb() != probe.values.entityProbe)
           return errors.push(new Error("Entitys's probe check failed"));
+
+        let storageBackend = handler.getStorageBackend();
+        if (storageBackend.getProb() != probe.values.storageBackendProbe)
+          return errors.push(new Error("Storage backend probe check failed"));
+
       });
 
       if (errors.length > 0)
         return done(errors[0]);
 
       done();
+    })
+  });
+
+  describe('Install, update and delete manoeuvre', () => {
+    it('It should perform manoueuvres for storage backends', (done) => {
+      let numProbes = 10;
+      let errors = [];
+
+      let probes = [];
+      let entityTypes = [];
+
+      for (var i = 0; i < numProbes; i++) {
+        let probe = TestUtils.createProbe();
+        probes.push(probe);
+        entityTypes.push(probe.classes.ProbeEntityType);
+      }
+
+      let entityAPI = EntityAPI.getInstance({entityTypes: entityTypes}, true);
+
+      entityAPI.install({ version: "1.0" })
+      .then(result => {
+        return entityAPI.update()
+      })
+      .then(result => {
+        entityAPI.uninstall()
+      })
+      .then(result => {
+        done();
+      })
+
+      .catch(err => {
+        done(err);
+      })
     })
   });
 });

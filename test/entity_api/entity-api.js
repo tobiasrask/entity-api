@@ -12,13 +12,11 @@ class TestUtils extends Utils {
   */
   static createProbe() {
     let probe = {
-      // Random probe values
       values: {
         entityTypeProbe: 'entityTypeprob:' + TestUtils.getUUID(),
         entityHandlerProbe: 'entityHandlerProb:' + TestUtils.getUUID(),
         entityProbe: 'entityProb:' + TestUtils.getUUID()
       },
-      // Probe classes
       classes: {}
     }
 

@@ -3,7 +3,7 @@ import EntityHandler from "./entity-handler"
 import StorageBackend from "./../storage/storage-backend"
 
 /**
-* Entity storage handler
+* Entity Storage handler.
 */
 class EntityStorageHandler extends EntityHandler {
 
@@ -26,6 +26,9 @@ class EntityStorageHandler extends EntityHandler {
       // Storage backend defaults to config storage
       backend = new StorageBackend();
     }
+
+    if (!backend)
+      throw new Error("Storage backend is not defined");
 
     // Apply reference to backend
     backend.setStorageHandler(this);
@@ -111,6 +114,16 @@ class EntityStorageHandler extends EntityHandler {
         else resolve(result);
       });
     });
+  }
+
+  /**
+  * Returns entity schemas.
+  *
+  * @return schemas
+  *   Array of schemas. Required format depends on storage backend.
+  */
+  getSchemas() {
+    return [];
   }
 
   /**
@@ -396,6 +409,57 @@ class EntityStorageHandler extends EntityHandler {
     return true;
   }
 
+  /**
+  * Perform installation manoeuvre for storage backends.
+  *
+  * @param options
+  *   Options to be passed for storages.
+  * @preturn promise
+  *   Promise to be resolved when all entity types are installed
+  */
+  install(options = {}) {
+    return new Promise((resolve, reject) => {
+      this.getStorageBackend()
+          .installSchemas(this.getSchemas(options), options,err => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+  }
+
+  /**
+  * Perform uninstallation manoeuvre for storage backends.
+  *
+  * @param options
+  *   Options to be passed for storages.
+  */
+  uninstall(options = {}) {
+    return new Promise((resolve, reject) => {
+      this.getStorageBackend()
+          .uninstallSchemas(this.getSchemas(options), options, err => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+
+  }
+
+  /**
+  * Perform uninstallation manoeuvre for storage backends.
+  *
+  * @param options
+  *   Options to be passed for storages.
+  */
+  update(options = {}) {
+    return new Promise((resolve, reject) => {
+      this.getStorageBackend()
+          .updateSchemas(this.getSchemas(options), options, err => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+
+  }
 }
 
 export default EntityStorageHandler;

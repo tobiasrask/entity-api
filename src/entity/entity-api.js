@@ -41,7 +41,7 @@ class EntityAPI extends APIObject {
   */
   registerEntityType(entityType) {
     let type = entityType.getEntityTypeId();
-    system.log("registerEntityType", `Registering entity type: ${type}`);
+    system.log("EntityAPI", `Registering entity type: ${type}`);
     this._registry.set('entityTypes', type, entityType)
   }
 
@@ -97,6 +97,53 @@ class EntityAPI extends APIObject {
   */
   getViewHandler(name) {
     return this.getEntityTypeHandler(name, 'view');
+  }
+
+  /**
+  * Perform installation manoeuvre for storage backends.
+  *
+  * @param options
+  *   Options to be passed for storages.
+  * @preturn promise
+  *   Promise to be resolved when all entity types are installed
+  */
+  install(options = {}) {
+    system.log('EntityAPI', "Executing install manoeuvre");
+    return this.getEntityTypeIds().reduce((sequence, entityType) => {
+      return sequence.then(() => {
+        return this.getStorage(entityType).install();
+      })
+    }, Promise.resolve());
+  }
+
+  /**
+  * Perform uninstallation manoeuvre for storage backends.
+  *
+  * @param options
+  *   Options to be passed for storages.
+  */
+  uninstall(options = {}) {
+    system.log('EntityAPI', "Executing install manoeuvre");
+    return this.getEntityTypeIds().reduce((sequence, entityType) => {
+      return sequence.then(() => {
+        return this.getStorage(entityType).uninstall();
+      })
+    }, Promise.resolve());
+  }
+
+  /**
+  * Perform uninstallation manoeuvre for storage backends.
+  *
+  * @param options
+  *   Options to be passed for storages.
+  */
+  update(options = {}) {
+    system.log('EntityAPI', "Executing install manoeuvre");
+    return this.getEntityTypeIds().reduce((sequence, entityType) => {
+      return sequence.then(() => {
+        return this.getStorage(entityType).update();
+      })
+    }, Promise.resolve());
   }
 
   /**
