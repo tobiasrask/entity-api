@@ -123,7 +123,7 @@ class EntityAPI extends APIObject {
   *   Options to be passed for storages.
   */
   uninstall(options = {}) {
-    system.log('EntityAPI', "Executing install manoeuvre");
+    system.log('EntityAPI', "Executing uninstall manoeuvre");
     return this.getEntityTypeIds().reduce((sequence, entityType) => {
       return sequence.then(() => {
         return this.getStorage(entityType).uninstall();
@@ -138,7 +138,7 @@ class EntityAPI extends APIObject {
   *   Options to be passed for storages.
   */
   update(options = {}) {
-    system.log('EntityAPI', "Executing install manoeuvre");
+    system.log('EntityAPI', "Executing update manoeuvre");
     return this.getEntityTypeIds().reduce((sequence, entityType) => {
       return sequence.then(() => {
         return this.getStorage(entityType).update();

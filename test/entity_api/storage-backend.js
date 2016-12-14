@@ -24,8 +24,33 @@ class TestUtils extends Utils {
     }
 
     class ProbeStorageBackend extends StorageBackend {
+
+      constructor(variables) {
+        super(variables);
+        this._testProbe = 0;
+      }
+
+      installSchemas(schemas, options, callback) {
+        this._testProbe += 1;
+        callback(null);
+      }
+
+      updateSchemas(schemas, options, callback) {
+        this._testProbe += 2;
+        callback(null);
+      }
+
+      uninstallSchemas(schemas, options, callback) {
+        this._testProbe += 4;
+        callback(null);
+      }
+
       getProb() {
         return probe.values.storageBackendProbe;
+      }
+
+      getTestProbe() {
+        return this._testProbe;
       }
     }
 
@@ -149,12 +174,22 @@ describe('Storage backend', () => {
         return entityAPI.update()
       })
       .then(result => {
-        entityAPI.uninstall()
+        return entityAPI.uninstall()
       })
       .then(result => {
-        done();
+        // Make sure all entity types are included
+        probes.map(probe => {
+          let probeValue = entityAPI.getStorage(probe.values.entityTypeProbe)
+                                    .getStorageBackend().getTestProbe();
+          console.log("PROBE ALUE :" + probeValue);
+          if (probeValue != 7)
+            errors.push(`Storage prove value check failed: ${probeValue}`)
+        });
+        if (errors.length > 0)
+          done(errors[0])
+        else
+          done();
       })
-
       .catch(err => {
         done(err);
       })

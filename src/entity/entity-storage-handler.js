@@ -458,7 +458,6 @@ class EntityStorageHandler extends EntityHandler {
         else resolve();
       });
     });
-
   }
 }
 
