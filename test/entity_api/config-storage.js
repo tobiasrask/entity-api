@@ -6,7 +6,8 @@ import Utils from "./../../src/includes/utils"
 
 let fieldAPI = new FieldAPI();
 
-EntitySystem.registerAPI(new LoggerAPI())
+if (process.env.LOGGER_ENABLED)
+  EntitySystem.registerAPI(new LoggerAPI())
 
 class TestUtils extends Utils {
 

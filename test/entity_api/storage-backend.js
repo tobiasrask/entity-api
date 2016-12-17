@@ -181,7 +181,6 @@ describe('Storage backend', () => {
         probes.map(probe => {
           let probeValue = entityAPI.getStorage(probe.values.entityTypeProbe)
                                     .getStorageBackend().getTestProbe();
-          console.log("PROBE ALUE :" + probeValue);
           if (probeValue != 7)
             errors.push(`Storage prove value check failed: ${probeValue}`)
         });

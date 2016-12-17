@@ -87,7 +87,7 @@ class StorageBackend {
   * @param scema
   *   Install one or more schemas
   * @param options
-  * @return promise
+  * @param callback
   */
   installSchemas(schemas, options, callback) {
     callback(null);
@@ -99,7 +99,7 @@ class StorageBackend {
   * @param scema
   *   Install one or more schemas
   * @param options
-  * @return promise
+  * @param callback
   */
   updateSchemas(schemas, options, callback) {
     callback(null);
@@ -111,7 +111,7 @@ class StorageBackend {
   * @param scema
   *   Install one or more schemas
   * @param options
-  * @return promise
+  * @param callback
   */
   uninstallSchemas(schemas, options, callback) {
     callback(null);

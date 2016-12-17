@@ -432,6 +432,8 @@ class EntityStorageHandler extends EntityHandler {
   *
   * @param options
   *   Options to be passed for storages.
+  * @preturn promise
+  *   Promise to be resolved when all entity types are uninstalled
   */
   uninstall(options = {}) {
     return new Promise((resolve, reject) => {
@@ -449,6 +451,8 @@ class EntityStorageHandler extends EntityHandler {
   *
   * @param options
   *   Options to be passed for storages.
+  * @preturn promise
+  *   Promise to be resolved when all entity types are updated
   */
   update(options = {}) {
     return new Promise((resolve, reject) => {
