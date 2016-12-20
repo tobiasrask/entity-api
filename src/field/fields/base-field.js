@@ -116,7 +116,8 @@ class BaseField extends Field {
   */
   view(options, callback) {
     let instance = this.getFieldTypeInstance();
-    return instance ? callback(null, instance.getValue()) : callback(null, null);
+    return instance && this.isViewModeEnabled(options.viewMode) ?
+      callback(null, instance.getValue()) : callback(null, null);
   }
 
   /**
