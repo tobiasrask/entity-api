@@ -100,6 +100,16 @@ class EntityAPI extends APIObject {
   }
 
   /**
+  * Get list handler for requested entity type.
+  *
+  * @param entity type name
+  * @return view handler or null
+  */
+  getListHandler(name) {
+    return this.getEntityTypeHandler(name, 'list');
+  }
+
+  /**
   * Perform installation manoeuvre for storage backends.
   *
   * @param options

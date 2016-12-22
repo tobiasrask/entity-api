@@ -31,6 +31,9 @@ export { _entityType as EntityType };
 import _entityViewHandler from './entity/entity-view-handler';
 export { _entityViewHandler as EntityViewHandler };
 
+import _entityListHandler from './entity/entity-list-handler';
+export { _entityListHandler as EntityListHandler };
+
 import _entityAccessHandler from './entity/entity-access-handler';
 export { _entityAccessHandler as EntityAccessHandler };
 
