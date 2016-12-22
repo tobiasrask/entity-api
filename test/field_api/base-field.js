@@ -126,13 +126,24 @@ describe('Base field', () => {
         if (instance.getProb() != probe.values.fieldProbe)
           errors.push(new Error("Field probe check failed"));
 
-        instance.setProtected(true);
-
         if (instance.getLockState())
           errors.push(new Error("Instance was locked before initial value"));
 
+        if (instance.isProtected())
+          errors.push(new Error("Base field protected flag was not initialized as expected"));
+
+        instance.setProtected(true);
+
         if (!instance.isProtected())
           errors.push(new Error("Base field protected flag was not updated"));
+
+        if (instance.isRequired())
+          errors.push(new Error("Base field required flag was not initialized as expected"));
+
+        instance.setRequired(true);
+
+        if (!instance.isRequired())
+          errors.push(new Error("Base field required flag was not updated"));
 
         if (!instance.set(probe.values.fieldValueProbe))
           errors.push(new Error("Field value update didn't return success"));
