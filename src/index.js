@@ -77,6 +77,9 @@ export { _mapFieldType as MapFieldType };
 import _textFieldType from './field/field_types/text';
 export { _textFieldType as TextFieldType };
 
+import _emailFieldType from './field/field_types/email';
+export { _emailFieldType as EmailFieldType };
+
 /**
 * Storage API
 */

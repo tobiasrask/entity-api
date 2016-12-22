@@ -39,6 +39,7 @@ class FieldAPI extends APIObject {
       variables.fieldTypes['boolean'] = require('./field_types/boolean').default;
       variables.fieldTypes['list'] = require('./field_types/list').default;
       variables.fieldTypes['map'] = require('./field_types/map').default;
+      variables.fieldTypes['email'] = require('./field_types/email').default;
     }
 
     Object.keys(variables.fieldTypes).forEach((fieldTypeId, index) => {
