@@ -29,20 +29,23 @@ class Entity {
   }
 
   /**
-  * Initialize base fields with content container.
+  * Initialize base fields with content container. Method will verify required
+  * fields.
   *
   * @param container
   *   Content container to be loaded
   * @param callback
   */
   prepareFieldValues(container, callback) {
-    var self = this;
-    var fields = this.getFields();
-    fields.forEach((value, fieldName) => {
+    let self = this;
+    let errors = null;
+    this.getFields().forEach((field, fieldName) => {
       if (container.hasOwnProperty(fieldName))
         self.set(fieldName, container[fieldName]);
+      else if (field.isRequired())
+        errors = new Error(`Field ${fieldName} is required.`);
     });
-    callback(null);
+    callback(errors);
   }
 
   /**

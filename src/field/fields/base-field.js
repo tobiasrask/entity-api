@@ -27,7 +27,7 @@ class BaseField extends Field {
   }
 
   /**
-  * Apply lock state
+  * Apply lock state.
   *
   * @param value
   */
@@ -36,7 +36,7 @@ class BaseField extends Field {
   }
 
   /**
-  * Get lock state
+  * Get lock state.
   *
   * @param value
   */
@@ -45,7 +45,7 @@ class BaseField extends Field {
   }
 
   /**
-  * Apply lock state
+  * Apply lock state.
   *
   * @param value
   */
@@ -55,12 +55,31 @@ class BaseField extends Field {
   }
 
   /**
-  * Get lock state
+  * Get lock state.
   *
   * @return value
   */
   isProtected(value) {
     return this._registry.get('properties', 'protected', false);
+  }
+
+  /**
+  * Apply required state.
+  *
+  * @param value
+  */
+  setRequired(value) {
+    this._registry.set('properties', 'required', value);
+    return this;
+  }
+
+  /**
+  * Get required state.
+  *
+  * @return value
+  */
+  isRequired(value) {
+    return this._registry.get('properties', 'required', false);
   }
 
   /**
