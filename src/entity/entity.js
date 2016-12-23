@@ -213,7 +213,7 @@ class Entity {
   * @param callback
   */
   delete(callback) {
-    entityAPI.getStorage(this.getEntityTypeId()).delete(this, callback);
+    entityAPI.getStorage(this.getEntityTypeId()).deleteEntity(this, callback);
   }
 
   /**
