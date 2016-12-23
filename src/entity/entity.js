@@ -180,6 +180,15 @@ class Entity {
   }
 
   /**
+  * Hook called before entity is saved.
+  *
+  * @param callback
+  */
+  preSave(callback) {
+    callback(null);
+  }
+
+  /**
   * Save this entity.
   *
   * @return promise

@@ -230,7 +230,7 @@ class EntityStorageHandler extends EntityHandler {
   }
 
   /**
-  * Save entity
+  * Save entity.
   *
   * @param entity
   * @param callback
@@ -238,17 +238,18 @@ class EntityStorageHandler extends EntityHandler {
   saveEntity(entity, callback) {
     let self = this;
     let storageBackend = this._registry.get('properties', 'storage-backend');
+    if (!storageBackend)
+      callback(new Error("Storage backend doesn't exists for entity"));
 
-    // Export field data
-    let entityId = entity.id();
-    let fieldData = entity.exportFieldValues();
-
-    storageBackend.saveEntityContainer(entityId, fieldData, err => {
-      if (err) return callback(err);
-
-      // Hook entity.postSave()
-      entity.postSave(err => {
-        callback(null, entity);
+    // Hook entity.preSave()
+    entity.preSave(err => {
+      // Save container
+      storageBackend.saveEntityContainer(entity.id(), entity.exportFieldValues(), err => {
+        if (err) return callback(err);
+        // Hook entity.postSave()
+        entity.postSave(err => {
+          callback(null, entity);
+        });
       });
     });
   }
