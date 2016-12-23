@@ -22,7 +22,8 @@ class IntegerFieldType extends FieldType {
   * @return boolean is valid
   */
   validateFieldValue(value) {
-    return !isNaN(value) && (x => { return (x | 0) === x; })(parseFloat(value))
+    return typeof value == 'number' ||
+      !isNaN(value) && (x => { return (x | 0) === x; })(parseFloat(value))
   }
 }
 

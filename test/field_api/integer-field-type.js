@@ -50,6 +50,11 @@ class TestUtils extends Utils {
             'expectedValue': 2
           },
           {
+            'value': 14825007437550,
+            'shouldAllow': true,
+            'expectedValue': 14825007437550
+          },
+          {
             'value': -1,
             'shouldAllow': true,
             'expectedValue': -1
