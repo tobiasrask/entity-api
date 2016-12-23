@@ -24,6 +24,20 @@ class TextFieldType extends FieldType {
   validateFieldValue(value) {
     return typeof value === 'string';
   }
+
+  /**
+  * Hook prepareFieldValue()
+  *
+  * @param value
+  * @return value
+  */
+  prepareFieldValue(value) {
+    if (value == undefined &&
+        value == null ||
+        typeof value === 'object')
+      return null;
+    return typeof value === 'string' ? value : value.toString();
+  }
 }
 
 export default TextFieldType;

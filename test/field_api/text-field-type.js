@@ -28,19 +28,23 @@ class TestUtils extends Utils {
           },
           {
             'value': true,
-            'shouldAllow': false
+            'shouldAllow': true,
+            'expectedValue': 'true'
           },
           {
             'value': false,
-            'shouldAllow': false
+            'shouldAllow': true,
+            'expectedValue': 'false'
           },
           {
             'value': 0,
-            'shouldAllow': false
+            'shouldAllow': true,
+            'expectedValue': '0'
           },
           {
             'value': 1,
-            'shouldAllow': false
+            'shouldAllow': true,
+            'expectedValue': '1'
           },
           {
             'value': 'abc',
