@@ -1,6 +1,6 @@
 {
   "name": "entity-api",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Entity API for Node.JS.",
   "main": "lib/index.js",
   "directories": {
