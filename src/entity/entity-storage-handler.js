@@ -268,14 +268,11 @@ class EntityStorageHandler extends EntityHandler {
     entity.preDelete(err => {
       if (err) return callback(err);
 
-      let entityId = entity.id();
-      storageBackend.deleteEntityContainer(entityId, err => {
+      storageBackend.deleteEntityContainer(entity.id(), err => {
         if (err) return callback(err);
 
         // Hook entity.postDelete()
-        entity.postDelete(err => {
-          callback(null);
-        });
+        entity.postDelete(callback);
       });
     });
   }
@@ -345,8 +342,16 @@ class EntityStorageHandler extends EntityHandler {
   * @return table name
   */
   getStorageTableName() {
-    let prefix = this._registry.get('properties', 'tablePrefix', '');
-    return prefix + this.getEntityTypeId();
+    return this.getStorageTablePrefix() + this.getEntityTypeId();
+  }
+
+  /**
+  * Returns storage table prefix for storage handler.
+  *
+  * @return table prefix
+  */
+  getStorageTablePrefix() {
+    return this._registry.get('properties', 'tablePrefix', '');
   }
 
   /**
