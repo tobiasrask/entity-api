@@ -116,7 +116,7 @@ class EntityViewHandler extends EntityHandler {
     let counter = fields.size;
     let container = {
       entityId: entityId,
-      content: {}
+      content: entity.getViewContent()
     };
     fields.forEach((field, fieldName) => {
       field.view(options, (err, result) => {
@@ -127,10 +127,13 @@ class EntityViewHandler extends EntityHandler {
         // TODO: Provide hook for overriding value?
         // Maybe observer-pattern?
         counter--;
-        if (counter == 0) {
-          if (!errors.length) callback(null, container);
-          else callback(errors);
-        }
+        if (counter > 0)
+          return;
+        else if (errors.length > 0)
+          return callback(errors);
+
+        // Allow entity to alter view content before passing container
+        entity.alterViewContent(container, callback);
       });
     });
   }

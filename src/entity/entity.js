@@ -245,6 +245,26 @@ class Entity {
   }
 
   /**
+  * Returns base view content entity view.
+  *
+  * @return view content
+  */
+  getViewContent() {
+    return {};
+  }
+
+  /**
+  * Alter view content after fields has been processed
+  *
+  * @param container
+  *   Entity view container produced by view handler.
+  * @param callback
+  */
+  alterViewContent(container, callback) {
+    callback(null, container);
+  }
+
+  /**
   * Return fields
   *
   * @return collection fields
