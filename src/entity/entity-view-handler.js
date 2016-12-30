@@ -133,7 +133,7 @@ class EntityViewHandler extends EntityHandler {
           return callback(errors);
 
         // Allow entity to alter view content before passing container
-        entity.alterViewContent(container, callback);
+        entity.alterViewContent(container, options, callback);
       });
     });
   }

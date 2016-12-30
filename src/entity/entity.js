@@ -260,7 +260,7 @@ class Entity {
   *   Entity view container produced by view handler.
   * @param callback
   */
-  alterViewContent(container, callback) {
+  alterViewContent(container, options, callback) {
     callback(null, container);
   }
 
