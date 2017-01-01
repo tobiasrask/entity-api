@@ -209,13 +209,14 @@ class Entity {
   }
 
   /**
-  * Delete entity
+  * Delete entity.
   *
-  * @param callback
+  * @return promise
+  *   Delivers promise from entity strorage.
   */
-  delete(callback) {
-    EntityAPI.getInstance()
-      .getStorage(this.getEntityTypeId()).deleteEntity(this, callback);
+  delete() {
+    return EntityAPI.getInstance()
+      .getStorage(this.getEntityTypeId()).delete(this);
   }
 
   /**
