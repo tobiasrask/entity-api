@@ -195,7 +195,8 @@ class Entity {
   *   Delivers promise from entity strorage.
   */
   save() {
-    return EntityAPI.getInstance().getStorage(this.getEntityTypeId()).save(this);
+    return EntityAPI.getInstance()
+      .getStorage(this.getEntityTypeId()).save(this);
   }
 
   /**
@@ -213,7 +214,8 @@ class Entity {
   * @param callback
   */
   delete(callback) {
-    EntityAPI.getStorage(this.getEntityTypeId()).deleteEntity(this, callback);
+    EntityAPI.getInstance()
+      .getStorage(this.getEntityTypeId()).deleteEntity(this, callback);
   }
 
   /**
@@ -241,7 +243,8 @@ class Entity {
   * @return promise
   */
   view(options) {
-    return EntityAPI.getInstance().getViewHandler(this.getEntityTypeId()).view(this, options);
+    return EntityAPI.getInstance()
+      .getViewHandler(this.getEntityTypeId()).view(this, options);
   }
 
   /**
