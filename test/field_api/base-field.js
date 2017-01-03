@@ -179,8 +179,6 @@ describe('Base field', () => {
 
         if (instance.get() != probe.values.fieldValueProbe)
           errors.push(new Error("Unable to update unprotected value: " + instance.get() + ", expecting: " + probe.values.fieldValueProbe));
-
-
       }
 
       if (errors.length > 0)

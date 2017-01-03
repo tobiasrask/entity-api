@@ -11,7 +11,6 @@ class TestUtils extends Utils {
   * @return probe
   */
   static createProbe(variables) {
-
     let probe = {
       // Random probe values
       values: {
@@ -85,7 +84,6 @@ class TestUtils extends Utils {
 }
 
 describe('List - Field type', () => {
-
   describe('Field construction', () => {
     it('Should construct with random field probes', (done) => {
       let numProbes = 2;

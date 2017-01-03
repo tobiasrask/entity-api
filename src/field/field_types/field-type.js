@@ -34,7 +34,6 @@ class FieldType {
   setValue(value) {
     // Prepare field value
     value = this.prepareFieldValue(value);
-
     if (this.validateFieldValue(value)) {
       this._registry.set('properties', 'value', value);
       return true;
@@ -50,7 +49,7 @@ class FieldType {
   * @return value
   */
   getValue() {
-    return this._registry.get('properties', 'value', null);
+    return this._registry.get('properties', 'value', this.getDefaultValue());
   }
 
   /**
