@@ -163,6 +163,23 @@ describe('Config storage handler', () => {
     })
   });
 
+  describe('Test default value initialization', () => {
+    it('Should initialize value with default value', (done) => {
+      let probe = TestUtils.createProbe();
+      let fields = probe.classes.ProbeEntity.getFieldDefinitions();
+
+      if (fields.get('field_int_b').get() != 123456789)
+        return done(new Error("It didn't return default value for field"));
+
+      fields.get('field_int_b').set(1122334455);
+
+      if (fields.get('field_int_b').get() != 1122334455)
+        return done(new Error("It didn't return new value"));
+
+      done();
+    })
+  });
+
   describe('Config storage interface', () => {
     it('Test StorageHandler.create() method', (done) => {
       let numProbes = 2;
