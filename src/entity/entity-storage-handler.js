@@ -93,6 +93,18 @@ class EntityStorageHandler extends EntityHandler {
   }
 
   /**
+  * Promise based alias for @create & @save
+  */
+  createAndSave(data) {
+    return this.create(data)
+    .then(entity => {
+      if (!entity)
+        throw new Error("Entity was not created and returned");
+      return this.save(entity);
+    });
+  }
+
+  /**
   * Promise based  alias for @delete
   */
   delete(entity) {

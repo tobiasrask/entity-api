@@ -81,6 +81,19 @@ class Entity {
   }
 
   /**
+  * Returns string representing entity id.
+  *
+  * @param delimiter
+  *   Defaults to ":"
+  * @return entity id as string
+  *   String
+  */
+  idString(delimiter = ':') {
+    let entityId = this.id();
+    return Object.keys(entityId).map(name => entityId[name]).join(delimiter);
+  }
+
+  /**
   * Returns entity type id.
   *
   * @return entityType
