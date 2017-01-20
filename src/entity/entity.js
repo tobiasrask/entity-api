@@ -112,6 +112,15 @@ class Entity {
   }
 
   /**
+  * Returns entity tag.
+  *
+  * @return tag
+  */
+  getEntityContext() {
+    return this._registry.get('properties', 'entityContext');
+  }
+
+  /**
   * Prepare entity creation
   *
   * @param variables
@@ -123,8 +132,14 @@ class Entity {
     // Apply entity tag
     if (variables.hasOwnProperty(':tag'))
       this._registry.set('properties', 'entityTag', variables[':tag']);
+
+    // Apply entity context
+    if (variables.hasOwnProperty(':context'))
+      this._registry.set('properties', 'entityContext', variables[':context']);
+
     // Prepare entity identifier
     this.prepareEntityId();
+
     // Apply field values
     this.prepareFieldValues(variables, callback);
   }
