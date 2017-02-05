@@ -110,6 +110,16 @@ class EntityAPI extends APIObject {
   }
 
   /**
+  * Get access handler for requested entity type.
+  *
+  * @param entity type name
+  * @return access handler or null
+  */
+  getAccessHandler(name) {
+    return this.getEntityTypeHandler(name, 'access');
+  }
+
+  /**
   * Perform installation manoeuvre for storage backends.
   *
   * @param options
