@@ -12,10 +12,11 @@ class EntityAccessHandler extends EntityHandler {
   * @param object
   *   Source object who want's to create entity.
   * @param options
-  * @return boolean has access
+  * @return promise
+  *   Resolves boolean has access
   */
   createAccess(object, options = {}) {
-    return false;
+    return Promise.resolve(false);
   }
 
   /**
@@ -27,10 +28,12 @@ class EntityAccessHandler extends EntityHandler {
   * @param object
   *   Source object who want's to access entity.
   * @param options
-  * @return boolean has access
+  *   Options for current access cgheck
+  * @return promise
+  *   Resolves boolean has access
   */
   access(entity, op, object, options = {}) {
-    return false;
+    return Promise.resolve(false);
   }
 }
 
