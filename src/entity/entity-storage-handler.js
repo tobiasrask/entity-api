@@ -353,6 +353,24 @@ class EntityStorageHandler extends EntityHandler {
   *
   * @return table name
   */
+  getStorageDatabaseName() {
+    return this.getStorageDatabasePrefix() + this.getEntityTypeId();
+  }
+
+  /**
+  * Returns storage table prefix for storage handler.
+  *
+  * @return table prefix
+  */
+  getStorageDatabasePrefix() {
+    return this._registry.get('properties', 'databasePrefix', '');
+  }
+
+  /**
+  * Returns table name for entity data. Table name can prefixed by configuration.
+  *
+  * @return table name
+  */
   getStorageTableName() {
     return this.getStorageTablePrefix() + this.getEntityTypeId();
   }

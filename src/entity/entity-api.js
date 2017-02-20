@@ -70,6 +70,7 @@ class EntityAPI extends APIObject {
     return entityType ? entityType.getHandler(handlerName) : null;
   }
 
+
   /**
   * Returns registered entity types.
   *
@@ -78,6 +79,10 @@ class EntityAPI extends APIObject {
   getEntityTypeIds() {
     return this._registry.getDomainKeysList('entityTypes', []);
   }
+
+  /**
+  * Shortcuts
+  */
 
   /**
   * Get storage handler for requested entity type.

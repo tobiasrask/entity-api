@@ -47,6 +47,35 @@ class EntityHandler {
     return this._registry.get('properties', 'entityClass')
   }
 
+  /**
+  * Set property.
+  *
+  * @param key
+  * @param value
+  */
+  setProperty(key, value) {
+    this._registry.set('properties', key, value);
+  }
+
+  /**
+  * Returns properties.
+  *
+  * @return properties.
+  */
+  getProperties() {
+    return this._registry.get('properties');
+  }
+
+  /**
+  * Returns property.
+  *
+  * @param property key
+  * @param default value
+  * @return property value or default, if property doesn't exists.
+  */
+  getProperty(key, defaultValue) {
+    return this._registry.get('properties', key, defaultValue);
+  }
 }
 
 export default EntityHandler;
