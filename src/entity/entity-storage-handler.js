@@ -251,19 +251,18 @@ class EntityStorageHandler extends EntityHandler {
     let self = this;
     let storageBackend = this._registry.get('properties', 'storage-backend');
     if (!storageBackend)
-      callback(new Error("Storage backend doesn't exists for entity"));
-
+      return callback(new Error("Storage backend doesn't exists for entity"));
     // Hook entity.preSave()
     entity.preSave(err => {
-      if (err)
-        return callback(err);
+      if (err) return callback(err);
       storageBackend.saveEntityContainer(entity.id(),
         entity.exportFieldValues(), err => {
         if (err)
           return callback(err);
         // Hook entity.postSave()
         entity.postSave(err => {
-          callback(null, entity);
+          if (err) callback(err);
+          else callback(null, entity);
         });
       });
     });
@@ -278,14 +277,11 @@ class EntityStorageHandler extends EntityHandler {
   deleteEntity(entity, callback) {
     let self = this;
     let storageBackend = this._registry.get('properties', 'storage-backend');
-
     // Hook entity.preDelete()
     entity.preDelete(err => {
       if (err) return callback(err);
-
       storageBackend.deleteEntityContainer(entity.id(), err => {
         if (err) return callback(err);
-
         // Hook entity.postDelete()
         entity.postDelete(callback);
       });
