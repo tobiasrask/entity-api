@@ -255,9 +255,12 @@ class EntityStorageHandler extends EntityHandler {
 
     // Hook entity.preSave()
     entity.preSave(err => {
-      // Save container
-      storageBackend.saveEntityContainer(entity.id(), entity.exportFieldValues(), err => {
-        if (err) return callback(err);
+      if (err)
+        return callback(err);
+      storageBackend.saveEntityContainer(entity.id(),
+        entity.exportFieldValues(), err => {
+        if (err)
+          return callback(err);
         // Hook entity.postSave()
         entity.postSave(err => {
           callback(null, entity);
