@@ -76,12 +76,10 @@ class Entity {
       return false
     }
 
-    let entityId = {}
-    for (var i = 0; i < indexes.length; i++) {
-      entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName)
-    }
-
-    return entityId
+    return indexes.reduce((acc, item) => {
+      acc[item.fieldName] = this.get(item.fieldName)
+      return acc
+    }, {})
   }
 
   /**
@@ -159,14 +157,17 @@ class Entity {
   */
   prepareEntityId() {
     let indexes = this.constructor.getFieldIndexDefinitions()
+
     if (!indexes) {
       return false
     }
-    for (var i = 0; i < indexes.length; i++) {
-      if (indexes[i].hasOwnProperty('auto') && indexes[i]['auto']) {
-        this.setDangerously(indexes[i].fieldName, Utils.getUUID())
+
+    indexes.forEach((index) => {
+      // Generate random UUID for entity id if requested
+      if (index.hasOwnProperty('auto') && index['auto']) {
+        this.setDangerously(index.fieldName, Utils.getUUID())
       }
-    }
+    })
   }
 
   /**

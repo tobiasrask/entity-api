@@ -29,18 +29,10 @@ class ProbeEntity extends Entity {
 
   static getFieldDefinitions() {
     const fields = new Map()
-    fields.set('country_code', fieldAPI.createBasefield('text')
+    fields.set('eid', fieldAPI.createBasefield('text')
       .setName('Entity id')
       .setDescription('Entity identifier')
       .setProtected(true)
-      .setProperty('view_properties', {
-        full: { view_field: true },
-        list: { view_field: true }
-      }))
-
-    fields.set('postal_area', fieldAPI.createBasefield('text')
-      .setName('Probe name')
-      .setDescription('Probe name')
       .setProperty('view_properties', {
         full: { view_field: true },
         list: { view_field: true }
@@ -58,8 +50,7 @@ class ProbeEntity extends Entity {
 
   static getFieldIndexDefinitions() {
     return [
-      { 'fieldName': 'country_code', 'indexType': 'HASH', 'auto': false },
-      { 'fieldName': 'postal_area', 'indexType': 'RANGE' },
+      { 'fieldName': 'eid', 'indexType': 'HASH', 'auto': true }
     ]
   }
 }
@@ -85,8 +76,7 @@ describe('Entity stack', () => {
       entityAPI.registerEntityType(new ProbeEntityType())
 
       let entityData = {
-        country_code: 'fi',
-        postal_area: '00001'
+        age: 35
       }
 
       entityAPI.getStorage(entityTypeId).create(entityData)
@@ -94,15 +84,11 @@ describe('Entity stack', () => {
           if (!entity) {
             throw new Error('Unable to create entity')
           }
-
-          // Make sure entity id is generated as expected
-          if (entity.idString() != 'fi:00001') {
-            throw new Error(`Unexpected entity id: ${entity.idString()}`)
-          }
           return entity.view({ viewMode: 'full' })
         })
         .then((viewedEntity) => {
           let errors = []
+
           Object.keys(entityData).forEach((fieldName) => {
             if (!viewedEntity.hasOwnProperty(fieldName)) {
               return errors.push(new Error(`Viewed entity doesn't contain value for field ${fieldName}`))
@@ -116,6 +102,71 @@ describe('Entity stack', () => {
 
           if (errors.length > 0) {
             return done(errors[0])
+          }
+
+          done()
+        })
+        .catch((err) => {
+          done(err)
+        })
+    })
+  })
+  
+  describe('Entity Construction with random entity id', () => {
+    it('It should construct entity with random id, event if we provide value', (done) => {
+
+      let entityAPI = EntityAPI.getInstance({}, true)
+      entityAPI.registerEntityType(new ProbeEntityType())
+
+      let entityData = {
+        eid: 'random-hard-coded'
+      }
+
+      entityAPI.getStorage(entityTypeId).create(entityData)
+        .then((entity) => {
+          if (!entity) {
+            throw new Error('Unable to create entity')
+          }
+
+          if (entity.idString() === entityData.eid) {
+            throw new Error(`Unexpected entity id: ${entity.idString()}`)
+          }
+
+          if (entity.idString().length !== 36) {
+            throw new Error(`Unexpected entity id length: ${entity.idString().length}`)
+          }
+
+          done()
+        })
+        .catch((err) => {
+          done(err)
+        })
+    })
+  })
+
+  describe('Entity Construction with random field values', () => {
+    it('It should construct entity only with known fields', (done) => {
+
+      let entityAPI = EntityAPI.getInstance({}, true)
+      entityAPI.registerEntityType(new ProbeEntityType())
+
+      let entityData = {
+        age: 52,
+        random_field: 123
+      }
+
+      entityAPI.getStorage(entityTypeId).create(entityData)
+        .then((entity) => {
+          if (!entity) {
+            throw new Error('Unable to create entity')
+          }
+
+          if (entity.get('age') != entityData.age) {
+            throw new Error('Known field not accepted')
+          }
+
+          if (entity.get('random_field') != null) {
+            throw new Error('Random field name accepted')
           }
 
           done()
