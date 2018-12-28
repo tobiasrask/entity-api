@@ -13,14 +13,13 @@ class StorageBackend {
   *     Storage handler who is using storage backend.
   */
   constructor(variables = {}) {
-    if (variables === undefined) variables = {};
-
     // Weak map
-    this._registry = new DomainMap({strictKeyMode: false});
+    this._registry = new DomainMap({strictKeyMode: false})
 
     // Ref. to entity storage handler
-    if (variables.hasOwnProperty('storageHandler'))
-      this._registry.set("properties", 'handler', variables.storageHandler);
+    if (variables.hasOwnProperty('storageHandler')) {
+      this._registry.set('properties', 'handler', variables.storageHandler)
+    }
   }
 
   /**
@@ -29,7 +28,7 @@ class StorageBackend {
   * @return handler
   */
   setStorageHandler(handler) {
-    return this._registry.set("properties", 'handler', handler);
+    return this._registry.set('properties', 'handler', handler)
   }
 
   /**
@@ -38,23 +37,23 @@ class StorageBackend {
   * @return handler
   */
   getStorageHandler() {
-    return this._registry.get("properties", 'handler');
+    return this._registry.get('properties', 'handler')
   }
 
   /**
   * Load entity content containers.
   *
-  * @param ids
+  * @param ids
   *   Array of entity ids.
   * @param callback
   *   Passes map of objects keyed with entity id
   */
   loadEntityContainers(ids, callback) {
-    let result = new Map();
-    ids.map(entityId => {
-      result.set(entityId, false);
-    });
-    callback(null, result);
+    let result = new Map()
+    ids.map((entityId) => {
+      result.set(entityId, false)
+    })
+    callback(null, result)
   }
 
   /**
@@ -67,7 +66,7 @@ class StorageBackend {
   * @param callback
   */
   saveEntityContainer(entityId, container, callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
@@ -78,43 +77,43 @@ class StorageBackend {
   * @param callback
   */
   deleteEntityContainer(entityId, callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
   * Install schema
   *
-  * @param scema
+  * @param scema
   *   Install one or more schemas
   * @param options
   * @param callback
   */
   installSchemas(schemas, options, callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
   * Update schema
   *
-  * @param scema
+  * @param scema
   *   Install one or more schemas
   * @param options
   * @param callback
   */
   updateSchemas(schemas, options, callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
   * Uninstall schema
   *
-  * @param scema
+  * @param scema
   *   Install one or more schemas
   * @param options
   * @param callback
   */
   uninstallSchemas(schemas, options, callback) {
-    callback(null);
+    callback(null)
   }
 }
 

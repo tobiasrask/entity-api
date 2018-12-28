@@ -11,17 +11,18 @@ class APIObject {
   * @param options
   */
   constructor(variables = {}) {
-    this._registry = new DomainMap();
+    this._registry = new DomainMap()
 
-    if (!variables.hasOwnProperty('type'))
-      throw new Error("API type not defined.");
+    if (!variables.hasOwnProperty('type')) {
+      throw new Error('API type not defined.')
+    }
 
     this._registry.set('properties', 'type', variables.type)
 
-    let debug = variables.hasOwnProperty('debug') ? variables.debug : false;
+    let debug = variables.hasOwnProperty('debug') ? variables.debug : false
     this._registry.set('properties', 'debug', debug)
 
-    this.init();
+    this.init()
   }
 
   /**
@@ -34,7 +35,7 @@ class APIObject {
   /**
   * Returns API type.
   *
-  * @return api type
+  * @return api type
   */
   getType() {
     return this._registry.get('properties', 'type')
@@ -48,7 +49,7 @@ class APIObject {
   * @param value
   */
   setProperty(key, value) {
-    this._registry.set('properties', key, value);
+    this._registry.set('properties', key, value)
   }
 
   /**
@@ -57,7 +58,7 @@ class APIObject {
   * @return properties.
   */
   getProperties() {
-    return this._registry.get('properties');
+    return this._registry.get('properties')
   }
 
   /**
@@ -68,7 +69,7 @@ class APIObject {
   * @return property value or default, if property doesn't exists.
   */
   getProperty(key, defaultValue = null) {
-    return this._registry.get('properties', key, defaultValue);
+    return this._registry.get('properties', key, defaultValue)
   }
 
   /**
@@ -78,9 +79,9 @@ class APIObject {
   * @param types
   * @param callback
   */
-  registerListener(listenerId, types, callback) {
+  registerListener(_listenerId, _types, _callback) {
     // TODO:
-    return false;
+    return false
   }
 
   /**
@@ -89,9 +90,9 @@ class APIObject {
   * @param listener identifier
   * @return boolean succeed
   */
-  unregisterListener(listenerId) {
-    return false;
+  unregisterListener(_listenerId) {
+    return false
   }
 }
 
-export default APIObject;
+export default APIObject

@@ -9,7 +9,7 @@ class FieldHandler {
   constructor(variables) {
     // Apply field type
     this._fieldTypeId = variables.hasOwnProperty('fieldType') ?
-      variables.fieldType : false;
+      variables.fieldType : false
   }
 
   /**
@@ -18,9 +18,9 @@ class FieldHandler {
   * @return fieldType
   */
   getFieldType() {
-    return this._fieldTypeId;
+    return this._fieldTypeId
   }
 
 }
 
-export default FieldHandler;
+export default FieldHandler

@@ -1,16 +1,15 @@
-import crypto from "crypto"
-import uuidV4 from "uuid/v4";
+import UUID from 'uuid'
 
 class Utils {
 
   /**
   * Generate uuid, read more from: https://www.npmjs.com/package/uuid.
   *
-  * @return uuid
+  * @return uuid
   */
   static getUUID() {
-    return uuidV4();
+    return UUID.v4()
   }
 }
 
-export default Utils;
+export default Utils

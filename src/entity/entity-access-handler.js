@@ -1,5 +1,4 @@
-import DomainMap from 'domain-map'
-import EntityHandler from "./entity-handler"
+import EntityHandler from './entity-handler'
 
 /**
 * Entity access handler
@@ -9,14 +8,14 @@ class EntityAccessHandler extends EntityHandler {
   /**
   * Create access for entity
   *
-  * @param object
+  * @param object
   *   Source object who want's to create entity.
   * @param options
   * @return promise
   *   Resolves boolean has access
   */
-  createAccess(object, options = {}) {
-    return Promise.resolve(false);
+  createAccess(object, _options = {}) {
+    return Promise.resolve(false)
   }
 
   /**
@@ -28,13 +27,13 @@ class EntityAccessHandler extends EntityHandler {
   * @param object
   *   Source object who want's to access entity.
   * @param options
-  *   Options for current access cgheck
+  *   Options for current access check
   * @return promise
   *   Resolves boolean has access
   */
-  access(entity, op, object, options = {}) {
-    return Promise.resolve(false);
+  access(entity, op, object, _options = {}) {
+    return Promise.resolve(false)
   }
 }
 
-export default EntityAccessHandler;
+export default EntityAccessHandler

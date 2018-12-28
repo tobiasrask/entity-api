@@ -1,5 +1,5 @@
-import Field from "./field";
-import system from "./../../system"
+import Field from './field'
+import system from './../../system'
 
 /**
 * Base fields are stored withing entity table.
@@ -13,17 +13,19 @@ class BaseField extends Field {
   */
   constructor(variables = {}) {
 
-    if (!variables.hasOwnProperty('fieldId'))
-      variables.fieldId = 'base_field';
+    if (!variables.hasOwnProperty('fieldId')) {
+      variables.fieldId = 'base_field'
+    }
 
-    super(variables);
+    super(variables)
 
     // Apply protected value
-    if (variables.hasOwnProperty('protected'))
-      this.setProtected(variables['protected']);
+    if (variables.hasOwnProperty('protected')) {
+      this.setProtected(variables['protected'])
+    }
 
     // By default field value is not locked
-    this.setLockState(false);
+    this.setLockState(false)
   }
 
   /**
@@ -32,7 +34,7 @@ class BaseField extends Field {
   * @param value
   */
   setLockState(value) {
-    this._registry.set('properties', 'locked', value);
+    this._registry.set('properties', 'locked', value)
   }
 
   /**
@@ -41,7 +43,7 @@ class BaseField extends Field {
   * @param value
   */
   getLockState() {
-    return this._registry.get('properties', 'locked', false);
+    return this._registry.get('properties', 'locked', false)
   }
 
   /**
@@ -50,8 +52,8 @@ class BaseField extends Field {
   * @param value
   */
   setProtected(value) {
-    this._registry.set('properties', 'protected', value);
-    return this;
+    this._registry.set('properties', 'protected', value)
+    return this
   }
 
   /**
@@ -59,8 +61,8 @@ class BaseField extends Field {
   *
   * @return value
   */
-  isProtected(value) {
-    return this._registry.get('properties', 'protected', false);
+  isProtected() {
+    return this._registry.get('properties', 'protected', false)
   }
 
   /**
@@ -69,8 +71,8 @@ class BaseField extends Field {
   * @param value
   */
   setRequired(value) {
-    this._registry.set('properties', 'required', value);
-    return this;
+    this._registry.set('properties', 'required', value)
+    return this
   }
 
   /**
@@ -78,32 +80,33 @@ class BaseField extends Field {
   *
   * @return value
   */
-  isRequired(value) {
-    return this._registry.get('properties', 'required', false);
+  isRequired() {
+    return this._registry.get('properties', 'required', false)
   }
 
   /**
   * Set field value
   *
-  * @param value
-  * @param options
+  * @param value
+  * @param options
   *   force - Force locked and protected values to be updated
   */
   set(value, options = {}) {
     let forceUpdate = options.hasOwnProperty('force') &&
-      options.force ? true : false;
+      options.force ? true : false
 
     // Protected fields are initialized only once
     // Second write requires force mode to be enabled
-    if (this.isProtected() && this.getLockState() && !forceUpdate) {
-      system.log("basefield", "Can't update locked field", "warning");
-      return false;
+    if (this.isProtected() && this.getLockState() && !forceUpdate) {
+      system.log('basefield', 'Can\'t update locked field', 'warning')
+      return false
     }
 
-    if (this.isProtected())
-      this.setLockState(true);
+    if (this.isProtected()) {
+      this.setLockState(true)
+    }
 
-    return this.getFieldTypeInstance().setValue(value);
+    return this.getFieldTypeInstance().setValue(value)
   }
 
   /**
@@ -111,8 +114,8 @@ class BaseField extends Field {
   *
   * @return field value
   */
-  get() {
-    return this.getFieldTypeInstance().getValue();
+  get() {
+    return this.getFieldTypeInstance().getValue()
   }
 
   /**
@@ -121,8 +124,8 @@ class BaseField extends Field {
   * @param value
   */
   setDefaultValue(value) {
-    this.getFieldTypeInstance().setDefaultValue(value);
-    return this;
+    this.getFieldTypeInstance().setDefaultValue(value)
+    return this
   }
 
   /**
@@ -134,26 +137,27 @@ class BaseField extends Field {
   *   Will return object content value - key, or false if no data available.
   */
   view(options, callback) {
-    let instance = this.getFieldTypeInstance();
+    let instance = this.getFieldTypeInstance()
     return instance && this.isViewModeEnabled(options.viewMode) ?
-      callback(null, instance.getValue()) : callback(null, null);
+      callback(null, instance.getValue()) : callback(null, null)
   }
 
   /**
   * Method checks if given view mode is enabled for view.
   *
   * @param viewMode
-  * @return boolean is enabled
+  * @return boolean is enabled
   */
   isViewModeEnabled(viewMode) {
-    let property = this.getProperty('view_properties');
+    let property = this.getProperty('view_properties')
 
-    if (!property || !property.hasOwnProperty(viewMode))
-      return false;
+    if (!property || !property.hasOwnProperty(viewMode)) {
+      return false
+    }
 
     return property[viewMode].hasOwnProperty('view_field') &&
-           property[viewMode]['view_field'] ? true : false;
+           property[viewMode]['view_field'] ? true : false
   }
 }
 
-export default BaseField;
+export default BaseField

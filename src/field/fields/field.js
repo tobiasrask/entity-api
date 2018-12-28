@@ -12,16 +12,18 @@ class Field {
   *   Every field construction requires field_name and field_type
   */
   constructor(variables = {}) {
-    this._registry = new DomainMap();
+    this._registry = new DomainMap()
 
-    if (variables.hasOwnProperty('fieldId'))
-      this._registry.set('properties', 'fieldId', variables.fieldId);
+    if (variables.hasOwnProperty('fieldId')) {
+      this._registry.set('properties', 'fieldId', variables.fieldId)
+    }
 
     // Apply field item
-    if (variables.hasOwnProperty('fieldType'))
-      this.setFieldTypeInstance(variables.fieldType);
+    if (variables.hasOwnProperty('fieldType')) {
+      this.setFieldTypeInstance(variables.fieldType)
+    }
     //  else
-    //    throw new Error("Field generation requires fielItem attribute");
+    //    throw new Error('Field generation requires fielItem attribute')
   }
 
   /**
@@ -30,7 +32,7 @@ class Field {
   * @return value
   */
   getFieldId() {
-    return this._registry.get('properties', 'fieldId', '');
+    return this._registry.get('properties', 'fieldId', '')
   }
 
   /**
@@ -39,8 +41,8 @@ class Field {
   * @param value
   */
   setName(value) {
-    this._registry.set('properties', 'fieldName', value);
-    return this;
+    this._registry.set('properties', 'fieldName', value)
+    return this
   }
 
   /**
@@ -49,7 +51,7 @@ class Field {
   * @return value
   */
   getName() {
-    return this._registry.get('properties', 'fieldName', '');
+    return this._registry.get('properties', 'fieldName', '')
   }
 
   /**
@@ -58,8 +60,8 @@ class Field {
   * @param value
   */
   setDescription(value) {
-    this._registry.set('properties', 'description', value);
-    return this;
+    this._registry.set('properties', 'description', value)
+    return this
   }
 
   /**
@@ -68,7 +70,7 @@ class Field {
   * @return value
   */
   getDescription() {
-    return this._registry.get('properties', 'description', '');
+    return this._registry.get('properties', 'description', '')
   }
 
   /**
@@ -77,7 +79,7 @@ class Field {
   * @param fieldType
   */
   setFieldTypeInstance(fieldType) {
-    this._registry.set('values', 'fieldType', fieldType);
+    this._registry.set('values', 'fieldType', fieldType)
   }
 
   /**
@@ -86,7 +88,7 @@ class Field {
   * @return fieldType or null
   */
   getFieldTypeInstance() {
-    return this._registry.get('values', 'fieldType', null);
+    return this._registry.get('values', 'fieldType', null)
   }
 
   /**
@@ -94,19 +96,19 @@ class Field {
   *
   * @param value
   */
-  setDefaultValue(value) {
+  setDefaultValue(_value) {
     // Override this method
-    return this;
+    return this
   }
 
   /**
   * Set field value
   *
-  * @param value
-  * @param options
+  * @param value
+  * @param options
   */
-  set(value, options) {
-    return false;
+  set(_value, _options) {
+    return false
   }
 
   /**
@@ -115,7 +117,7 @@ class Field {
   * @return field value
   */
   get() {
-    return false;
+    return false
   }
 
   /**
@@ -127,7 +129,7 @@ class Field {
   *   Will return object with data - key, or false if no data available.
   */
   view(options, callback) {
-    callback(null, false);
+    callback(null, false)
   }
 
   /**
@@ -137,18 +139,18 @@ class Field {
   * @param value
   */
   setProperty(propertyKey, value) {
-    this._registry.set('field_property', propertyKey, value);
-    return this;
+    this._registry.set('field_property', propertyKey, value)
+    return this
   }
 
   /**
   * Get field property
   *
   * @param propertyKey
-  * @return value
+  * @return value
   */
   getProperty(propertyKey) {
-    return this._registry.get('field_property', propertyKey);
+    return this._registry.get('field_property', propertyKey)
   }
 }
 

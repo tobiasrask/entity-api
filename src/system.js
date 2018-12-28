@@ -1,2 +1,2 @@
-import core from "./includes/core"
-export default core;
+import core from './includes/core'
+export default core

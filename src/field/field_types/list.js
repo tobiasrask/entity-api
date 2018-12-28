@@ -1,4 +1,4 @@
-import FieldType from "./field-type";
+import FieldType from './field-type'
 
 /**
 * List field type
@@ -11,19 +11,20 @@ class ListFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    if (!variables.hasOwnProperty('fieldTypeId'))
-      variables['fieldTypeId'] = 'list';
-    super(variables);
+    if (!variables.hasOwnProperty('fieldTypeId')) {
+      variables['fieldTypeId'] = 'list'
+    }
+    super(variables)
   }
 
   /**
   * Validate value.
   *
-  * @param value
+  * @param value
   */
   validateFieldValue(value) {
-    return Array.isArray(value);
+    return Array.isArray(value)
   }
 }
 
-export default ListFieldType;
+export default ListFieldType

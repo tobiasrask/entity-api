@@ -1,7 +1,7 @@
-import system from "./../system"
-import APIObject from "./../includes/api-object"
+import system from './../system'
+import APIObject from './../includes/api-object'
 
-var entityAPIInstance = false;
+var entityAPIInstance = false
 
 /**
 * Entity API
@@ -14,24 +14,25 @@ class EntityAPI extends APIObject {
   * @param options
   */
   constructor(variables = {}) {
-    variables.type = 'entityAPI';
-    super(variables);
+    variables.type = 'entityAPI'
+    super(variables)
 
-    if (variables.hasOwnProperty('entityTypes'))
-      this.registerEntityTypes(variables.entityTypes);
+    if (variables.hasOwnProperty('entityTypes')) {
+      this.registerEntityTypes(variables.entityTypes)
+    }
   }
 
   /**
   * Register entity types
   *
-  * @param entityTypes
+  * @param entityTypes
   *   List of entity types to be registered
   */
   registerEntityTypes(entityTypes) {
-    let self = this;
-    entityTypes.map(entityTypeClass => {
-      self.registerEntityType(new entityTypeClass());
-    });
+    const self = this
+    entityTypes.map((entityTypeClass) => {
+      self.registerEntityType(new entityTypeClass())
+    })
   }
 
   /**
@@ -40,8 +41,8 @@ class EntityAPI extends APIObject {
   * @param entityType
   */
   registerEntityType(entityType) {
-    let type = entityType.getEntityTypeId();
-    system.log("EntityAPI", `Registering entity type: ${type}`);
+    const type = entityType.getEntityTypeId()
+    system.log('EntityAPI', `Registering entity type: ${type}`)
     this._registry.set('entityTypes', type, entityType)
   }
 
@@ -53,7 +54,7 @@ class EntityAPI extends APIObject {
   * @return handler
   */
   getEntityType(entitTypeName) {
-    return this._registry.get('entityTypes', entitTypeName);
+    return this._registry.get('entityTypes', entitTypeName)
   }
 
   /**
@@ -66,8 +67,8 @@ class EntityAPI extends APIObject {
   * @return handler
   */
   getEntityTypeHandler(entitTypeName, handlerName) {
-    let entityType = this._registry.get('entityTypes', entitTypeName, false);
-    return entityType ? entityType.getHandler(handlerName) : null;
+    const entityType = this._registry.get('entityTypes', entitTypeName, false)
+    return entityType ? entityType.getHandler(handlerName) : null
   }
 
 
@@ -77,7 +78,7 @@ class EntityAPI extends APIObject {
   * @return entity types
   */
   getEntityTypeIds() {
-    return this._registry.getDomainKeysList('entityTypes', []);
+    return this._registry.getDomainKeysList('entityTypes', [])
   }
 
   /**
@@ -91,7 +92,7 @@ class EntityAPI extends APIObject {
   * @return storage handler or null
   */
   getStorage(name) {
-    return this.getEntityTypeHandler(name, 'storage');
+    return this.getEntityTypeHandler(name, 'storage')
   }
 
   /**
@@ -101,7 +102,7 @@ class EntityAPI extends APIObject {
   * @return view handler or null
   */
   getViewHandler(name) {
-    return this.getEntityTypeHandler(name, 'view');
+    return this.getEntityTypeHandler(name, 'view')
   }
 
   /**
@@ -111,7 +112,7 @@ class EntityAPI extends APIObject {
   * @return view handler or null
   */
   getListHandler(name) {
-    return this.getEntityTypeHandler(name, 'list');
+    return this.getEntityTypeHandler(name, 'list')
   }
 
   /**
@@ -121,60 +122,60 @@ class EntityAPI extends APIObject {
   * @return access handler or null
   */
   getAccessHandler(name) {
-    return this.getEntityTypeHandler(name, 'access');
+    return this.getEntityTypeHandler(name, 'access')
   }
 
   /**
   * Perform installation manoeuvre for storage backends.
   *
-  * @param options
+  * @param options
   *   Options to be passed for storages.
   * @preturn promise
   *   Promise to be resolved when all entity types are installed
   */
-  install(options = {}) {
-    system.log('EntityAPI', "Executing install manoeuvre");
+  install(options = {}) {
+    system.log('EntityAPI', 'Executing install manoeuvre')
     return this.getEntityTypeIds().reduce((sequence, entityType) => {
       return sequence.then(() => {
-        return this.getStorage(entityType).install();
+        return this.getStorage(entityType).install(options)
       })
-    }, Promise.resolve());
+    }, Promise.resolve())
   }
 
   /**
   * Perform uninstallation manoeuvre for storage backends.
   *
-  * @param options
+  * @param options
   *   Options to be passed for storages.
   */
-  uninstall(options = {}) {
-    system.log('EntityAPI', "Executing uninstall manoeuvre");
+  uninstall(options = {}) {
+    system.log('EntityAPI', 'Executing uninstall manoeuvre')
     return this.getEntityTypeIds().reduce((sequence, entityType) => {
       return sequence.then(() => {
-        return this.getStorage(entityType).uninstall();
+        return this.getStorage(entityType).uninstall(options)
       })
-    }, Promise.resolve());
+    }, Promise.resolve())
   }
 
   /**
   * Perform uninstallation manoeuvre for storage backends.
   *
-  * @param options
+  * @param options
   *   Options to be passed for storages.
   */
-  update(options = {}) {
-    system.log('EntityAPI', "Executing update manoeuvre");
+  update(options = {}) {
+    system.log('EntityAPI', 'Executing update manoeuvre')
     return this.getEntityTypeIds().reduce((sequence, entityType) => {
       return sequence.then(() => {
-        return this.getStorage(entityType).update();
+        return this.getStorage(entityType).update(options)
       })
-    }, Promise.resolve());
+    }, Promise.resolve())
   }
 
   /**
   * Returns singleton object
   *
-  * @param options
+  * @param options
   *  If instance if not constructed yet, it will be constructed with given
   *  options
   * @param reset
@@ -182,11 +183,11 @@ class EntityAPI extends APIObject {
   *   Defaults to false.
   */
   static getInstance(options = {}, reset = false) {
-    if (!entityAPIInstance || reset) {
-      entityAPIInstance = new EntityAPI(options);
+    if (!entityAPIInstance || reset) {
+      entityAPIInstance = new EntityAPI(options)
     }
-    return entityAPIInstance;
+    return entityAPIInstance
   }
 }
 
-export default EntityAPI;
+export default EntityAPI

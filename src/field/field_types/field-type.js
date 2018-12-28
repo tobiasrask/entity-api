@@ -1,5 +1,5 @@
 import DomainMap from 'domain-map'
-import system from "./../../system"
+import system from './../../system'
 
 /**
 * Field type.
@@ -12,17 +12,17 @@ class FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    this._registry = new DomainMap();
-    this._registry.set('properties', 'fieldTypeId', variables.fieldTypeId);
+    this._registry = new DomainMap()
+    this._registry.set('properties', 'fieldTypeId', variables.fieldTypeId)
   }
 
   /**
   * Get field type id.
   *
-  * @return field type id
+  * @return field type id
   */
   getFieldTypeId() {
-    return this._registry.get('properties', 'fieldTypeId');
+    return this._registry.get('properties', 'fieldTypeId')
   }
 
   /**
@@ -33,13 +33,13 @@ class FieldType {
   */
   setValue(value) {
     // Prepare field value
-    value = this.prepareFieldValue(value);
+    value = this.prepareFieldValue(value)
     if (this.validateFieldValue(value)) {
-      this._registry.set('properties', 'value', value);
-      return true;
+      this._registry.set('properties', 'value', value)
+      return true
     } else {
-      system.log('FieldType', `Unable to set value, validation failed: ${value}`, 'error');
-      return false;
+      system.log('FieldType', `Unable to set value, validation failed: ${value}`, 'error')
+      return false
     }
   }
 
@@ -49,7 +49,7 @@ class FieldType {
   * @return value
   */
   getValue() {
-    return this._registry.get('properties', 'value', this.getDefaultValue());
+    return this._registry.get('properties', 'value', this.getDefaultValue())
   }
 
   /**
@@ -58,7 +58,7 @@ class FieldType {
   * @param value
   */
   setDefaultValue(value) {
-    this._registry.set('properties', 'defaultValue', value);
+    this._registry.set('properties', 'defaultValue', value)
   }
 
   /**
@@ -67,7 +67,7 @@ class FieldType {
   * @return value
   */
   getDefaultValue() {
-    return this._registry.get('properties', 'defaultValue', null);
+    return this._registry.get('properties', 'defaultValue', null)
   }
 
   /**
@@ -77,7 +77,7 @@ class FieldType {
   * @return value
   */
   prepareFieldValue(value) {
-    return value;
+    return value
   }
 
   /**
@@ -85,8 +85,8 @@ class FieldType {
   *
   * @return boolean is valid
   */
-  validateFieldValue(value) {
-    return true;
+  validateFieldValue(_value) {
+    return true
   }
 
   /**
@@ -95,8 +95,8 @@ class FieldType {
   * @return boolean is empty
   */
   isEmpty() {
-    return true;
+    return true
   }
 }
 
-export default FieldType;
+export default FieldType

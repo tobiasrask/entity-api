@@ -1,4 +1,4 @@
-import FieldType from "./field-type";
+import FieldType from './field-type'
 
 /**
 * Boolean field type
@@ -11,9 +11,10 @@ class BooleanFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    if (!variables.hasOwnProperty('fieldTypeId'))
-      variables['fieldTypeId'] = 'boolean';
-    super(variables);
+    if (!variables.hasOwnProperty('fieldTypeId')) {
+      variables['fieldTypeId'] = 'boolean'
+    }
+    super(variables)
   }
 
   /**
@@ -23,17 +24,17 @@ class BooleanFieldType extends FieldType {
   * @return value
   */
   prepareFieldValue(value) {
-    return value ? true : false;
+    return value ? true : false
   }
 
   /**
   * Validate value.
   *
-  * @param value
+  * @param value
   */
   validateFieldValue(value) {
-    return typeof (value) === "boolean";
+    return typeof (value) === 'boolean'
   }
 }
 
-export default BooleanFieldType;
+export default BooleanFieldType

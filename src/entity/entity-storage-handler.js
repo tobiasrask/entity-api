@@ -1,6 +1,6 @@
 import DomainMap from 'domain-map'
-import EntityHandler from "./entity-handler"
-import StorageBackend from "./../storage/storage-backend"
+import EntityHandler from './entity-handler'
+import StorageBackend from './../storage/storage-backend'
 
 /**
 * Entity Storage handler.
@@ -10,33 +10,35 @@ class EntityStorageHandler extends EntityHandler {
   /**
   * Construct storage
   *
-  * @param variables
+  * @param variables
   */
   constructor(variables = {}) {
-    super(variables);
-    let backend = null;
+    super(variables)
+    let backend = null
 
     if (variables.hasOwnProperty('storageBackend')) {
-      backend = new variables['storageBackend']();
+      backend = new variables['storageBackend']()
 
     } else if (variables.hasOwnProperty('storage')) {
-      backend = variables['storage'];
+      backend = variables['storage']
 
     } else {
       // Storage backend defaults to config storage
-      backend = new StorageBackend();
+      backend = new StorageBackend()
     }
 
-    if (!backend)
-      throw new Error("Storage backend is not defined");
+    if (!backend) {
+      throw new Error('Storage backend is not defined')
+    }
 
     // Apply reference to backend
-    backend.setStorageHandler(this);
+    backend.setStorageHandler(this)
 
-    this._registry.set('properties', 'storage-backend', backend);
+    this._registry.set('properties', 'storage-backend', backend)
 
-    if (variables.hasOwnProperty('tablePrefix'))
-      this._registry.set('properties', 'tablePrefix', variables.tablePrefix);
+    if (variables.hasOwnProperty('tablePrefix')) {
+      this._registry.set('properties', 'tablePrefix', variables.tablePrefix)
+    }
   }
 
   /**
@@ -50,10 +52,13 @@ class EntityStorageHandler extends EntityHandler {
   create(data) {
     return new Promise((resolve, reject) => {
       this.createEntity(data, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    });
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
   }
 
   /**
@@ -62,10 +67,13 @@ class EntityStorageHandler extends EntityHandler {
   load(id) {
     return new Promise((resolve, reject) => {
       this.loadEntity(id, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    });
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
   }
 
   /**
@@ -74,10 +82,13 @@ class EntityStorageHandler extends EntityHandler {
   loadMultiple(ids) {
     return new Promise((resolve, reject) => {
       this.loadMultipleEntities(ids, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    });
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
   }
 
   /**
@@ -86,10 +97,13 @@ class EntityStorageHandler extends EntityHandler {
   save(entity) {
     return new Promise((resolve, reject) => {
       this.saveEntity(entity, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    });
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
   }
 
   /**
@@ -97,11 +111,12 @@ class EntityStorageHandler extends EntityHandler {
   */
   createAndSave(data) {
     return this.create(data)
-    .then(entity => {
-      if (!entity)
-        throw new Error("Entity was not created and returned");
-      return this.save(entity);
-    });
+      .then((entity) => {
+        if (!entity) {
+          throw new Error('Entity was not created and returned')
+        }
+        return this.save(entity)
+      })
   }
 
   /**
@@ -110,10 +125,13 @@ class EntityStorageHandler extends EntityHandler {
   delete(entity) {
     return new Promise((resolve, reject) => {
       this.deleteEntity(entity, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    });
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
   }
 
   /**
@@ -122,20 +140,23 @@ class EntityStorageHandler extends EntityHandler {
   deleteMultiple(entities) {
     return new Promise((resolve, reject) => {
       this.deleteMultipleEntities(entities, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
-    });
+        if (err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
   }
 
   /**
   * Returns entity schemas.
   *
-  * @return schemas
+  * @return schemas
   *   Array of schemas. Required format depends on storage backend.
   */
   getSchemas() {
-    return [];
+    return []
   }
 
   /**
@@ -150,13 +171,17 @@ class EntityStorageHandler extends EntityHandler {
   */
   loadEntity(id, callback) {
     // Check if id is valid
-    if (!this.isValidEntityId(id))
-      return callback(new Error("Requested entity id is not valid."));
+    if (!this.isValidEntityId(id)) {
+      return callback(new Error('Requested entity id is not valid.'))
+    }
 
     this.loadMultipleEntities([id], (err, items) => {
-      if (err) callback(err);
-      else callback(null, items.get(id, false));
-    });
+      if (err) {
+        callback(err)
+      } else {
+        callback(null, items.get(id, false))
+      }
+    })
   }
 
   /**
@@ -169,76 +194,87 @@ class EntityStorageHandler extends EntityHandler {
   *   Passes collection of entities keyed with entity id
   */
   loadMultipleEntities(ids, callback) {
-    let self = this;
-    let errors = [];
+    let self = this
+    let errors = []
 
-    if (ids.length < 1)
-      return callback(new Error("You have to provide at least one entity id"));
+    if (ids.length < 1) {
+      return callback(new Error('You have to provide at least one entity id'))
+    }
 
-    let build = DomainMap.createCollection({strictKeyMode: false});
-    let storageBackend = this._registry.get('properties', 'storage-backend');
+    let build = DomainMap.createCollection({strictKeyMode: false})
+    let storageBackend = this._registry.get('properties', 'storage-backend')
 
     // Container holds keys also for empty items
     storageBackend.loadEntityContainers(ids, (err, containers) => {
-      if (err) return callback(err);
-      let counter = containers.getSize();
-      if (counter == 0)
-        return callback(null, build);
+      if (err) {
+        return callback(err)
+      }
+
+      let counter = containers.getSize()
+      if (counter == 0) {
+        return callback(null, build)
+      }
 
       // Load entities
       containers.forEach((container, entityId) => {
         self.processLoadedEntity(entityId, container, (err, result) => {
           if (err) {
-            errors.push(err);
-            system.log('storage-handler', err.toString(), 'error');
+            errors.push(err)
+            // system.log('storage-handler', err.toString(), 'error')
           } else {
-            build.set(result.entityId, result.entity);
+            build.set(result.entityId, result.entity)
           }
 
-          counter--;
+          counter--
           if (counter == 0) {
-            if (errors.length > 0)
-              callback(new Error("There was error when loading entities"));
-            else
-              callback(null, build);
+            if (errors.length > 0) {
+              callback(new Error('There was error when loading entities'))
+            } else {
+              callback(null, build)
+            }
           }
-        });
-      });
-    });
+        })
+      })
+    })
   }
 
   /**
   * Build entity from loaded content container.
   *
-  * @param entityId
+  * @param entityId
   * @param container
   *   Content container
   * @param callback
   */
   processLoadedEntity(entityId, container, callback) {
-    let build = { entityId: entityId, entity: false };
+    let build = { entityId: entityId, entity: false }
 
     // Make sure we have valid container
-    if (!container)
-      return callback(null, build);
+    if (!container) {
+      return callback(null, build)
+    }
 
-    let EntityBaseClass = this.getEntityBaseClass();
+    let EntityBaseClass = this.getEntityBaseClass()
 
     build.entity = new EntityBaseClass({
       entityTypeId: this.getEntityTypeId()
-    });
+    })
 
     // Hook entity.load()
-    let params = { entityId: entityId, container: container };
-    build.entity.load(params, err => {
-      if (err) return callback(err);
-
+    let params = { entityId: entityId, container: container }
+    build.entity.load(params, (err) => {
+      if (err) {
+        return callback(err)
+      }
       // Hook entity.postLoad()
-      build.entity.postLoad(err => {
-        if (err) callback(err);
-        else callback(null, build);
-      });
-    });
+      build.entity.postLoad((err) => {
+        if (err) {
+          callback(err)
+        } else {
+          callback(null, build)
+        }
+      })
+    })
   }
 
   /**
@@ -248,24 +284,33 @@ class EntityStorageHandler extends EntityHandler {
   * @param callback
   */
   saveEntity(entity, callback) {
-    let self = this;
-    let storageBackend = this._registry.get('properties', 'storage-backend');
-    if (!storageBackend)
-      return callback(new Error("Storage backend doesn't exists for entity"));
+    let storageBackend = this._registry.get('properties', 'storage-backend')
+
+    if (!storageBackend) {
+      return callback(new Error('Storage backend doesn\'t exists for entity'))
+    }
+
     // Hook entity.preSave()
-    entity.preSave(err => {
-      if (err) return callback(err);
+    entity.preSave((err) => {
+      if (err) {
+        return callback(err)
+      }
+
       storageBackend.saveEntityContainer(entity.id(),
-        entity.exportFieldValues(), err => {
-        if (err)
-          return callback(err);
-        // Hook entity.postSave()
-        entity.postSave(err => {
-          if (err) callback(err);
-          else callback(null, entity);
-        });
-      });
-    });
+        entity.exportFieldValues(), (err) => {
+          if (err) {
+            return callback(err)
+          }
+          // Hook entity.postSave()
+          entity.postSave((err) => {
+            if (err) {
+              callback(err)
+            } else {
+              callback(null, entity)
+            }
+          })
+        })
+    })
   }
 
   /**
@@ -275,17 +320,20 @@ class EntityStorageHandler extends EntityHandler {
   * @param callback
   */
   deleteEntity(entity, callback) {
-    let self = this;
-    let storageBackend = this._registry.get('properties', 'storage-backend');
+    let storageBackend = this._registry.get('properties', 'storage-backend')
     // Hook entity.preDelete()
-    entity.preDelete(err => {
-      if (err) return callback(err);
-      storageBackend.deleteEntityContainer(entity.id(), err => {
-        if (err) return callback(err);
+    entity.preDelete((err) => {
+      if (err) {
+        return callback(err)
+      }
+      storageBackend.deleteEntityContainer(entity.id(), (err) => {
+        if (err) {
+          return callback(err)
+        }
         // Hook entity.postDelete()
-        entity.postDelete(callback);
-      });
-    });
+        entity.postDelete(callback)
+      })
+    })
   }
 
   /**
@@ -295,24 +343,27 @@ class EntityStorageHandler extends EntityHandler {
   * @param callback
   */
   deleteMultipleEntities(entities, callback) {
-    var self = this;
-    let errors = [];
-    let counter = entities.length;
+    var self = this
+    let errors = []
+    let counter = entities.length
 
-    if (counter == 0)
-      return callback(null);
+    if (counter == 0) {
+      return callback(null)
+    }
 
-    entities.map(entity => {
-      self.delete(entity, err => {
-        if (err)
-          errors.push(err);
+    entities.map((entity) => {
+      self.delete(entity, (err) => {
+        if (err) {
+          errors.push(err)
+        }
 
-        counter--;
-        if (counter == 0) {
-          if (errors.length > 0)
-            callback(new Error("There was an error when deleting items"))
-          else
-            callback(null);
+        counter--
+        if (counter == 0) {
+          if (errors.length > 0) {
+            callback(new Error('There was an error when deleting items'))
+          } else {
+            callback(null)
+          }
         }
       })
     })
@@ -325,26 +376,31 @@ class EntityStorageHandler extends EntityHandler {
   * @param callback
   */
   createEntity(data, callback) {
-    let EntityBaseClass = this.getEntityBaseClass();
+    let EntityBaseClass = this.getEntityBaseClass()
     let entity = new EntityBaseClass({
       entityTypeId: this.getEntityTypeId()
-    });
+    })
 
     // Hook entity.preCreation()
-    entity.preCreation(data, err => {
-      if (err) return callback(err);
-
+    entity.preCreation(data, (err) => {
+      if (err) {
+        return callback(err)
+      }
       // Hook entity.create()
-      entity.create(data, err => {
-        if (err) return callback(err);
-
+      entity.create(data, (err) => {
+        if (err) {
+          return callback(err)
+        }
         // Hook entity.finalize()
-        entity.finalize(err => {
-          if (err) callback(err);
-          else callback(null, entity);
-        });
-      });
-    });
+        entity.finalize((err) => {
+          if (err) {
+            callback(err)
+          } else {
+            callback(null, entity)
+          }
+        })
+      })
+    })
   }
 
   /**
@@ -353,7 +409,7 @@ class EntityStorageHandler extends EntityHandler {
   * @return table name
   */
   getStorageDatabaseName() {
-    return this.getStorageDatabasePrefix() + this.getEntityTypeId();
+    return this.getStorageDatabasePrefix() + this.getEntityTypeId()
   }
 
   /**
@@ -362,7 +418,7 @@ class EntityStorageHandler extends EntityHandler {
   * @return table prefix
   */
   getStorageDatabasePrefix() {
-    return this._registry.get('properties', 'databasePrefix', '');
+    return this._registry.get('properties', 'databasePrefix', '')
   }
 
   /**
@@ -371,7 +427,7 @@ class EntityStorageHandler extends EntityHandler {
   * @return table name
   */
   getStorageTableName() {
-    return this.getStorageTablePrefix() + this.getEntityTypeId();
+    return this.getStorageTablePrefix() + this.getEntityTypeId()
   }
 
   /**
@@ -380,7 +436,7 @@ class EntityStorageHandler extends EntityHandler {
   * @return table prefix
   */
   getStorageTablePrefix() {
-    return this._registry.get('properties', 'tablePrefix', '');
+    return this._registry.get('properties', 'tablePrefix', '')
   }
 
   /**
@@ -389,25 +445,25 @@ class EntityStorageHandler extends EntityHandler {
   * @return storage backend
   */
   getStorageBackend() {
-    return this._registry.get('properties', 'storage-backend');
+    return this._registry.get('properties', 'storage-backend')
   }
 
   /**
   * Returns entity field definitions.
   *
-  * @return field definitions
+  * @return field definitions
   */
   getEntityFieldDefinitions() {
-    return this.getEntityBaseClass().getFieldDefinitions();
+    return this.getEntityBaseClass().getFieldDefinitions()
   }
 
   /**
   * Returns entity field definitions.
   *
-  * @return field definitions
+  * @return field definitions
   */
   getEntityFieldIndexDefinitions() {
-    return this.getEntityBaseClass().getFieldIndexDefinitions();
+    return this.getEntityBaseClass().getFieldIndexDefinitions()
   }
 
   /**
@@ -415,20 +471,21 @@ class EntityStorageHandler extends EntityHandler {
   *
   * @param indexes
   *   Entity index definition
-  * @param data
+  * @param data
   *   Container
   * @return entity id
   */
   extractEntityId(indexes, data) {
-    let build = {};
+    let build = {}
 
-    if (!indexes)
-      return false;
+    if (!indexes) {
+      return false
+    }
 
     for (var i = 0; i < indexes.length; i++) {
-      build[indexes[i].fieldName] = data[indexes[i].fieldName];
+      build[indexes[i].fieldName] = data[indexes[i].fieldName]
     }
-    return build;
+    return build
   }
 
   /**
@@ -439,65 +496,68 @@ class EntityStorageHandler extends EntityHandler {
   * @return boolean is valid
   */
   isValidEntityId(entityId) {
-    if (!entityId)
-      return false;
-    return true;
+    return entityId ? true : false
   }
 
   /**
   * Perform installation manoeuvre for storage backends.
   *
-  * @param options
+  * @param options
   *   Options to be passed for storages.
   * @preturn promise
   *   Promise to be resolved when all entity types are installed
   */
-  install(options = {}) {
+  install(options = {}) {
     return new Promise((resolve, reject) => {
-      this.getStorageBackend()
-          .installSchemas(this.getSchemas(options), options,err => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
+      this.getStorageBackend().installSchemas(this.getSchemas(options), options, (err) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 
   /**
   * Perform uninstallation manoeuvre for storage backends.
   *
-  * @param options
+  * @param options
   *   Options to be passed for storages.
   * @preturn promise
   *   Promise to be resolved when all entity types are uninstalled
   */
-  uninstall(options = {}) {
+  uninstall(options = {}) {
     return new Promise((resolve, reject) => {
-      this.getStorageBackend()
-          .uninstallSchemas(this.getSchemas(options), options, err => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
-
+      this.getStorageBackend().uninstallSchemas(this.getSchemas(options), options, (err) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 
   /**
   * Perform uninstallation manoeuvre for storage backends.
   *
-  * @param options
+  * @param options
   *   Options to be passed for storages.
   * @preturn promise
   *   Promise to be resolved when all entity types are updated
   */
-  update(options = {}) {
+  update(options = {}) {
     return new Promise((resolve, reject) => {
-      this.getStorageBackend()
-          .updateSchemas(this.getSchemas(options), options, err => {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
+      this.getStorageBackend().updateSchemas(this.getSchemas(options), options, (err) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 }
 
-export default EntityStorageHandler;
+export default EntityStorageHandler

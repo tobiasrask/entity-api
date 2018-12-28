@@ -1,4 +1,4 @@
-import FieldType from "./field-type";
+import FieldType from './field-type'
 
 /**
 * Text field type
@@ -11,9 +11,10 @@ class TextFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    if (!variables.hasOwnProperty('fieldTypeId'))
-      variables['fieldTypeId'] = 'text';
-    super(variables);
+    if (!variables.hasOwnProperty('fieldTypeId')) {
+      variables['fieldTypeId'] = 'text'
+    }
+    super(variables)
   }
 
   /**
@@ -22,7 +23,7 @@ class TextFieldType extends FieldType {
   * @return boolean is valid
   */
   validateFieldValue(value) {
-    return typeof value === 'string';
+    return typeof value === 'string'
   }
 
   /**
@@ -34,10 +35,11 @@ class TextFieldType extends FieldType {
   prepareFieldValue(value) {
     if (value == undefined &&
         value == null ||
-        typeof value === 'object')
-      return null;
-    return typeof value === 'string' ? value : value.toString();
+        typeof value === 'object') {
+      return null
+    }
+    return typeof value === 'string' ? value : value.toString()
   }
 }
 
-export default TextFieldType;
+export default TextFieldType

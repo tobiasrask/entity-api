@@ -1,7 +1,7 @@
-import APIObject from "./../includes/api-object"
-import system from "./../system"
+import APIObject from './../includes/api-object'
+import system from './../system'
 
-var fieldAPIInstance = false;
+var fieldAPIInstance = false
 
 /**
 * Field API.
@@ -17,39 +17,44 @@ class FieldAPI extends APIObject {
   * @param variables
   */
   constructor(variables = {}) {
-    variables.type = 'entityAPI';
-    super(variables);
+    variables.type = 'entityAPI'
+    super(variables)
 
     // Apply default fields provided by field API
-    if (!variables.hasOwnProperty('fields')) variables.fields = {};
-    if (!variables.hasOwnProperty('skipDefaultFields')) {
-      variables.fields['base_field'] = require('./fields/base-field').default;
-      variables.fields['complex_field'] = require('./fields/complex-field').default;
+    if (!variables.hasOwnProperty('fields')) {
+      variables.fields = {}
+    }
+    if (!variables.hasOwnProperty('skipDefaultFields')) {
+      variables.fields['base_field'] = require('./fields/base-field').default
+      variables.fields['complex_field'] = require('./fields/complex-field').default
     }
 
-    Object.keys(variables.fields).forEach((fieldId, index) => {
-      this.registerField(fieldId, variables.fields[fieldId]);
-    });
+    Object.keys(variables.fields).forEach((fieldId, _index) => {
+      this.registerField(fieldId, variables.fields[fieldId])
+    })
 
     // Apply default field types provided by field API
-    if (!variables.hasOwnProperty('fieldTypes')) variables.fieldTypes = {};
-    if (!variables.hasOwnProperty('skipDefaultFieldTypes')) {
-      variables.fieldTypes['text'] = require('./field_types/text').default;
-      variables.fieldTypes['integer'] = require('./field_types/integer').default;
-      variables.fieldTypes['boolean'] = require('./field_types/boolean').default;
-      variables.fieldTypes['list'] = require('./field_types/list').default;
-      variables.fieldTypes['map'] = require('./field_types/map').default;
-      variables.fieldTypes['email'] = require('./field_types/email').default;
+    if (!variables.hasOwnProperty('fieldTypes')) {
+      variables.fieldTypes = {}
     }
 
-    Object.keys(variables.fieldTypes).forEach((fieldTypeId, index) => {
-      this.registerFieldType(fieldTypeId, variables.fieldTypes[fieldTypeId]);
-    });
+    if (!variables.hasOwnProperty('skipDefaultFieldTypes')) {
+      variables.fieldTypes['text'] = require('./field_types/text').default
+      variables.fieldTypes['integer'] = require('./field_types/integer').default
+      variables.fieldTypes['boolean'] = require('./field_types/boolean').default
+      variables.fieldTypes['list'] = require('./field_types/list').default
+      variables.fieldTypes['map'] = require('./field_types/map').default
+      variables.fieldTypes['email'] = require('./field_types/email').default
+    }
+
+    Object.keys(variables.fieldTypes).forEach((fieldTypeId, _index) => {
+      this.registerFieldType(fieldTypeId, variables.fieldTypes[fieldTypeId])
+    })
   }
 
   /**
-  * Register field. Field could be something like "base_field", "image" or
-  * "link" and contains formatted value.
+  * Register field. Field could be something like 'base_field', 'image' or
+  * 'link' and contains formatted value.
   *
   * @param fieldId
   *   Field identifier
@@ -57,8 +62,8 @@ class FieldAPI extends APIObject {
   *   Field class
   */
   registerField(fieldId, field) {
-    system.log("FieldAPI", `Registering field: ${fieldId}`);
-    this._registry.set('fields', fieldId, field);
+    system.log('FieldAPI', `Registering field: ${fieldId}`)
+    this._registry.set('fields', fieldId, field)
   }
 
   /**
@@ -68,20 +73,20 @@ class FieldAPI extends APIObject {
   * @return field of null
   */
   getField(fieldId) {
-    return this._registry.get('fields', fieldId, null);
+    return this._registry.get('fields', fieldId, null)
   }
 
   /**
-  * Register field type. Field type could be something like "text", "integer" or
-  * "boolean" and contains formatted value.
+  * Register field type. Field type could be something like 'text', 'integer' or
+  * 'boolean' and contains formatted value.
   *
   * @param fieldTypeId
   * @param fieldType
   *   Field type class
   */
   registerFieldType(fieldTypeId, fieldType) {
-    system.log("FieldAPI", `Registering field type: ${fieldTypeId}`);
-    this._registry.set('fieldTypes', fieldTypeId, fieldType);
+    system.log('FieldAPI', `Registering field type: ${fieldTypeId}`)
+    this._registry.set('fieldTypes', fieldTypeId, fieldType)
   }
 
   /**
@@ -91,7 +96,7 @@ class FieldAPI extends APIObject {
   * @return field handler of null
   */
   getFieldType(type) {
-    return this._registry.get('fieldTypes', type, null);
+    return this._registry.get('fieldTypes', type, null)
   }
 
   /**
@@ -102,7 +107,7 @@ class FieldAPI extends APIObject {
   * @return field instance
   */
   createBasefield(fieldTypeId) {
-    return this.createField('base_field', fieldTypeId);
+    return this.createField('base_field', fieldTypeId)
   }
 
   /**
@@ -115,25 +120,27 @@ class FieldAPI extends APIObject {
   * @return field
   */
   createField(fieldId, fieldTypeId) {
-    let field = this.getField(fieldId);
+    let field = this.getField(fieldId)
 
-    if (!field)
-      throw new Error(`Unable to create field, unknown field id: ${fieldId}`);
+    if (!field) {
+      throw new Error(`Unable to create field, unknown field id: ${fieldId}`)
+    }
 
-    let fieldType = this.getFieldType(fieldTypeId);
-    if (!fieldType)
-      throw new Error(`Unable to create field, unknown field type ${fieldTypeId}`);
+    let fieldType = this.getFieldType(fieldTypeId)
+    if (!fieldType) {
+      throw new Error(`Unable to create field, unknown field type ${fieldTypeId}`)
+    }
 
     return new field({
       'fieldId': fieldId,
       'fieldType': new fieldType()
-      });
+    })
   }
 
   /**
   * Returns singleton object
   *
-  * @param options
+  * @param options
   *  If instance if not constructed yet, it will be constructed with given
   *  options
   * @param reset
@@ -141,11 +148,11 @@ class FieldAPI extends APIObject {
   *   Defaults to false.
   */
   static getInstance(options = {}, reset = false) {
-    if (!fieldAPIInstance || reset) {
-      fieldAPIInstance = new FieldAPI(options);
+    if (!fieldAPIInstance || reset) {
+      fieldAPIInstance = new FieldAPI(options)
     }
-    return fieldAPIInstance;
+    return fieldAPIInstance
   }
 }
 
-export default FieldAPI;
+export default FieldAPI

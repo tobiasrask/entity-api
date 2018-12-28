@@ -1,4 +1,4 @@
-import FieldType from "./field-type";
+import FieldType from './field-type'
 
 /**
 * Interger field type
@@ -11,9 +11,10 @@ class IntegerFieldType extends FieldType {
   * @param params
   */
   constructor(variables = {}) {
-    if (!variables.hasOwnProperty('fieldTypeId'))
-      variables['fieldTypeId'] = 'integer';
-    super(variables);
+    if (!variables.hasOwnProperty('fieldTypeId')) {
+      variables['fieldTypeId'] = 'integer'
+    }
+    super(variables)
   }
 
   /**
@@ -23,8 +24,8 @@ class IntegerFieldType extends FieldType {
   */
   validateFieldValue(value) {
     return typeof value == 'number' ||
-      !isNaN(value) && (x => { return (x | 0) === x; })(parseFloat(value))
+      !isNaN(value) && ((x) => { return (x | 0) === x })(parseFloat(value))
   }
 }
 
-export default IntegerFieldType;
+export default IntegerFieldType

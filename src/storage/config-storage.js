@@ -1,5 +1,5 @@
 import DomainMap from 'domain-map'
-import StorageBackend from "./storage-backend"
+import StorageBackend from './storage-backend'
 
 /**
 * Simple memory storage backend.
@@ -16,14 +16,15 @@ class ConfigStorageBackend extends StorageBackend {
   *     Lock entity updates.
   */
   constructor(variables = {}) {
-    super(variables);
+    super(variables)
 
-    if (variables.hasOwnProperty('storageData'))
-      this.applyStorageData(variables.storageData);
+    if (variables.hasOwnProperty('storageData')) {
+      this.applyStorageData(variables.storageData)
+    }
 
-    if (variables.hasOwnProperty('lockUpdates'))
-      this.setStorageLock(variables.lockUpdates);
-
+    if (variables.hasOwnProperty('lockUpdates')) {
+      this.setStorageLock(variables.lockUpdates)
+    }
   }
 
   /**
@@ -31,40 +32,40 @@ class ConfigStorageBackend extends StorageBackend {
   *
   * @param indexes
   *   Entity storage indexes
-  * @param storage data
+  * @param storage data
   *   Array of containers to be applied, every item should contain keys
   *   entityId and container.
   * @return boolean succeed
   */
   applyStorageData(indexes, data) {
-    let self = this;
-    let domain = this.getStorageDomain();
-    let handler = self.getStorageHandler();
+    let self = this
+    let domain = this.getStorageDomain()
+    let handler = self.getStorageHandler()
 
-    data.map(container => {
+    data.map((container) => {
       // TODO: Retrieve entity id based on item values
-      let entityId = handler.extractEntityId(indexes, container);
-      self._registry.set(domain, entityId, container);
-    });
+      let entityId = handler.extractEntityId(indexes, container)
+      self._registry.set(domain, entityId, container)
+    })
   }
 
   /**
   * Load entity content container for entity data.
   *
-  * @param ids
+  * @param ids
   *   Array of entity ids.
   * @param callback
   *   Passes map of objects keyed with existing entity id. If entity doesn't
   *   exists, it will not be indexed.
   */
   loadEntityContainers(ids, callback) {
-    var self = this;
-    let result = DomainMap.createCollection({strictKeyMode: false});
-    let domain = this.getStorageDomain();
-    ids.map(entityId => {
-      result.set(entityId, self._registry.get(domain, entityId, false));
-    });
-    callback(null, result);
+    var self = this
+    let result = DomainMap.createCollection({strictKeyMode: false})
+    let domain = this.getStorageDomain()
+    ids.map((entityId) => {
+      result.set(entityId, self._registry.get(domain, entityId, false))
+    })
+    callback(null, result)
   }
 
   /**
@@ -77,12 +78,13 @@ class ConfigStorageBackend extends StorageBackend {
   * @param caallback
   */
   saveEntityContainer(entityId, container, callback) {
-    if (this.isStorageLocked())
-      return callback(new Error("Storage updates are locked"));
+    if (this.isStorageLocked()) {
+      return callback(new Error('Storage updates are locked'))
+    }
 
-    let domain = this.getStorageDomain();
-    this._registry.set(domain, entityId, container);
-    callback(null);
+    let domain = this.getStorageDomain()
+    this._registry.set(domain, entityId, container)
+    callback(null)
   }
 
   /**
@@ -91,7 +93,7 @@ class ConfigStorageBackend extends StorageBackend {
   * @return storage domain
   */
   getStorageDomain() {
-    return "_entities:" + this.getStorageHandler().getStorageTableName();
+    return '_entities:' + this.getStorageHandler().getStorageTableName()
   }
 
   /**
@@ -100,7 +102,7 @@ class ConfigStorageBackend extends StorageBackend {
   * @return boolean is locked
   */
   isStorageLocked() {
-    return this._registry.get("properties", 'lockUpdates', false);
+    return this._registry.get('properties', 'lockUpdates', false)
   }
 
   /**
@@ -110,8 +112,8 @@ class ConfigStorageBackend extends StorageBackend {
   *   New lock status.
   */
   setStorageLock(status) {
-    this._registry.set("properties", 'lockUpdates', status);
+    this._registry.set('properties', 'lockUpdates', status)
   }
 }
 
-export default ConfigStorageBackend;
+export default ConfigStorageBackend

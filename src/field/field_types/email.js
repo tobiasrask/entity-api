@@ -1,4 +1,4 @@
-import TextFieldType from "./text.js";
+import TextFieldType from './text.js'
 
 /**
 * Email field overrides Text field, and makes sure email address doesn't contain
@@ -12,9 +12,10 @@ class EmailFieldType extends TextFieldType {
   * @param params
   */
   constructor(variables = {}) {
-    if (!variables.hasOwnProperty('fieldTypeId'))
-      variables['fieldTypeId'] = 'email';
-    super(variables);
+    if (!variables.hasOwnProperty('fieldTypeId')) {
+      variables['fieldTypeId'] = 'email'
+    }
+    super(variables)
   }
 
   /**
@@ -24,9 +25,9 @@ class EmailFieldType extends TextFieldType {
   */
   validateFieldValue(value) {
     return value !== undefined &&
-           value !== null &&
-           typeof value === 'string' &&
-           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
+      value !== null &&
+      typeof value === 'string' &&
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value)
   }
 
   /**
@@ -39,8 +40,8 @@ class EmailFieldType extends TextFieldType {
     return value !== undefined &&
            value !== null &&
            typeof value === 'string' ?
-      value.toLowerCase().replace(/\s/g, '') : null;
+      value.toLowerCase().replace(/\s/g, '') : null
   }
 }
 
-export default EmailFieldType;
+export default EmailFieldType

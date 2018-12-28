@@ -1,4 +1,3 @@
-import DomainMap from "domain-map"
 import APIObject from './api-object'
 
 /**
@@ -19,7 +18,7 @@ class Core extends APIObject {
   * @param apiObject
   */
   registerAPI(apiObject) {
-    this._registry.set('api', apiObject.getType(), apiObject);
+    this._registry.set('api', apiObject.getType(), apiObject)
   }
 
   /**
@@ -29,7 +28,7 @@ class Core extends APIObject {
   * @return API Object or null if not exists
   */
   api(type) {
-    return this._registry.get('api', type, null);
+    return this._registry.get('api', type, null)
   }
 
   /**
@@ -41,16 +40,17 @@ class Core extends APIObject {
   * @return boolean succeed
   *   Method returns boolean value to indicate if log exists.
   */
-  log(args) {
-    let logger = this.api('log');
+  log(_args) {
+    let logger = this.api('log')
 
-    if (logger == null)
-      return false;
+    if (logger == null) {
+      return false
+    }
 
-    logger.log.apply(logger, arguments);
-    return true;
+    logger.log.apply(logger, arguments)
+    return true
   }
 }
 
-const core = new Core({ type: 'system' });
-export default core;
+const core = new Core({ type: 'system' })
+export default core

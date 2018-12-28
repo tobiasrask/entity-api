@@ -1,7 +1,6 @@
-import DomainMap from "domain-map"
-import APIObject from "./../includes/api-object"
-import Utils from "./../includes/utils"
-import EntityAPI from "./entity-api"
+import DomainMap from 'domain-map'
+import Utils from './../includes/utils'
+import EntityAPI from './entity-api'
 
 /**
 * Entity
@@ -15,17 +14,17 @@ class Entity {
   *  - entityTypeId
   */
   constructor(variables = {}) {
-    this._registry = new DomainMap();
-    this._registry.set('properties', 'entityTypeId', variables.entityTypeId);
-    this.prepareFields();
+    this._registry = new DomainMap()
+    this._registry.set('properties', 'entityTypeId', variables.entityTypeId)
+    this.prepareFields()
   }
 
   /**
   * Prepare fields by fetching field definitions.
   */
   prepareFields() {
-    let fields = this.constructor.getFieldDefinitions();
-    this._registry.set('properties', 'fields', fields);
+    let fields = this.constructor.getFieldDefinitions()
+    this._registry.set('properties', 'fields', fields)
   }
 
   /**
@@ -37,15 +36,16 @@ class Entity {
   * @param callback
   */
   prepareFieldValues(container, callback) {
-    let self = this;
-    let errors = null;
+    let self = this
+    let errors = null
     this.getFields().forEach((field, fieldName) => {
-      if (container.hasOwnProperty(fieldName))
-        self.set(fieldName, container[fieldName]);
-      else if (field.isRequired())
-        errors = new Error(`Field ${fieldName} is required.`);
-    });
-    callback(errors);
+      if (container.hasOwnProperty(fieldName)) {
+        self.set(fieldName, container[fieldName])
+      } else if (field.isRequired()) {
+        errors = new Error(`Field ${fieldName} is required.`)
+      }
+    })
+    callback(errors)
   }
 
   /**
@@ -54,13 +54,12 @@ class Entity {
   * @return content container
   */
   exportFieldValues() {
-    var self = this;
-    var build = {};
-    var fields = this.getFields();
+    var build = {}
+    var fields = this.getFields()
     fields.forEach((field, fieldName) => {
-      build[fieldName] = field.get();
-    });
-    return build;
+      build[fieldName] = field.get()
+    })
+    return build
   }
 
   /**
@@ -71,26 +70,31 @@ class Entity {
   *   Object with index keys
   */
   id() {
-    let indexes = this.constructor.getFieldIndexDefinitions();
-    if (!indexes)
-      return false;
-    let entityId = {};
-    for (var i = 0; i < indexes.length; i++)
-      entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName);
-    return entityId;
+    let indexes = this.constructor.getFieldIndexDefinitions()
+
+    if (!indexes) {
+      return false
+    }
+
+    let entityId = {}
+    for (var i = 0; i < indexes.length; i++) {
+      entityId[indexes[i].fieldName] = this.get(indexes[i].fieldName)
+    }
+
+    return entityId
   }
 
   /**
   * Returns string representing entity id.
   *
   * @param delimiter
-  *   Defaults to ":"
+  *   Defaults to ':'
   * @return entity id as string
   *   String
   */
   idString(delimiter = ':') {
-    let entityId = this.id();
-    return Object.keys(entityId).map(name => entityId[name]).join(delimiter);
+    let entityId = this.id()
+    return Object.keys(entityId).map((name) => entityId[name]).join(delimiter)
   }
 
   /**
@@ -99,7 +103,7 @@ class Entity {
   * @return entityType
   */
   getEntityTypeId() {
-    return this._registry.get('properties', 'entityTypeId');
+    return this._registry.get('properties', 'entityTypeId')
   }
 
   /**
@@ -108,7 +112,7 @@ class Entity {
   * @return tag
   */
   getEntityTag() {
-    return this._registry.get('properties', 'entityTag');
+    return this._registry.get('properties', 'entityTag')
   }
 
   /**
@@ -117,31 +121,33 @@ class Entity {
   * @return tag
   */
   getEntityContext() {
-    return this._registry.get('properties', 'entityContext');
+    return this._registry.get('properties', 'entityContext')
   }
 
   /**
   * Prepare entity creation
   *
-  * @param variables
+  * @param variables
   * @param callback
   */
   preCreation(variables, callback) {
-    this._registry.set('properties', 'isNew', true);
+    this._registry.set('properties', 'isNew', true)
 
     // Apply entity tag
-    if (variables.hasOwnProperty(':tag'))
-      this._registry.set('properties', 'entityTag', variables[':tag']);
+    if (variables.hasOwnProperty(':tag')) {
+      this._registry.set('properties', 'entityTag', variables[':tag'])
+    }
 
     // Apply entity context
-    if (variables.hasOwnProperty(':context'))
-      this._registry.set('properties', 'entityContext', variables[':context']);
+    if (variables.hasOwnProperty(':context')) {
+      this._registry.set('properties', 'entityContext', variables[':context'])
+    }
 
     // Prepare entity identifier
-    this.prepareEntityId();
+    this.prepareEntityId()
 
     // Apply field values
-    this.prepareFieldValues(variables, callback);
+    this.prepareFieldValues(variables, callback)
   }
 
   /**
@@ -152,22 +158,25 @@ class Entity {
   *   Object with index keys
   */
   prepareEntityId() {
-    let indexes = this.constructor.getFieldIndexDefinitions();
-    if (!indexes)
-      return false;
-    for (var i = 0; i < indexes.length; i++)
-      if (indexes[i].hasOwnProperty('auto') && indexes[i]['auto'])
-        this.setDangerously(indexes[i].fieldName, Utils.getUUID());
+    let indexes = this.constructor.getFieldIndexDefinitions()
+    if (!indexes) {
+      return false
+    }
+    for (var i = 0; i < indexes.length; i++) {
+      if (indexes[i].hasOwnProperty('auto') && indexes[i]['auto']) {
+        this.setDangerously(indexes[i].fieldName, Utils.getUUID())
+      }
+    }
   }
 
   /**
   * Create entity.
   *
-  * @param variables
+  * @param variables
   * @param callback
   */
   create(variables, callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
@@ -176,7 +185,7 @@ class Entity {
   * @param callback
   */
   finalize(callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
@@ -185,7 +194,7 @@ class Entity {
   * @return boolean is new
   */
   isNew() {
-    return this._registry.get('properties', 'isNew', false);
+    return this._registry.get('properties', 'isNew', false)
   }
 
   /**
@@ -195,7 +204,7 @@ class Entity {
   * @param callback
   */
   load(variables, callback) {
-    this.prepareFieldValues(variables.container, callback);
+    this.prepareFieldValues(variables.container, callback)
   }
 
   /**
@@ -204,7 +213,7 @@ class Entity {
   * @param callback
   */
   postLoad(callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
@@ -213,7 +222,7 @@ class Entity {
   * @param callback
   */
   preSave(callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
@@ -224,7 +233,7 @@ class Entity {
   */
   save() {
     return EntityAPI.getInstance()
-      .getStorage(this.getEntityTypeId()).save(this);
+      .getStorage(this.getEntityTypeId()).save(this)
   }
 
   /**
@@ -233,7 +242,7 @@ class Entity {
   * @param callback
   */
   postSave(callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
@@ -244,7 +253,7 @@ class Entity {
   */
   delete() {
     return EntityAPI.getInstance()
-      .getStorage(this.getEntityTypeId()).delete(this);
+      .getStorage(this.getEntityTypeId()).delete(this)
   }
 
   /**
@@ -253,7 +262,7 @@ class Entity {
   * @param callback
   */
   preDelete(callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
@@ -262,18 +271,18 @@ class Entity {
   * @param callback
   */
   postDelete(callback) {
-    callback(null);
+    callback(null)
   }
 
   /**
   * View entity.
   *
   * @param options
-  * @return promise
+  * @return promise
   */
   view(options) {
     return EntityAPI.getInstance()
-      .getViewHandler(this.getEntityTypeId()).view(this, options);
+      .getViewHandler(this.getEntityTypeId()).view(this, options)
   }
 
   /**
@@ -282,7 +291,7 @@ class Entity {
   * @return view content
   */
   getViewContent() {
-    return {};
+    return {}
   }
 
   /**
@@ -293,7 +302,7 @@ class Entity {
   * @param callback
   */
   alterViewContent(container, options, callback) {
-    callback(null, container);
+    callback(null, container)
   }
 
   /**
@@ -302,7 +311,7 @@ class Entity {
   * @return collection fields
   */
   getFields() {
-    return this._registry.get('properties', 'fields');
+    return this._registry.get('properties', 'fields')
   }
 
   /**
@@ -311,10 +320,8 @@ class Entity {
   * @param fieldName
   */
   get(fieldName) {
-    let fields = this._registry.get('properties', 'fields');
-    if (!fields)
-      return null;
-    return fields.has(fieldName) ? fields.get(fieldName).get() : null;
+    let fields = this._registry.get('properties', 'fields')
+    return fields && fields.has(fieldName) ? fields.get(fieldName).get() : null
   }
 
   /**
@@ -325,14 +332,12 @@ class Entity {
   * @return boolean succeed
   */
   set(fieldName, value) {
-    let fields = this._registry.get('properties', 'fields');
+    let fields = this._registry.get('properties', 'fields')
 
-    if (!fields)
-      return false;
-
-    if (!fields.has(fieldName))
-      throw new Error(`Unable to set value for unkown field : ${fieldName}`);
-    return fields.get(fieldName).set(value);
+    if (!fields || !fields.has(fieldName)) {
+      throw new Error(`Unable to set value for unkown field : ${fieldName}`)
+    }
+    return fields.get(fieldName).set(value)
   }
 
   /**
@@ -343,15 +348,13 @@ class Entity {
   * @param value
   */
   setDangerously(fieldName, value) {
-    let fields = this._registry.get('properties', 'fields');
+    let fields = this._registry.get('properties', 'fields')
 
-    if (!fields)
-      return false;
+    if (!fields || !fields.has(fieldName)) {
+      throw new Error(`Unable to set value for unkown field : ${fieldName}`)
+    }
 
-    if (!fields.has(fieldName))
-      throw new Error(`Unable to set value for unkown field : ${fieldName}`);
-
-    return fields.get(fieldName).set(value, {force: true});
+    return fields.get(fieldName).set(value, {force: true})
   }
 
   /**
@@ -360,8 +363,8 @@ class Entity {
   * @return data
   */
   static getFieldDefinitions() {
-    const fields = new Map();
-    return fields;
+    const fields = new Map()
+    return fields
   }
 
   /**
@@ -371,8 +374,8 @@ class Entity {
   *   List of indexes
   */
   static getFieldIndexDefinitions() {
-    return [];
+    return []
   }
 }
 
-export default Entity;
+export default Entity

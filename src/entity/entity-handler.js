@@ -9,24 +9,25 @@ class EntityHandler {
   /**
   * Constructor
   *
-  * @param variables with following keys
+  * @param variables with following keys
   *   entityTypeId
   *     Entity type id
   *   entityClass
   *     Entity class
   */
   constructor(variables = {}) {
-    this._registry = new DomainMap();
+    this._registry = new DomainMap()
 
-    if (!variables.hasOwnProperty('entityTypeId'))
-      throw new Error("Entity type id not defined");
+    if (!variables.hasOwnProperty('entityTypeId')) {
+      throw new Error('Entity type id not defined')
+    }
 
-    this._registry.set('properties', 'entityTypeId', variables.entityTypeId);
+    this._registry.set('properties', 'entityTypeId', variables.entityTypeId)
 
     let entityClass = variables.hasOwnProperty('entityClass') ?
-      variables.entityClass : Entity;
+      variables.entityClass : Entity
 
-    this._registry.set('properties', 'entityClass', variables.entityClass);
+    this._registry.set('properties', 'entityClass', entityClass)
   }
 
   /**
@@ -41,7 +42,7 @@ class EntityHandler {
   /**
   * Returns entity base class
   *
-  * @return base class
+  * @return base class
   */
   getEntityBaseClass() {
     return this._registry.get('properties', 'entityClass')
@@ -54,7 +55,7 @@ class EntityHandler {
   * @param value
   */
   setProperty(key, value) {
-    this._registry.set('properties', key, value);
+    this._registry.set('properties', key, value)
   }
 
   /**
@@ -63,7 +64,7 @@ class EntityHandler {
   * @return properties.
   */
   getProperties() {
-    return this._registry.get('properties');
+    return this._registry.get('properties')
   }
 
   /**
@@ -74,8 +75,8 @@ class EntityHandler {
   * @return property value or default, if property doesn't exists.
   */
   getProperty(key, defaultValue) {
-    return this._registry.get('properties', key, defaultValue);
+    return this._registry.get('properties', key, defaultValue)
   }
 }
 
-export default EntityHandler;
+export default EntityHandler
