@@ -1,11 +1,9 @@
 # entity-api
 [entity-api](https://www.npmjs.org/package/entity-api) provides easy to use Entity API for Node.js applications.
 
-Creating, loading, updating and deleting entities can be messy operation behind the scenes, if there is no proper way to do it. This module aims to help you formalize these basic entity operations.
+Creating, loading, updating and deleting entities can be messy operation behind the scenes, if there is no proper way to do it. This module aims to help you formalize these basic entity operations by defining required `Entity types`, `Entities` and specialized handlers like `View handler`, `List handler`, `Storage handler` and `Access handler`.
 
-Entity API provides tools to define `Entity types`, `Entities` and specialized handlers like `View handler`, `List handler` and `Storage handler`.
-
-Inclded `Field API` provides tools to define, manage and validate fields. Fields can be assigned to entities.
+Field API provides tools to define, manage and validate entity fields. Check out usage example below.
 
 ### Supported storage backends
 
@@ -25,13 +23,9 @@ Using [npm](https://www.npmjs.com/):
 
 ### Usage example
 
-Here is an example how to create a custom entity type called `message` to store some notes with content.
+Here is an example how to create a custom entity type called `message` to store some notes with content. Check out [example.js](https://github.com/tobiasrask/entity-api/blob/master/docs/examples.js) for more examples.
 
-Entity API is composed from following components: `Entity`, `EntityType`, `EntityStorageHandler`, `EntityViewHandler`.
-
-Check out [example.js](https://github.com/tobiasrask/entity-api/blob/master/docs/examples.js) for more examples.
-
-```
+```js
 import {
   Entity,
   EntityAPI,
@@ -42,20 +36,19 @@ import {
   fieldAPI
 } from 'entity-api'
 
-// Define custom Entity called 'message'.
 class MessageEntity extends Entity {
 
   /**
   * Implementation of hook create()
   */
-  create(_variables = {}, callback) {
+  create(variables = {}, callback) {
     // Set created time for message
     this.set('created', Date.now())
     callback(null)
   }
 
   /**
-   * Custom entity method 'explain' to describe messages.
+   * Describe entity.
    */
   explain() {
     return `This message says: "${this.get('body')}"`
@@ -118,13 +111,10 @@ class MessageEntity extends Entity {
 class MessageEntityType extends EntityType {
 
   constructor(variables = {}) {
-
     // Entity type id for this entity
     variables.entityTypeId = 'message'
-
     // Entity class for entity
     variables.entityClass = MessageEntity
-
     // ConfigStorageBackend is in-memory storage implemented with this module.
     // You can extend storage and view handlers, see examples.js
     variables.handlers = {
@@ -141,7 +131,6 @@ class MessageEntityType extends EntityType {
 const entityAPI = EntityAPI.getInstance({}, true)
 entityAPI.registerEntityType(new MessageEntityType())
 
-
 // Now you can create new instance of message entity with provided data
 const data = {
   body: 'Hi there'
@@ -153,7 +142,6 @@ entityAPI.getStorage('message').create(data)
     // You can access instance methods here, let's call our custom method explain()
     console.log(entity.explain())
     // --> This message says: "Hi there"
-
     // Now we create full view from message by calling method entity.view().
     // View mode is 
     return entity.view({ viewMode: 'full' })
@@ -168,15 +156,11 @@ entityAPI.getStorage('message').create(data)
 // Storing and saving entities. See full list of Entity API methods
 entityAPI.getStorage('message').createAndSave(data)
   .then((entity) => {
-
     console.log(`Message ${entity.id()} now created and stored to storage backend.`)
-
     return entityAPI.getStorage('message').load(entity.id())
   })
   .then((entity) => {
-
     console.log(`Message ${entity.id()} is now loaded from storage backend.`)
-
     // Update message body and store changes
     entity.set('body', 'Updated body text')
     return entity.save()
@@ -194,9 +178,7 @@ entityAPI.getStorage('message').create(data)
     // If there was an error when creating entity, 
     console.error(err)
   })
-
 ```
-
 
 ## Methods and hooks
 
@@ -243,7 +225,6 @@ entityAPI.uninstall(options)
 entityAPI.update(options)
   Perform update storage operation for all entity types
 
-
 ### Entity
 
 Entity object has following methods:
@@ -281,7 +262,7 @@ entity.setDangerously(fieldName, value)
 
 Entity object has following hooks:
 
-```
+```js
 class CustomEntity extends Entity {
 
   // Construct new entity
@@ -339,7 +320,6 @@ class CustomEntity extends Entity {
     callback(null, container)
   }
 }
-
 ```
 
 ### EntityHandler
@@ -368,7 +348,7 @@ handler.viewMultiple(entity, options = {})
 
 `EntityAccessHandler` has following hooks to manage access to given entity. You should extend EntityAccessHandler class to override this behaviour.
 
-```
+```js
 class EntityAccessHandler extends EntityHandler {
   /**
   * Create access for entity
@@ -400,7 +380,6 @@ class EntityAccessHandler extends EntityHandler {
     return Promise.resolve(false)
   }
 }
-
 ```
 
 ### EntityStorageHandler
