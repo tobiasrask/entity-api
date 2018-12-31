@@ -141,7 +141,7 @@ const entityId = {id: '00112233-4455-6677-8899-aabbccddeeff'}
 entityAPI.getStorage('message').load(entityId)
   .then((entity) => {
     console.log(entity.describe())
-    // --> This message says: "Wohoo"
+    // --> This message says: "Hi there"
   })
 ```
 
