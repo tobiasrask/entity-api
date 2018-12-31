@@ -106,6 +106,7 @@ entityAPI.registerEntityType(new MessageEntityType())
 Now you can create, store and load message entities. You can also view entities using `view modes` defined within fields. Viewed entity is Data Transfer Object (DTO).
 
 ```js
+
 const data = {
   body: 'Hi there'
 }
@@ -120,6 +121,7 @@ entityAPI.getStorage('message').create(data)
     // --> {id: '00112233-4455-6677-8899-aabbccddeeff', body': 'Hi there', created: 1234567890 }
   })
 
+// Save and update entity
 entityAPI.getStorage('message').createAndSave(data)
   .then((entity) => {
     console.log(entity.describe())
@@ -133,6 +135,7 @@ entityAPI.getStorage('message').createAndSave(data)
     // --> This message says: "Wohoo"
   })
 
+// Load entity
 const entityId = {id: '00112233-4455-6677-8899-aabbccddeeff'}
 
 entityAPI.getStorage('message').load(entityId)
