@@ -3,7 +3,7 @@
 
 Creating, loading, updating and deleting entities can be messy operation behind the scenes, if there is no proper way to do it. This module aims to help you formalize these basic entity operations by defining required `Entity types`, `Entities` and specialized handlers like `View handler`, `List handler`, `Storage handler` and `Access handler`.
 
-Field API provides tools to define, manage, view and validate entity fields. Check out usage example below.
+Field API provides tools to define, manage, view and validate entity fields.
 
 ### Supported storage backends
 
@@ -23,7 +23,7 @@ Using [npm](https://www.npmjs.com/):
 
 ### Usage example
 
-Here is an example how to create a custom entity type called `message` to store some notes with content. Check out [example.js](https://github.com/tobiasrask/entity-api/blob/master/docs/examples.js) for more examples and descriptions.
+Here is an example how to create a custom entity type called `message` to store some notes with content. See [example.js](https://github.com/tobiasrask/entity-api/blob/master/docs/examples.js) for more examples with descriptions.
 
 ```js
 import {
@@ -80,7 +80,6 @@ class MessageEntity extends Entity {
   }
 }
 
-// Define entity type and how it should be stored, viewed, accessed etc
 class MessageEntityType extends EntityType {
 
   constructor(variables = {}) {
@@ -120,17 +119,17 @@ entityAPI.getStorage('message').create(data)
     // --> {id: '00112233-4455-6677-8899-aabbccddeeff', body': 'Hi there', created: 1234567890 }
   })
 
-
 entityAPI.getStorage('message').createAndSave(data)
-  .then((entity) => {
-    console.log(`Message ${entity.id()} now created and stored to storage backend.`)
-    return entityAPI.getStorage('message').load(entity.id())
+  .then((savedEntity) => {
+    savedEntity.set('body', 'Updated body text')
+    return savedEntity.save()
   })
-  .then((entity) => {
-    console.log(`Message ${entity.id()} is now loaded from storage backend.`)
-    // Update message body and store changes
-    entity.set('body', 'Updated body text')
-    return entity.save()
+  .then((updatedEntity) => {
+    return entityAPI.getStorage('message').load(updatedEntity.id())
+  })
+  .then((loadedEntity) => {
+    console.log(loadedEntity.describe())
+    // --> This message says: "Updated body text"
   })
 ```
 
