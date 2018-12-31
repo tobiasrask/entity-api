@@ -49,6 +49,7 @@ class MessageEntity extends Entity {
  
   static getFieldDefinitions() {
     const fields = new Map()
+
     fields.set('id', fieldAPI.createBasefield('text')
       .setName('ID')
       .setDescription('Entity identifier')
@@ -57,12 +58,14 @@ class MessageEntity extends Entity {
         full: { view_field: true },
         list: { view_field: true }
       }))
+
     fields.set('body', fieldAPI.createBasefield('text')
       .setName('Message')
       .setDescription('Message body')
       .setProperty('view_properties', {
         full: { view_field: true }
       }))
+
     fields.set('created', fieldAPI.createBasefield('integer')
       .setName('Created time')
       .setDescription('Created time for message')
@@ -103,15 +106,13 @@ entityAPI.registerEntityType(new MessageEntityType())
 Now you can create, store and load message entities. You can also view entities using `view modes` defined within fields. Viewed entity is Data Transfer Object (DTO).
 
 ```js
-
 const data = {
   body: 'Hi there'
 }
 
+// Create and view entity
 entityAPI.getStorage('message').create(data)
   .then((entity) => {
-    console.log(entity.describe())
-    // --> This message says: "Hi there"
     return entity.view({ viewMode: 'full' })
   })
   .then((viewedEntity) => {
@@ -120,16 +121,24 @@ entityAPI.getStorage('message').create(data)
   })
 
 entityAPI.getStorage('message').createAndSave(data)
-  .then((savedEntity) => {
-    savedEntity.set('body', 'Updated body text')
-    return savedEntity.save()
+  .then((entity) => {
+    console.log(entity.describe())
+    // --> This message says: "Hi there"
+
+    entity.set('body', 'Wohoo')
+    return entity.save()
   })
-  .then((updatedEntity) => {
-    return entityAPI.getStorage('message').load(updatedEntity.id())
+  .then((entity) => {
+    console.log(entity.describe())
+    // --> This message says: "Wohoo"
   })
-  .then((loadedEntity) => {
-    console.log(loadedEntity.describe())
-    // --> This message says: "Updated body text"
+
+const entityId = {id: '00112233-4455-6677-8899-aabbccddeeff'}
+
+entityAPI.getStorage('message').load(entityId)
+  .then((entity) => {
+    console.log(entity.describe())
+    // --> This message says: "Wohoo"
   })
 ```
 
