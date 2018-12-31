@@ -327,6 +327,7 @@ handler.viewMultiple(entity, options = {})
 
 ```js
 class EntityAccessHandler extends EntityHandler {
+
   /**
   * Create access for entity
   *
